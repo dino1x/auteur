@@ -1,0 +1,13 @@
+node_modules/
+.next/
+/out/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+.env*.local
+.env
+*.png
+.turbo/
+.cache/
+*.tsbuildinfo

@@ -1,0 +1,320 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #08090c;
+  --surface: #0f1116;
+  --elev: #14171e;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-2: rgba(255, 255, 255, 0.13);
+  --teal: #4ed4b7;
+  --mint: #5fe995;
+  --gold: #e8c76d;
+  --text: #fafafc;
+  --text-muted: #a0a6b1;
+  --text-dim: #626a76;
+  --font-display: 'Space Grotesk', -apple-system, sans-serif;
+  --font-heading: 'Plus Jakarta Sans', Inter, sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01", "ss02";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: var(--font-sans), "Inter", -apple-system, sans-serif;
+  letter-spacing: -0.012em;
+}
+
+.font-display {
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+  letter-spacing: -0.035em;
+}
+
+.font-heading {
+  font-family: var(--font-heading), "Plus Jakarta Sans", sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.font-serif {
+  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display), "Space Grotesk", var(--font-heading), "Plus Jakarta Sans", sans-serif;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+
+/* Tabular figures & slashed zeros for all monospace elements */
+code, kbd, samp, pre, .font-mono {
+  font-family: var(--font-mono), "JetBrains Mono", monospace;
+  font-feature-settings: "zero", "calt";
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.015em;
+}
+
+.micro-label {
+  font-family: var(--font-mono), "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.text-glow-teal {
+  text-shadow: 0 0 16px rgba(78, 212, 183, 0.45);
+}
+
+.text-glow-gold {
+  text-shadow: 0 0 16px rgba(232, 199, 109, 0.45);
+}
+
+.text-glow-mint {
+  text-shadow: 0 0 16px rgba(95, 233, 149, 0.45);
+}
+
+/* Subtle architectural grid pattern & atmospheric ambient lighting */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(circle at 50% -10%, rgba(78, 212, 183, 0.09), transparent 60%),
+    radial-gradient(circle at 85% 35%, rgba(126, 148, 255, 0.06), transparent 45%),
+    radial-gradient(circle at 15% 70%, rgba(232, 199, 109, 0.04), transparent 50%),
+    linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+  mask-image: linear-gradient(to bottom, black, transparent 95%);
+}
+
+/* Tactile 3D Button styles */
+.tactile-btn {
+  cursor: pointer;
+  user-select: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%), #14171e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.tactile-btn:hover {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.04) 100%), #181b23;
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+.tactile-btn:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.tactile-btn-primary {
+  cursor: pointer;
+  user-select: none;
+  background: linear-gradient(180deg, #74f1d6 0%, #4ed4b7 50%, #3cc6a8 100%);
+  color: #030806;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 0 24px rgba(78, 212, 183, 0.38), 0 3px 8px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.tactile-btn-primary:hover {
+  background: linear-gradient(180deg, #8af6dd 0%, #5fe0c4 50%, #46cfb1 100%);
+  box-shadow: inset 0 1px 0 #ffffff, inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 0 34px rgba(78, 212, 183, 0.55), 0 5px 12px rgba(0, 0, 0, 0.5);
+}
+.tactile-btn-primary:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 16px rgba(78, 212, 183, 0.3);
+}
+
+/* Capsule Pill styles */
+.capsule-pill {
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+.capsule-pill:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(78, 212, 183, 0.35);
+  color: #fafafc;
+  box-shadow: 0 0 14px rgba(78, 212, 183, 0.12);
+}
+.capsule-pill-active {
+  border-radius: 9999px;
+  background: rgba(78, 212, 183, 0.12);
+  border: 1px solid rgba(78, 212, 183, 0.5);
+  color: #4ed4b7;
+  box-shadow: 0 0 16px rgba(78, 212, 183, 0.2);
+}
+
+/* Gradient heading text */
+.gradient-heading {
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gradient-accent {
+  background: linear-gradient(135deg, #4ed4b7 0%, #5fe995 50%, #e8c76d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* HUD reticle brackets for viewport */
+.reticle-corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.55;
+}
+.reticle-tl { top: 12px; left: 12px; border-top: 1.5px solid rgba(78, 212, 183, 0.75); border-left: 1.5px solid rgba(78, 212, 183, 0.75); }
+.reticle-tr { top: 12px; right: 12px; border-top: 1.5px solid rgba(78, 212, 183, 0.75); border-right: 1.5px solid rgba(78, 212, 183, 0.75); }
+.reticle-bl { bottom: 12px; left: 12px; border-bottom: 1.5px solid rgba(78, 212, 183, 0.75); border-left: 1.5px solid rgba(78, 212, 183, 0.75); }
+.reticle-br { bottom: 12px; right: 12px; border-bottom: 1.5px solid rgba(78, 212, 183, 0.75); border-right: 1.5px solid rgba(78, 212, 183, 0.75); }
+
+/* Studio Glass Card with hover elevation */
+.studio-card {
+  background: linear-gradient(180deg, rgba(20, 23, 30, 0.75) 0%, rgba(13, 15, 20, 0.85) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.studio-card:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 14px 40px -10px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Shimmer sweep effect */
+@keyframes shimmerSweep {
+  0% { transform: translateX(-150%); }
+  50%, 100% { transform: translateX(150%); }
+}
+.shimmer-badge {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-badge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-150%);
+  animation: shimmerSweep 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+/* Framing center crosshair */
+.camera-crosshair {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  opacity: 0.25;
+}
+.camera-crosshair::before,
+.camera-crosshair::after {
+  content: "";
+  position: absolute;
+  background: #ffffff;
+}
+.camera-crosshair::before {
+  top: 11.5px;
+  left: 0;
+  width: 24px;
+  height: 1px;
+}
+.camera-crosshair::after {
+  top: 0;
+  left: 11.5px;
+  width: 1px;
+  height: 24px;
+}
+
+/* Playhead Needle */
+.playhead-needle {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  background: #4ed4b7;
+  box-shadow: 0 0 10px rgba(78, 212, 183, 0.9), 0 0 20px rgba(78, 212, 183, 0.4);
+  pointer-events: none;
+  z-index: 20;
+  border-radius: 9999px;
+  transition: left 0.05s linear;
+}
+
+/* Rule of Thirds Cinematic Grid */
+.thirds-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8;
+  background-image:
+    linear-gradient(to right, transparent 33.1%, rgba(78, 212, 183, 0.18) 33.3%, transparent 33.5%, transparent 66.4%, rgba(78, 212, 183, 0.18) 66.6%, transparent 66.8%),
+    linear-gradient(to bottom, transparent 33.1%, rgba(78, 212, 183, 0.18) 33.3%, transparent 33.5%, transparent 66.4%, rgba(78, 212, 183, 0.18) 66.6%, transparent 66.8%);
+}
+
+/* Anamorphic Lens Flare Line */
+.anamorphic-flare {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent 0%, rgba(78, 212, 183, 0.35) 20%, rgba(255, 255, 255, 0.8) 50%, rgba(78, 212, 183, 0.35) 80%, transparent 100%);
+  filter: blur(0.5px);
+  pointer-events: none;
+  z-index: 9;
+  opacity: 0.65;
+  transform: translateY(-50%);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+/* 35mm Filmstrip Sprockets Pattern */
+.filmstrip-sprockets {
+  background-image: radial-gradient(#08090c 45%, transparent 46%);
+  background-size: 14px 14px;
+  background-position: center;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #08090c;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(78, 212, 183, 0.4);
+}
