@@ -1967,65 +1967,56 @@ export function AuteurWorkstation({
         )}
 
         {/* ============================================================ */}
-        {/* VIEW 6: LIVEPEER AGENT MCP GPU ORCHESTRATION CONSOLE         */}
+        {/* ============================================================ */}
+        {/* VIEW 6: LIVEPEER CINEMA GENERATION CONSOLE                   */}
         {/* ============================================================ */}
         {mode === "generating" && (
           <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-8 animate-fadeIn max-w-2xl mx-auto w-full">
-            {/* 35mm Celluloid Frame Viewport */}
-            <div className="w-full max-w-xl aspect-[16/9] rounded-2xl bg-[#090b10] border border-white/15 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] flex flex-col justify-between p-6">
-              {/* Top Film Metadata & Corner Crosshairs */}
-              <div className="flex items-center justify-between text-zinc-500 font-mono text-[10px] tracking-wider border-b border-white/10 pb-3">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#4ed4b7] animate-ping" />
-                  <span className="text-[#4ed4b7] font-bold">LIVEPEER CREATIVE MCP</span>
-                  <span className="text-zinc-600">|</span>
-                  <span>agent.livepeer.org/api/mcp/creative</span>
+            {/* Cinematic Screening Slate */}
+            <div className="w-full max-w-xl rounded-2xl bg-[#080a10] border border-white/10 relative overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.85),0_0_35px_rgba(78,212,183,0.08)] flex flex-col justify-between p-6">
+              
+              {/* Header HUD */}
+              <div className="flex items-center justify-between text-zinc-400 font-mono text-[11px] tracking-wider border-b border-white/10 pb-3.5">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-[#4ed4b7] animate-pulse shadow-[0_0_8px_#4ed4b7]" />
+                  <span className="text-white font-bold tracking-widest uppercase">AUTEUR CINEMA STUDIO</span>
                 </div>
-                <div className="text-zinc-400">
-                  35MM 24FPS · 8K
+                <div className="text-zinc-400 font-mono text-[10px] tracking-widest">
+                  35MM · 24 FPS · DCI 4K
                 </div>
               </div>
 
-              {/* Center Active Prompt & Telemetry Display */}
-              <div className="space-y-4 my-auto text-center px-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 font-mono text-[10px] text-zinc-300">
-                  <Cpu className="w-3 h-3 text-[#4ed4b7]" />
-                  <span>Subnet: flux-subnet · Decentralized GPU Inference</span>
+              {/* Center Slate Content */}
+              <div className="space-y-4 my-6 text-center px-4">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#4ed4b7]/10 border border-[#4ed4b7]/25 font-mono text-[10px] text-[#5fe995]">
+                  <Sparkles className="w-3 h-3" />
+                  <span>Livepeer Neural Diffusion</span>
                 </div>
 
-                <p className="font-serif italic text-base md:text-lg text-white max-w-md mx-auto line-clamp-3 leading-relaxed">
+                <p className="font-serif italic text-base sm:text-lg text-zinc-100 max-w-md mx-auto line-clamp-3 leading-relaxed">
                   &ldquo;{brief || urlInput}&rdquo;
                 </p>
 
-                <div className="flex items-center justify-center gap-4 text-xs font-mono text-zinc-400">
-                  <span className="flex items-center gap-1.5">
-                    <span className="text-zinc-500">Method:</span>
-                    <span className="text-zinc-200">tools/call (create_media)</span>
-                  </span>
-                  <span className="text-zinc-600">•</span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="text-zinc-500">GPU Time:</span>
-                    <span className="text-[#4ed4b7] font-bold">5,500ms – 8,000ms</span>
-                  </span>
+                <div className="flex items-center justify-center gap-3 text-xs font-mono text-zinc-400">
+                  <span className="text-zinc-300">Livepeer GPU Swarm</span>
+                  <span className="text-zinc-600">·</span>
+                  <span className="text-zinc-300">Kodak 2383 LUT</span>
+                  <span className="text-zinc-600">·</span>
+                  <span className="text-[#4ed4b7] font-semibold">Generating Takes</span>
                 </div>
               </div>
 
-              {/* Bottom Metadata & Status */}
-              <div className="flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-zinc-500">
+              {/* Footer Metadata */}
+              <div className="flex items-center justify-between border-t border-white/10 pt-3.5 text-[10px] font-mono text-zinc-500">
                 <div className="flex items-center gap-2">
-                  <span className="text-zinc-400">ORCHESTRATOR:</span>
-                  <span className="text-zinc-200">livepeer-orch-flux-subnet</span>
+                  <span className="text-zinc-400 uppercase tracking-wider">PIPELINE:</span>
+                  <span className="text-zinc-200">DECENTRALIZED INFERENCE</span>
                 </div>
-                <div className="text-[#4ed4b7] flex items-center gap-1">
-                  <span>UNLOCKED DEMO ALLOWANCE</span>
+                <div className="text-[#5fe995] flex items-center gap-1.5 font-semibold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995] animate-ping" />
+                  <span>ACTIVE GPU CLUSTER</span>
                 </div>
               </div>
-
-              {/* Optical Corner Crop Marks */}
-              <div className="absolute top-2 left-2 w-2.5 h-2.5 border-t border-l border-[#4ed4b7]/50" />
-              <div className="absolute top-2 right-2 w-2.5 h-2.5 border-t border-r border-[#4ed4b7]/50" />
-              <div className="absolute bottom-2 left-2 w-2.5 h-2.5 border-b border-l border-[#4ed4b7]/50" />
-              <div className="absolute bottom-2 right-2 w-2.5 h-2.5 border-b border-r border-[#4ed4b7]/50" />
             </div>
 
             {/* Live Progress Stage */}
@@ -2034,10 +2025,10 @@ export function AuteurWorkstation({
                 <span className="font-bold text-[#4ed4b7] tracking-wider">AUTEUR</span>
                 <span className="text-zinc-500">•</span>
                 <span className="text-zinc-200 font-sans text-xs">
-                  {generationStep === 1 && "Decomposing creative brief into 3 directional beliefs..."}
-                  {generationStep === 2 && "Dispatching create_media to Livepeer Agent Creative MCP..."}
-                  {generationStep === 3 && "Livepeer GPU orchestrators synthesizing bespoke keyframes (5.5s–8.0s)..."}
-                  {generationStep >= 4 && "Keyframes verified on agent.livepeer.org · Launching"}
+                  {generationStep === 1 && "Decomposing creative brief into cinematic acts..."}
+                  {generationStep === 2 && "Synthesizing visual keyframes on Livepeer GPU..."}
+                  {generationStep === 3 && "Calibrating camera blocking and volumetric lighting..."}
+                  {generationStep >= 4 && "Master sequence ready · Launching workstation"}
                 </span>
               </div>
 
@@ -2050,7 +2041,7 @@ export function AuteurWorkstation({
 
               <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500">
                 <span>STAGE 0{generationStep}/04</span>
-                <span>DECENTRALIZED GPU RENDERING</span>
+                <span>LIVEPEER CINEMA ENGINE</span>
               </div>
             </div>
           </div>
@@ -2061,67 +2052,58 @@ export function AuteurWorkstation({
         {/* ============================================================ */}
         {mode === "producing" && (
           <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-8 animate-fadeIn max-w-2xl mx-auto w-full">
-            {/* 35mm Celluloid Frame Viewport */}
-            <div className="w-full max-w-xl aspect-[16/9] rounded-2xl bg-[#090b10] border border-white/15 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] flex flex-col justify-between p-6">
-              {/* Top Film Metadata & Corner Crosshairs */}
-              <div className="flex items-center justify-between text-zinc-500 font-mono text-[10px] tracking-wider border-b border-white/10 pb-3">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#4ed4b7] animate-ping" />
-                  <span className="text-[#4ed4b7] font-bold">LIVEPEER 60FPS NLE PIPELINE</span>
-                  <span className="text-zinc-600">|</span>
-                  <span>agent.livepeer.org/api/mcp/creative</span>
+            {/* Cinematic Screening Slate */}
+            <div className="w-full max-w-xl rounded-2xl bg-[#080a10] border border-white/10 relative overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.85),0_0_35px_rgba(78,212,183,0.08)] flex flex-col justify-between p-6">
+              
+              {/* Header HUD */}
+              <div className="flex items-center justify-between text-zinc-400 font-mono text-[11px] tracking-wider border-b border-white/10 pb-3.5">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-[#5fe995] animate-pulse shadow-[0_0_8px_#5fe995]" />
+                  <span className="text-white font-bold tracking-widest uppercase">AUTEUR 60FPS NLE</span>
                 </div>
-                <div className="text-zinc-400">
-                  35MM 24FPS · 8K PRORES
+                <div className="text-zinc-400 font-mono text-[10px] tracking-widest">
+                  PRORES 422 · 2.39:1 DCI
                 </div>
               </div>
 
-              {/* Center Active Prompt & Telemetry Display */}
-              <div className="space-y-4 my-auto text-center px-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 font-mono text-[10px] text-zinc-300">
-                  <Cpu className="w-3 h-3 text-[#4ed4b7]" />
-                  <span>Subnet: flux-subnet · 5 Acts Parallel Compute</span>
+              {/* Center Slate Content */}
+              <div className="space-y-4 my-6 text-center px-4">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#5fe995]/10 border border-[#5fe995]/25 font-mono text-[10px] text-[#5fe995]">
+                  <Film className="w-3 h-3" />
+                  <span>5-Act Master Composition</span>
                 </div>
 
                 <div className="space-y-1">
-                  <span className="text-[#4ed4b7] font-mono text-[11px] uppercase tracking-wider block">
-                    {activeTerritory?.title || "Directional Belief"}
-                  </span>
-                  <p className="font-serif italic text-base md:text-lg text-white max-w-md mx-auto line-clamp-2 leading-relaxed">
+                  {activeTerritory?.title && (
+                    <span className="text-[#4ed4b7] font-mono text-[10px] uppercase tracking-widest block font-semibold">
+                      {activeTerritory.title}
+                    </span>
+                  )}
+                  <p className="font-serif italic text-base sm:text-lg text-zinc-100 max-w-md mx-auto line-clamp-2 leading-relaxed">
                     &ldquo;{brief || urlInput}&rdquo;
                   </p>
                 </div>
 
-                <div className="flex items-center justify-center gap-4 text-xs font-mono text-zinc-400">
-                  <span className="flex items-center gap-1.5">
-                    <span className="text-zinc-500">Pipeline:</span>
-                    <span className="text-zinc-200">5-Act Master Cut</span>
-                  </span>
-                  <span className="text-zinc-600">•</span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="text-zinc-500">Audio:</span>
-                    <span className="text-[#4ed4b7] font-bold">Chatterbox TTS + Score</span>
-                  </span>
+                <div className="flex items-center justify-center gap-3 text-xs font-mono text-zinc-400">
+                  <span className="text-zinc-300">5 Continuous Acts</span>
+                  <span className="text-zinc-600">·</span>
+                  <span className="text-zinc-300">Livepeer Soundstage</span>
+                  <span className="text-zinc-600">·</span>
+                  <span className="text-[#5fe995] font-semibold">60 FPS Compositor</span>
                 </div>
               </div>
 
-              {/* Bottom Metadata & Status */}
-              <div className="flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-zinc-500">
+              {/* Footer Metadata */}
+              <div className="flex items-center justify-between border-t border-white/10 pt-3.5 text-[10px] font-mono text-zinc-500">
                 <div className="flex items-center gap-2">
-                  <span className="text-zinc-400">ORCHESTRATOR:</span>
-                  <span className="text-zinc-200">livepeer-orch-flux-subnet</span>
+                  <span className="text-zinc-400 uppercase tracking-wider">COMPOSITOR:</span>
+                  <span className="text-zinc-200">60 FPS CANVAS ENGINE</span>
                 </div>
-                <div className="text-[#4ed4b7] flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#4ed4b7] inline-block animate-pulse" />
-                  <span>ASSET PRELOAD CACHE ACTIVE</span>
+                <div className="text-[#5fe995] flex items-center gap-1.5 font-semibold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995] animate-ping" />
+                  <span>ASSEMBLING MASTER</span>
                 </div>
               </div>
-
-              {/* Optical Corner Crop Marks */}
-              <div className="absolute top-2 left-2 w-2.5 h-2.5 border-t border-l border-[#4ed4b7]/50" />
-              <div className="absolute top-2 right-2 w-2.5 h-2.5 border-t border-r border-[#4ed4b7]/50" />
-              <div className="absolute bottom-2 left-2 w-2.5 h-2.5 border-b border-l border-[#4ed4b7]/50" />
-              <div className="absolute bottom-2 right-2 w-2.5 h-2.5 border-b border-r border-[#4ed4b7]/50" />
             </div>
 
             {/* Live Progress Stage */}
@@ -2143,7 +2125,7 @@ export function AuteurWorkstation({
 
               <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500">
                 <span>STAGE 0{producingStep}/04</span>
-                <span>DECENTRALIZED GPU RENDERING</span>
+                <span>MASTER SEQUENCE ASSEMBLY</span>
               </div>
             </div>
           </div>
