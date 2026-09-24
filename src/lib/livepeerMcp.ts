@@ -262,45 +262,6 @@ export class LivepeerMcpService {
   public async createMedia(params: LivepeerCreateMediaParams): Promise<LivepeerCreateMediaResult> {
     const startTime = Date.now();
 
-    // 1. Direct Livepeer Studio AI Inference if API key is provided
-    if (this.apiKey && this.apiKey.trim().length > 0) {
-      try {
-        const studioRes = await fetch("https://livepeer.studio/api/beta/generate/text-to-image", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": this.apiKey.startsWith("Bearer ") ? this.apiKey : `Bearer ${this.apiKey}`,
-          },
-          body: JSON.stringify({
-            prompt: params.prompt,
-            model_id: params.modelOverride || "black-forest-labs/FLUX.1-schnell",
-            width: params.aspectRatio === "9:16" ? 576 : 1024,
-            height: params.aspectRatio === "9:16" ? 1024 : 576,
-            num_inference_steps: 4,
-          }),
-        });
-
-        if (studioRes.ok) {
-          const studioJson = await studioRes.json();
-          const studioUrl = studioJson.images?.[0]?.url;
-          if (studioUrl) {
-            return {
-              jobId: `livepeer-studio-${Date.now()}`,
-              url: studioUrl,
-              servedModelId: "FLUX.1-schnell",
-              costPaidUsd: 0.026,
-              orchestratorNode: "livepeer-orch-flux-subnet",
-              latencyMs: Date.now() - startTime,
-              status: "completed",
-              humanSummary: "Livepeer Studio AI Pipeline (FLUX.1-schnell)",
-            };
-          }
-        }
-      } catch (studioErr) {
-        console.warn("Livepeer Studio direct API notice:", studioErr);
-      }
-    }
-
     try {
       const result = await this.callMcp("tools/call", {
         name: "create_media",
