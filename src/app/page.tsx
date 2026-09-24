@@ -1,10 +1,9 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import { LiveCinemaCarouselBackground } from "@/components/landing/LiveCinemaCarouselBackground";
 import { LandingNavbar } from "@/components/landing/LandingNavbar";
 import { HeroSection } from "@/components/landing/HeroSection";
-import { AgentPipelineSection } from "@/components/landing/AgentPipelineSection";
 import { FeatureCardsSection } from "@/components/landing/FeatureCardsSection";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 
@@ -18,7 +17,6 @@ export default function LandingPage() {
       <div className="relative z-10">
         <LandingNavbar />
         <HeroSection />
-        <AgentPipelineSection />
         <FeatureCardsSection />
         <LandingFooter />
       </div>

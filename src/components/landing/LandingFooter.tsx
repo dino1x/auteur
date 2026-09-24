@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Link from "next/link";
-import { Film, ArrowUpRight, Cpu, Sparkles } from "lucide-react";
+import { Film, ArrowUpRight } from "lucide-react";
 import { cinematicAudio } from "@/lib/cinematic-audio";
 
 export function LandingFooter() {
@@ -42,8 +42,8 @@ export function LandingFooter() {
           {/* Quick Specs / Highlights */}
           <div id="specs" className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-white/5 text-xs font-mono scroll-mt-28">
             <div>
-              <span className="text-zinc-500 block mb-1">SETTLEMENT</span>
-              <span className="text-white font-semibold">Arbitrum / Livepeer Subnet</span>
+              <span className="text-zinc-500 block mb-1">NETWORK</span>
+              <span className="text-white font-semibold">Livepeer Decentralized GPU</span>
             </div>
             <div>
               <span className="text-zinc-500 block mb-1">MAX RESOLUTION</span>
@@ -84,10 +84,10 @@ export function LandingFooter() {
               <ArrowUpRight className="w-3 h-3" />
             </a>
             <a
-              href="#pipeline"
+              href="#primitives"
               className="text-zinc-400 hover:text-white transition-colors"
             >
-              Architecture
+              Studio Primitives
             </a>
           </div>
         </div>
