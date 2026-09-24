@@ -159,12 +159,24 @@ export class LivepeerMcpService {
     };
 
     try {
-      const response = await fetch(this.endpoint, {
+      let response = await fetch(this.endpoint, {
         method: "POST",
         headers,
         body: JSON.stringify(payload),
         signal: controller.signal,
       });
+
+      // If key is rejected (401), automatically retry keyless as Livepeer Agent creative endpoint is keyless by default
+      if (response.status === 401 && headers["Authorization"]) {
+        const retryHeaders = { ...headers };
+        delete retryHeaders["Authorization"];
+        response = await fetch(this.endpoint, {
+          method: "POST",
+          headers: retryHeaders,
+          body: JSON.stringify(payload),
+          signal: controller.signal,
+        });
+      }
 
       clearTimeout(timeoutId);
 
@@ -175,6 +187,20 @@ export class LivepeerMcpService {
 
       const json = await response.json();
       if (json.error) {
+        // If error message indicates key is not accepted, retry keyless
+        if (json.error.code === -32001 && headers["Authorization"]) {
+          const retryHeaders = { ...headers };
+          delete retryHeaders["Authorization"];
+          const retryResp = await fetch(this.endpoint, {
+            method: "POST",
+            headers: retryHeaders,
+            body: JSON.stringify(payload),
+          });
+          if (retryResp.ok) {
+            const retryJson = await retryResp.json();
+            if (retryJson.result) return retryJson.result as T;
+          }
+        }
         throw new Error(`Livepeer MCP JSON-RPC Error [${json.error.code}]: ${json.error.message}`);
       }
 

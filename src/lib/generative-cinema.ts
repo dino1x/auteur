@@ -26,19 +26,19 @@ const THEMATIC_PALETTES: Record<string, string[]> = {
     "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk2ODEvM1ZWUGMtTXdkMnU2REVuM3RWUmptLmpwZw.e057b08306b30f75/3VVPc-Mwd2u6DEn3tVRjm.jpg",
   ],
   racing: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MWUvSkhLMUNBeHVudFBBd29HQ1RZTVdCLmpwZw.969dfc1a43072ab4/JHK1CAxuntPAwoGCTYMWB.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDYvMFNOYkt1UWFaNWNTcDBHbElRRDdlLmpwZw.65b76b30ba58da56/0SNbKuQaZ5cSp0GlIQD7e.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYmI2NDYvcW94aGVyMXhqR0hNb3ZJQnZKQXBULmpwZw.49412f66622296dd/qoxher1xjGHMovIBvJApT.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MTYvejRDTFU0THkyRjFoWml5TklJcWEyLmpwZw.660ffbf5b22ed418/z4CLU4Ly2F1hZiyNIIqa2.jpg",
   ],
   wildlife: [
     "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDEvekFjeWZCNVR6OUJHTGJJaDZ2TGZQLmpwZw.e73f200b252ea79b/zAcyfB5Tz9BGLbIh6vLfP.jpg",
     "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDMvNWNfLUdhZk9jRTBwSzE0TEQ1UGNhLmpwZw.9fc767252bb912f8/5c_-GafOcE0pK14LD5Pca.jpg",
   ],
   mountains: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDMvNWNfLUdhZk9jRTBwSzE0TEQ1UGNhLmpwZw.9fc767252bb912f8/5c_-GafOcE0pK14LD5Pca.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MGIvWDZjYk16ZDU2VnhtREphQzdISERGLmpwZw.9ff8d740a112167f/X6cbMzd56VxmDJaC7HHDF.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYmI2NWQvQ0FvVFozSVpsMG9ybXJHdTN3cFlPLmpwZw.78696e133226f1eb/CAoTZ3IZl0ormrGu3wpYO.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDEvekFjeWZCNVR6OUJHTGJJaDZ2TGZQLmpwZw.e73f200b252ea79b/zAcyfB5Tz9BGLbIh6vLfP.jpg",
   ],
   nature: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDEvekFjeWZCNVR6OUJHTGJJaDZ2TGZQLmpwZw.e73f200b252ea79b/zAcyfB5Tz9BGLbIh6vLfP.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYmI2NWQvQ0FvVFozSVpsMG9ybXJHdTN3cFlPLmpwZw.78696e133226f1eb/CAoTZ3IZl0ormrGu3wpYO.jpg",
     "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3YTRvX0N1NmxhQnY5WFRMeVlNUHpIbHNaLmpwZw.43ec37d854c29895/_Cu6laBv9XTLyYMPzHlsZ.jpg",
   ],
   luxury: [
@@ -54,7 +54,7 @@ const THEMATIC_PALETTES: Record<string, string[]> = {
     "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MGIvWDZjYk16ZDU2VnhtREphQzdISERGLmpwZw.9ff8d740a112167f/X6cbMzd56VxmDJaC7HHDF.jpg",
   ],
   food: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDEvekFjeWZCNVR6OUJHTGJJaDZ2TGZQLmpwZw.e73f200b252ea79b/zAcyfB5Tz9BGLbIh6vLfP.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYmI2NWQvTjJERTA4MXBvWC00c2xCbkZ1VmVLLmpwZw.3414528c347ff6e5/N2DE081poX-4slBnFuVeK.jpg",
     "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3YTRvX0N1NmxhQnY5WFRMeVlNUHpIbHNaLmpwZw.43ec37d854c29895/_Cu6laBv9XTLyYMPzHlsZ.jpg",
   ],
   urban: [
@@ -89,17 +89,17 @@ export function resolveCinematicAsset(prompt: string, sceneNumber: number): stri
 
   let category = "urban";
 
-  // 1. Wildlife, Big Cats & Predators (Highest priority - catches snow leopards, tigers, lions, animals)
-  if (hasAny("leopard", "leopards", "tiger", "tigers", "lion", "lions", "cheetah", "cheetahs", "panther", "panthers", "jaguar", "jaguars", "predator", "predators", "feline", "felines", "wildlife", "animal", "animals", "safari", "bear", "bears", "wolf", "wolves", "deer", "eagle", "hawk", "falcon", "prey")) {
+  // 1. Automotive, Motorsport & Driving (Any vehicle in any setting: mountain, track, highway, coast)
+  if (hasAny("f1", "formula 1", "formula one", "racecar", "racecars", "supercar", "supercars", "nascar", "motorsport", "motorsports", "automotive", "porsche", "ferrari", "mclaren", "lamborghini", "pit lane", "lap time") || hasAny("car", "cars", "vehicle", "vehicles", "automobile", "sports car", "driving", "drift", "drifting", "tarmac", "speedway")) {
+    category = "racing";
+  }
+  // 2. Wildlife, Big Cats & Predators (Catches snow leopards, tigers, lions, animals)
+  else if (hasAny("leopard", "leopards", "tiger", "tigers", "lion", "lions", "cheetah", "cheetahs", "panther", "panthers", "jaguar", "jaguars", "predator", "predators", "feline", "felines", "wildlife", "animal", "animals", "safari", "bear", "bears", "wolf", "wolves", "deer", "eagle", "hawk", "falcon", "prey")) {
     category = "wildlife";
   }
-  // 2. Mountains, Alpine & Himalayan Ridges
+  // 3. Mountains, Alpine & Himalayan Ridges
   else if (hasAny("mountain", "mountains", "himalaya", "himalayan", "ridge", "ridgelines", "ridgeline", "peak", "peaks", "summit", "summits", "alpine", "alps", "glacier", "glaciers", "everest", "snow", "snowy", "cliff", "crag", "scree")) {
     category = "mountains";
-  }
-  // 3. Automotive, Motorsport & Racing (Only true racing/automotive terms)
-  else if (hasAny("f1", "formula 1", "formula one", "racecar", "racecars", "supercar", "supercars", "nascar", "motorsport", "motorsports", "automotive", "porsche", "ferrari", "mclaren", "lamborghini", "pit lane", "lap time") || (hasAny("car", "cars", "vehicle", "vehicles", "automobile") && !hasAny("nature", "forest", "mountain", "ocean", "space", "sky", "animal", "food"))) {
-    category = "racing";
   }
   // 4. Ocean & Marine
   else if (hasAny("ocean", "marine", "underwater", "sea", "jellyfish", "coral", "abyss", "abyssal", "pelagic", "scuba", "diver", "submarine", "whale", "whales", "shark", "sharks", "tide", "tides", "submerged")) {

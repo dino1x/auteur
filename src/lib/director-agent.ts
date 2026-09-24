@@ -100,8 +100,24 @@ export class DirectorAgent {
       return new RegExp(`\\b${w}\\b`, "i").test(cleanLower);
     });
 
-    // 1. Wildlife, Himalayan, Big Cats & Mountain Predators
-    if (hasAny("leopard", "snow leopard", "tiger", "lion", "cheetah", "jaguar", "panther", "predator", "wildlife", "animal", "feline", "himalaya", "himalayan", "ridge", "ridgeline", "alpine", "summit", "glacier")) {
+    // 1. Automotive, Motorsport & Racing (Check before generic landscapes so mountain/street driving matches correctly)
+    if (hasAny("f1", "formula 1", "formula one", "supercar", "hypercar", "racecar", "motorsport", "nascar", "le mans", "grand prix", "drag strip", "circuit race", "pit lane", "porsche", "ferrari", "mclaren", "lamborghini", "speedway", "drift", "drifting", "tarmac") || (hasAny("car", "vehicle", "automobile", "driving", "drive") && !hasAny("carpet", "card", "carbon-fiber drone"))) {
+      return {
+        dramaticTitle: "Pit Lane Noir", dramaticTagline: "Polished carbon fiber, oil-slick reflections, and mechanical tension.",
+        dramaticEnvironment: "dimly lit garages and rain-streaked pit lanes", dramaticPalette: ["#06080b", "#e8c76d", "#cc0000", "#fafafc"],
+        dramaticLightModifier: "workshop tungsten with metallic reflections", dramaticCameraModifier: "around carbon fiber bodywork", dramaticInstrument: "deep engine rumble textures",
+        atmosphericTitle: "Open Road", atmosphericTagline: "Vast horizons, golden hour asphalt, and the freedom of distance.",
+        atmosphericEnvironment: "endless open highways at golden hour", atmosphericPalette: ["#12151d", "#e8c76d", "#ff8c42", "#f5f6fa"],
+        atmosphericLightModifier: "Long golden hour sidelight with lens flare", atmosphericCameraModifier: "helicopter tracking along highway", atmosphericInstrument: "Ambient synthesizer pads",
+        kineticTitle: "Apex Velocity", kineticTagline: "Wheel-to-wheel combat, g-force compression, and split-second decisions.",
+        kineticEnvironment: "the apex of high-speed corners under race conditions", kineticPalette: ["#08090c", "#ff3333", "#00ff88", "#ffffff"],
+        kineticLightModifier: "strobing track lights and motion blur", kineticCameraModifier: "Onboard camera snap cuts", kineticInstrument: "electronic arpeggios layered with engine harmonics",
+        styleKeywords: "automotive cinematography, high-speed shutter, carbon fiber detail, motorsport",
+      };
+    }
+
+    // 2. Wildlife, Himalayan Big Cats & Mountain Predators (Strict animal matching only)
+    if (hasAny("leopard", "snow leopard", "tiger", "lion", "cheetah", "jaguar", "panther", "predator", "wildlife", "animal", "feline", "safari", "bear", "wolf")) {
       return {
         dramaticTitle: "Apex Solitude", dramaticTagline: "High-altitude limestone crags, sub-zero vapor, and solitary predator focus.",
         dramaticEnvironment: "frozen Himalayan ridgelines and misty alpine cliffs", dramaticPalette: ["#0a0d14", "#8ba3c7", "#e2e8f0", "#3a4a60"],
@@ -116,19 +132,19 @@ export class DirectorAgent {
       };
     }
 
-    // 2. Automotive, Motorsport & Racing (Strict matching only: racecars, f1, supercars, etc.)
-    if (hasAny("f1", "formula 1", "formula one", "supercar", "hypercar", "racecar", "motorsport", "nascar", "le mans", "grand prix", "drag strip", "circuit race", "pit lane", "porsche", "ferrari", "mclaren", "lamborghini") || (hasAny("car", "vehicle", "automobile") && !hasAny("carbon", "carpet", "scarlet", "card"))) {
+    // 3. Alpine Mountains, Glaciers & Summits (Landscape without predators)
+    if (hasAny("mountain", "mountains", "alpine", "summit", "summits", "peak", "peaks", "glacier", "glaciers", "everest", "snowy peak", "himalayas", "himalaya")) {
       return {
-        dramaticTitle: "Pit Lane Noir", dramaticTagline: "Polished carbon fiber, oil-slick reflections, and mechanical tension.",
-        dramaticEnvironment: "dimly lit garages and rain-streaked pit lanes", dramaticPalette: ["#06080b", "#e8c76d", "#cc0000", "#fafafc"],
-        dramaticLightModifier: "workshop tungsten with metallic reflections", dramaticCameraModifier: "around carbon fiber bodywork", dramaticInstrument: "deep engine rumble textures",
-        atmosphericTitle: "Open Road", atmosphericTagline: "Vast horizons, golden hour asphalt, and the freedom of distance.",
-        atmosphericEnvironment: "endless open highways at golden hour", atmosphericPalette: ["#12151d", "#e8c76d", "#ff8c42", "#f5f6fa"],
-        atmosphericLightModifier: "Long golden hour sidelight with lens flare", atmosphericCameraModifier: "helicopter tracking along highway", atmosphericInstrument: "Ambient synthesizer pads",
-        kineticTitle: "Apex Velocity", kineticTagline: "Wheel-to-wheel combat, g-force compression, and split-second decisions.",
-        kineticEnvironment: "the apex of high-speed corners under race conditions", kineticPalette: ["#08090c", "#ff3333", "#00ff88", "#ffffff"],
-        kineticLightModifier: "strobing track lights and motion blur", kineticCameraModifier: "Onboard camera snap cuts", kineticInstrument: "electronic arpeggios layered with engine harmonics",
-        styleKeywords: "automotive cinematography, high-speed shutter, carbon fiber detail, motorsport",
+        dramaticTitle: "Glacial Majesty", dramaticTagline: "Sheer vertical rock faces, crystalline sub-zero air, and blinding snow glare.",
+        dramaticEnvironment: "towering granite peaks rising above sea-of-clouds", dramaticPalette: ["#070c14", "#7ea4d8", "#e2eef8", "#2a3a50"],
+        dramaticLightModifier: "razor-sharp morning sun piercing cloud inversion", dramaticCameraModifier: "sweeping helicopter aerials circling summits", dramaticInstrument: "massive orchestral horns and deep ambient drone",
+        atmosphericTitle: "Alpine Horizon", atmosphericTagline: "Golden hour snowfields, pastel clouds, and silent monumental scale.",
+        atmosphericEnvironment: "high alpine passes bathed in warm sunset alpenglow", atmosphericPalette: ["#141926", "#e8c76d", "#ffaa77", "#f0f5fa"],
+        atmosphericLightModifier: "Warm golden alpenglow reflecting off glacial ice", atmosphericCameraModifier: "slow panoramic tilt reveals", atmosphericInstrument: "Haunting winds and acoustic resonance",
+        kineticTitle: "Summit Ascent", kineticTagline: "High-altitude expedition, raw elements, and geological power.",
+        kineticEnvironment: "windswept ridges and icy mountain passes", kineticPalette: ["#080d14", "#4ed4b7", "#60a5fa", "#ffffff"],
+        kineticLightModifier: "dramatic weather shifts with crisp rim highlights", kineticCameraModifier: "telephoto tracking through blowing snow", kineticInstrument: "driving rhythm with thunderous percussion",
+        styleKeywords: "alpine landscape cinematography, snow-capped peaks, alpenglow, 8k resolution, IMAX landscape",
       };
     }
 
@@ -307,25 +323,45 @@ export class DirectorAgent {
     const lighting = territory.lightingLogic.replace(/\.+$/, "").toLowerCase();
     const visualMeta = territory.visualMetaphor.replace(/\.+$/, "").toLowerCase();
 
-    // 1. Wildlife / Snow Leopard / Himalayan / Mountain Predators
-    if (p.includes("leopard") || p.includes("wildlife") || p.includes("predator") || p.includes("animal") || p.includes("feline") || p.includes("himalaya") || p.includes("ridge") || p.includes("mountain") || p.includes("tiger") || p.includes("lion")) {
+    // 1. Wildlife / Snow Leopard / Big Cats (Strict matching only)
+    if (p.includes("leopard") || p.includes("tiger") || p.includes("lion") || p.includes("cheetah") || p.includes("panther") || p.includes("jaguar") || p.includes("feline") || (p.includes("predator") && !p.includes("drone"))) {
       switch (sceneNumber) {
         case 1:
-          return `Across the frozen Himalayan ridgelines at dawn, ${titleCaseBrief} steps out from the veil of mountain mist.`;
+          return `Across the wilderness at dawn, ${titleCaseBrief} steps out from the veil of morning mist.`;
         case 2:
-          return `Thick rosetted fur and muscular contours honed by thousands of years at the roof of the world.`;
+          return `Muscular contours and predatory focus honed over generations in the wild.`;
         case 3:
-          return `Silent, sure-footed strides navigating razor-thin alpine ledges with complete sovereign grace.`;
+          return `Silent, sure-footed strides navigating the rugged terrain with complete sovereign grace.`;
         case 4:
-          return `Sub-zero vapor rises in the morning air as ${lighting} illuminates the endless snow peaks.`;
+          return `Morning vapor rises in the cold air as ${lighting} illuminates the landscape.`;
         case 5:
-          return `Perched high above the glacial valley, the apex predator commands the wild expanse.`;
+          return `Perched high above the valley, the apex predator commands the wild expanse.`;
         case 6:
-          return `${subjectCapitalized} dissolves back into the mountain stone—untamed, patient, and eternal.`;
+          return `${subjectCapitalized} dissolves back into the shadows—untamed, patient, and eternal.`;
         case 7:
-          return `The high mountains hold their quiet guardian forever.`;
+          return `The wild expanse holds its quiet guardian forever.`;
         default:
-          return `The solitary sovereign of the high Himalayas.`;
+          return `The solitary sovereign of the wild.`;
+      }
+    }
+
+    // 2. Alpine Mountains / Summits / Glaciers (Landscape without predators)
+    if (p.includes("mountain") || p.includes("alpine") || p.includes("summit") || p.includes("glacier") || p.includes("ridge") || p.includes("peak")) {
+      switch (sceneNumber) {
+        case 1:
+          return `Across sheer alpine summits at dawn, ${titleCaseBrief} commands the vast mountain horizon.`;
+        case 2:
+          return `Glacial winds sweep across ancient rock faces, sculpted over millions of years.`;
+        case 3:
+          return `Sunlight breaks over high-altitude ridges, casting sharp raking shadows across the snow.`;
+        case 4:
+          return `Sub-zero vapor drifts through the pass as ${lighting} illuminates the peaks.`;
+        case 5:
+          return `High above the valleys, ${subjectCapitalized} stands silent and enduring against the sky.`;
+        case 6:
+          return `${subjectCapitalized} dissolves into twilight alpenglow—monumental, peaceful, and eternal.`;
+        default:
+          return `The untamed majesty of the high alpine range.`;
       }
     }
 
@@ -519,9 +555,14 @@ export class DirectorAgent {
     const subjectCore = briefWords.slice(0, Math.min(3, briefWords.length)).join(" ");
     const subjectCapitalized = subjectCore.charAt(0).toUpperCase() + subjectCore.slice(1);
 
-    // 1. Wildlife / Snow Leopard / Himalayan / Big Cats / Mountain Predators
-    if (p.includes("leopard") || p.includes("wildlife") || p.includes("predator") || p.includes("animal") || p.includes("feline") || p.includes("himalaya") || p.includes("ridge") || p.includes("mountain") || p.includes("tiger") || p.includes("lion")) {
-      return `Across the frozen Himalayan ridgelines at dawn, ${subjectCapitalized} navigates the heights with sovereign grace. Pure instinct traversing the mountain solitude—untamed, patient, and eternal.`;
+    // 1. Wildlife / Big Cats (Strict matching only)
+    if (p.includes("leopard") || p.includes("tiger") || p.includes("lion") || p.includes("cheetah") || p.includes("panther") || p.includes("jaguar") || p.includes("feline") || (p.includes("predator") && !p.includes("drone"))) {
+      return `Across the wilderness at dawn, ${subjectCapitalized} navigates the heights with sovereign grace. Pure instinct traversing the solitude—untamed, patient, and eternal.`;
+    }
+
+    // 2. Alpine Mountains & Summits (Landscape)
+    if (p.includes("mountain") || p.includes("alpine") || p.includes("summit") || p.includes("glacier") || p.includes("peak")) {
+      return `Where sheer alpine summits meet morning light, ${subjectCapitalized} stands above the clouds. Monumental ridgelines and ancient glacial valleys sculpted by time.`;
     }
 
     // 2. Cyber / Drones / Tech / Robotics / AI

@@ -133,9 +133,9 @@ export function AuteurWorkstation({
   onToggleMode,
   onOpenShotLedger,
 }: AuteurWorkstationProps) {
-  // Progressive Pipeline Stepper State (All 5 stages unlocked and responsive)
+  // Progressive Pipeline Stepper State (Stages unlock progressively as user completes each phase)
   const [mode, setMode] = useState<WorkstationMode>("input");
-  const [maxUnlockedStep, setMaxUnlockedStep] = useState<number>(5);
+  const [maxUnlockedStep, setMaxUnlockedStep] = useState<number>(1);
   const [selectedScene, setSelectedScene] = useState<StoryboardScene | null>(null);
   const [modalTab, setModalTab] = useState<ModalTab>("direct");
   const [generationStep, setGenerationStep] = useState<number>(0);
@@ -149,9 +149,11 @@ export function AuteurWorkstation({
     }
   }, [brief]);
 
-  // When Stage 3 (Cinema NLE) is reached, automatically unlock Stage 4 (Critic Pass) and Stage 5 (Storyboard)
+  // Progressive unlock: Territories unlocks Step 2, NLE/Critic/Storyboard unlock Steps 3-5
   useEffect(() => {
-    if (mode === "nle" || mode === "critic" || mode === "storyboard") {
+    if (mode === "territories") {
+      setMaxUnlockedStep((prev) => Math.max(prev, 2));
+    } else if (mode === "nle" || mode === "critic" || mode === "storyboard") {
       setMaxUnlockedStep(5);
     }
   }, [mode]);
@@ -532,13 +534,16 @@ export function AuteurWorkstation({
     setMode("generating");
     setGenerationStep(1);
 
+    const stepTimer = setInterval(() => {
+      setGenerationStep((prev) => (prev < 3 ? prev + 1 : prev));
+    }, 1800);
+
     try {
-      const genPromise = Promise.resolve(onGenerateTerritories(input));
-      const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 4000));
-      await Promise.race([genPromise, timeoutPromise]);
+      await onGenerateTerritories(input);
+      clearInterval(stepTimer);
       setGenerationStep(4);
       cinematicAudio.playCue("success");
-      setMaxUnlockedStep(5);
+      setMaxUnlockedStep(2);
       setMode("territories");
       confetti({
         particleCount: 50,
@@ -547,8 +552,9 @@ export function AuteurWorkstation({
         colors: ["#4ed4b7", "#5fe995", "#e8c76d"],
       });
     } catch (err) {
+      clearInterval(stepTimer);
       console.error("Livepeer territory synthesis error:", err);
-      setMaxUnlockedStep(5);
+      setMaxUnlockedStep(2);
       setMode("territories");
     }
   };
@@ -949,8 +955,8 @@ export function AuteurWorkstation({
             ].map((step, idx) => {
               const Icon = step.icon;
               const isCurrent = mode === step.id || (mode === "producing" && step.id === "territories");
-              const isUnlocked = true;
-              const isPast = maxUnlockedStep > step.num;
+              const isUnlocked = step.num <= maxUnlockedStep;
+              const isPast = maxUnlockedStep > step.num && !isCurrent;
               const isBusy = mode === "generating" || mode === "producing";
 
               return (
@@ -964,17 +970,23 @@ export function AuteurWorkstation({
                   )}
                   <button
                     onClick={() => {
-                      if (!isBusy) {
+                      if (isUnlocked && !isBusy) {
                         cinematicAudio.playCue("action");
                         setMode(step.id as WorkstationMode);
                       }
                     }}
-                    disabled={isBusy}
-                    title={`Navigate to Step ${step.num}: ${step.label}`}
-                    className={`flex items-center gap-1.5 px-2 md:px-2.5 py-1 rounded-lg transition-all group shrink-0 cursor-pointer ${
-                      isCurrent
-                        ? "bg-[#4ed4b7] text-black font-bold shadow-[0_0_12px_rgba(78,212,183,0.35)]"
-                        : "text-zinc-300 hover:text-white hover:bg-white/10"
+                    disabled={!isUnlocked || isBusy}
+                    title={
+                      isUnlocked
+                        ? `Navigate to Step ${step.num}: ${step.label}`
+                        : `Step ${step.num}: ${step.label} (Locked - complete prior step)`
+                    }
+                    className={`flex items-center gap-1.5 px-2 md:px-2.5 py-1 rounded-lg transition-all group shrink-0 ${
+                      !isUnlocked
+                        ? "opacity-30 cursor-not-allowed text-zinc-600"
+                        : isCurrent
+                        ? "bg-[#4ed4b7] text-black font-bold shadow-[0_0_12px_rgba(78,212,183,0.35)] cursor-pointer"
+                        : "text-zinc-300 hover:text-white hover:bg-white/10 cursor-pointer"
                     }`}
                   >
                     <span
@@ -1001,7 +1013,15 @@ export function AuteurWorkstation({
                           : "text-zinc-600"
                       }`}
                     />
-                    <span className="hidden sm:inline whitespace-nowrap text-[11px] md:text-xs">{step.label}</span>
+                    <span className={`hidden sm:inline whitespace-nowrap text-[11px] md:text-xs ${
+                      isCurrent
+                        ? "text-black font-bold"
+                        : isUnlocked
+                        ? "text-zinc-300"
+                        : "text-zinc-600"
+                    }`}>
+                      {step.label}
+                    </span>
                   </button>
                 </React.Fragment>
               );
