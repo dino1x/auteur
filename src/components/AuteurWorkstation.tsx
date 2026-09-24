@@ -59,6 +59,7 @@ import {
   getImageForShot,
 } from "@/lib/generative-cinema";
 import { LIVEPEER_CINEMA_RECIPES } from "@/lib/livepeerMcp";
+import { DirectorAgent } from "@/lib/director-agent";
 import { TactileFluidButton } from "./TactileFluidButton";
 import { SpinningBorderCta } from "./SpinningBorderCta";
 import { CrtMonitorOverlay } from "./CrtMonitorOverlay";
@@ -142,6 +143,7 @@ export function AuteurWorkstation({
   const [producingStep, setProducingStep] = useState<number>(1);
   const [producingMessage, setProducingMessage] = useState<string>("Decomposing episodic storyboard into 5 continuous acts...");
   const [urlInput, setUrlInput] = useState<string>(brief || "");
+  const directorAgent = useMemo(() => new DirectorAgent(), []);
 
   useEffect(() => {
     if (!urlInput && brief) {
@@ -1979,10 +1981,21 @@ export function AuteurWorkstation({
                       </div>
 
                       <div>
-                        <h2 className="text-lg font-display font-bold text-white group-hover:text-[#4ed4b7] transition-colors">
-                          {territory.title}
-                        </h2>
-                        <p className="font-serif italic text-xs text-[#4ed4b7] mt-1">
+                        {territory.title.includes(" · ") ? (
+                          <div>
+                            <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-[#4ed4b7]/10 text-[#4ed4b7] border border-[#4ed4b7]/30 mb-1.5">
+                              {territory.title.split(" · ")[0]}
+                            </span>
+                            <h2 className="text-lg font-display font-bold text-white group-hover:text-[#4ed4b7] transition-colors">
+                              {territory.title.split(" · ")[1]}
+                            </h2>
+                          </div>
+                        ) : (
+                          <h2 className="text-lg font-display font-bold text-white group-hover:text-[#4ed4b7] transition-colors">
+                            {territory.title}
+                          </h2>
+                        )}
+                        <p className="font-serif italic text-xs text-[#4ed4b7] mt-1 line-clamp-2">
                           &quot;{territory.tagline}&quot;
                         </p>
                       </div>
@@ -2000,11 +2013,31 @@ export function AuteurWorkstation({
                         </div>
                       </div>
 
-                      <div className="space-y-1.5 pt-2 border-t border-white/10 font-mono text-xs text-zinc-400">
-                        <div><span className="text-zinc-500">Metaphor: </span><span className="text-zinc-200">{territory.visualMetaphor}</span></div>
-                        <div><span className="text-zinc-500">Lighting: </span><span className="text-zinc-200">{territory.lightingLogic}</span></div>
-                        <div><span className="text-zinc-500">Camera: </span><span className="text-zinc-200">{territory.cameraLanguage}</span></div>
-                        <div><span className="text-zinc-500">Score: </span><span className="text-zinc-200">{territory.musicMood}</span></div>
+                      <div className="space-y-2 pt-2 border-t border-white/10 font-mono text-xs">
+                        <div className="p-2.5 rounded-lg bg-black/40 border border-white/5 space-y-1">
+                          <div className="flex items-center gap-1.5 text-[10px] text-zinc-400 uppercase tracking-wider">
+                            <Sparkles className="w-3 h-3 text-[#4ed4b7]" />
+                            <span>Visual Metaphor</span>
+                          </div>
+                          <p className="text-zinc-200 text-[11px] line-clamp-2 leading-relaxed font-sans">
+                            {territory.visualMetaphor}
+                          </p>
+                        </div>
+
+                        <div className="space-y-1 text-[11px]">
+                          <div className="flex items-start gap-1.5 text-zinc-400">
+                            <span className="text-zinc-500 shrink-0">Lighting:</span>
+                            <span className="text-zinc-200 line-clamp-1">{territory.lightingLogic}</span>
+                          </div>
+                          <div className="flex items-start gap-1.5 text-zinc-400">
+                            <span className="text-zinc-500 shrink-0">Camera:</span>
+                            <span className="text-zinc-200 line-clamp-1">{territory.cameraLanguage}</span>
+                          </div>
+                          <div className="flex items-start gap-1.5 text-zinc-400">
+                            <span className="text-zinc-500 shrink-0">Score:</span>
+                            <span className="text-zinc-200 line-clamp-1">{territory.musicMood}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -2166,6 +2199,20 @@ export function AuteurWorkstation({
                   </button>
                 </div>
 
+                {/* Real-Time Detected Entity Pill */}
+                {urlInput.trim() && (
+                  <div className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-black/60 border border-white/10 text-[10px] font-mono animate-fadeIn">
+                    <div className="flex items-center gap-2 text-zinc-300">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995] animate-pulse" />
+                      <span className="text-zinc-500 uppercase">Target Entity:</span>
+                      <span className="text-[#4ed4b7] font-bold">
+                        {directorAgent.extractBrandOrProduct(urlInput)}
+                      </span>
+                    </div>
+                    <span className="text-zinc-500 hidden sm:inline">Autonomous Scene Ingest Ready</span>
+                  </div>
+                )}
+
                 <div className="flex items-center justify-between pt-3 border-t border-white/[0.08] text-[11px] font-mono text-zinc-400">
                   <div className="flex items-center gap-1.5 text-zinc-300">
                     <Globe className="w-3.5 h-3.5 text-[#4ed4b7]" />
@@ -2178,11 +2225,36 @@ export function AuteurWorkstation({
                 </div>
               </div>
 
-              {/* Innovation Playbooks */}
+              {/* Inspiration Playbooks */}
               <div className="space-y-2">
                 <label className="text-xs font-mono text-[#626a76] uppercase block">Inspiration Playbooks:</label>
                 <div className="grid grid-cols-2 gap-2">
-                  {INNOVATION_PLAYBOOKS.slice(0, 4).map((pb) => {
+                  {[
+                    {
+                      id: "pb-spatial",
+                      title: "Spatial Computing Launch",
+                      tagline: "Apple Vision Pro 3D optics & visionOS",
+                      defaultBrief: "Apple Vision Pro: curved 3D glass optics, spatial visionOS interfaces, precision machined aluminum, and ambient physical room integration.",
+                    },
+                    {
+                      id: "pb-nike",
+                      title: "Nike Marathon Velocity",
+                      tagline: "High-speed road racing commercial",
+                      defaultBrief: "Commercial for Nike Alphafly 3 marathon racing shoe sprinting across rain-slicked nocturnal Tokyo streetlights with high-speed camera tracking.",
+                    },
+                    {
+                      id: "pb-cyber",
+                      title: "Auteur Cinema Director",
+                      tagline: "Anamorphic cyber-noir commercial",
+                      defaultBrief: "A cyber-noir operative infiltrates an orbital cryogenic server vault suspended above a tempest ocean. Panavision anamorphic glass with cold cyan rim lighting.",
+                    },
+                    {
+                      id: "pb-fashion",
+                      title: "Avant-Garde Lookbook",
+                      tagline: "Volcanic landscape editorial",
+                      defaultBrief: "Avant-garde architectural streetwear film: sculptural obsidian technical garments cutting through windward Icelandic black sand dunes and geothermal steam vents.",
+                    },
+                  ].map((pb) => {
                     const isSelected = activePlaybookId === pb.id || urlInput === pb.defaultBrief;
                     return (
                       <button

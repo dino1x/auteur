@@ -218,6 +218,34 @@ export class DirectorAgent {
       };
     }
 
+    // 0c. Fintech, Payments, Modern Cloud SaaS & Developer Platforms
+    if (hasAny("stripe", "resend", "linear", "figma", "datadog", "snowflake", "vercel", "aws", "payment", "payments", "fintech", "banking", "checkout", "transaction", "ledger", "database", "infrastructure", "cloud", "api", "developer platform", "developer tools", "sdk", "backend", "token", "crypto", "blockchain", "saas")) {
+      return {
+        dramaticTitle: "Monolithic Core",
+        dramaticTagline: "High-density data architecture, architectural server racks, and pulse-code precision.",
+        dramaticEnvironment: "a subterranean monolithic server sanctuary with pulsing fiber-optic nodes",
+        dramaticPalette: ["#070a0f", "#00ffcc", "#6366f1", "#f8fafc"],
+        dramaticLightModifier: "subtle cold blue LED edge-lighting and deep negative shadow fill",
+        dramaticCameraModifier: "slow rectilinear push-in through geometric architectural corridors",
+        dramaticInstrument: "low-frequency modular sub-bass with tactile relay clicks",
+        atmosphericTitle: "Global Settlement",
+        atmosphericTagline: "Infinite fiber routes, seamless global throughput, and serene architectural scale.",
+        atmosphericEnvironment: "a sunlit glass skyscraper overlooking a sprawling modern financial district",
+        atmosphericPalette: ["#0a0e17", "#4ed4b7", "#93c5fd", "#ffffff"],
+        atmosphericLightModifier: "Natural morning sunbeams cutting through expansive glass curtain walls",
+        atmosphericCameraModifier: "sweeping panoramic aerial crane descending toward glass terraces",
+        atmosphericInstrument: "Neo-classical piano with lush atmospheric delay",
+        kineticTitle: "Throughput Surge",
+        kineticTagline: "Sub-millisecond latency, million-transaction velocity, and zero-downtime execution.",
+        kineticEnvironment: "a high-velocity fiber-optic network routing real-time global transactions",
+        kineticPalette: ["#05080f", "#00f0ff", "#ff007f", "#ffffff"],
+        kineticLightModifier: "high-frequency synchronized optical data pulses",
+        kineticCameraModifier: "high-speed kinetic tracking along glowing illuminated pathways",
+        kineticInstrument: "driving industrial synthwave with relentless percussive precision",
+        styleKeywords: "fintech commercial, enterprise infrastructure cinematography, minimalist architecture, clean corporate tech, 8k commercial",
+      };
+    }
+
     // 1. Automotive, Motorsport & Racing (Check before generic landscapes so mountain/street driving matches correctly)
     if (hasAny("f1", "formula 1", "formula one", "supercar", "hypercar", "racecar", "motorsport", "nascar", "le mans", "grand prix", "drag strip", "circuit race", "pit lane", "porsche", "ferrari", "mclaren", "lamborghini", "speedway", "drift", "drifting", "tarmac") || (hasAny("car", "vehicle", "automobile", "driving", "drive") && !hasAny("carpet", "card", "carbon-fiber drone"))) {
       return {
