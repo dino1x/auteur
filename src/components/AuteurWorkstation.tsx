@@ -180,7 +180,7 @@ export function AuteurWorkstation({
   const [isAutoGenerateActive, setIsAutoGenerateActive] = useState<boolean>(true);
   const [isExporting, setIsExporting] = useState<boolean>(false);
   const [isLivepeerModalOpen, setIsLivepeerModalOpen] = useState<boolean>(false);
-  const [livepeerApiKey, setLivepeerApiKey] = useState<string>("sk_TDEE2utMJc28nb8KyeCuMZXbPwKRVWRDDBxiudAwz7nz5ZPsfWDv2N5nEYKt8qdB");
+  const [livepeerApiKey, setLivepeerApiKey] = useState<string>("");
   const [livepeerLatency, setLivepeerLatency] = useState<number>(184);
   const [isPingingLivepeer, setIsPingingLivepeer] = useState<boolean>(false);
   const [activeLivepeerRecipe, setActiveLivepeerRecipe] = useState<string>("anamorphic-spot");
@@ -2494,7 +2494,7 @@ export function AuteurWorkstation({
                     Livepeer Agent Bearer Key
                   </label>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#4ed4b7]/10 text-[#4ed4b7]">
-                    Active
+                    {livepeerApiKey ? "Custom Key" : "Keyless Native Mode"}
                   </span>
                 </div>
 
@@ -2503,7 +2503,8 @@ export function AuteurWorkstation({
                     type="password"
                     value={livepeerApiKey}
                     onChange={(e) => setLivepeerApiKey(e.target.value)}
-                    className="flex-1 bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-zinc-200 focus:outline-none focus:border-[#4ed4b7]"
+                    placeholder="Keyless mode active (no key required)"
+                    className="flex-1 bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-zinc-200 focus:outline-none focus:border-[#4ed4b7] placeholder-zinc-500"
                   />
                   <button
                     onClick={handlePingLivepeer}
@@ -2515,7 +2516,7 @@ export function AuteurWorkstation({
                   </button>
                 </div>
                 <p className="text-[11px] text-zinc-400 font-sans">
-                  Connected directly to Livepeer Agent MCP. Keyless demo access is natively supported with automatic participant grants.
+                  Connected directly to Livepeer Agent Creative MCP. Operates natively keyless with automatic hackathon participant quota.
                 </p>
               </div>
 
