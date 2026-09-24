@@ -266,7 +266,7 @@ export function HeroSection() {
         </div>
 
         {/* 3D Perspective Cinema Viewport Showcase */}
-        <div className="relative mx-auto max-w-5xl">
+        <div id="screening-room" className="relative mx-auto max-w-5xl scroll-mt-28">
           {/* Ambient Glow */}
           <div
             className="absolute -inset-1 rounded-3xl blur-2xl opacity-30 transition-all duration-700 pointer-events-none"

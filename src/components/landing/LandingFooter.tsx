@@ -40,7 +40,7 @@ export function LandingFooter() {
           </div>
 
           {/* Quick Specs / Highlights */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-white/5 text-xs font-mono">
+          <div id="specs" className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-white/5 text-xs font-mono scroll-mt-28">
             <div>
               <span className="text-zinc-500 block mb-1">SETTLEMENT</span>
               <span className="text-white font-semibold">Arbitrum / Livepeer Subnet</span>

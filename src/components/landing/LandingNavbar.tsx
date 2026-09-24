@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Film, Cpu, Layers, Sparkles } from "lucide-react";
+import { ArrowRight, Film } from "lucide-react";
 import { cinematicAudio } from "@/lib/cinematic-audio";
 
 export function LandingNavbar() {
@@ -52,10 +52,10 @@ export function LandingNavbar() {
         {/* Center Nav Links */}
         <nav className="hidden md:flex items-center gap-1 sm:gap-2 text-xs font-mono tracking-wider">
           <a
-            href="#features"
+            href="#screening-room"
             className="px-3 py-1.5 rounded-full text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
           >
-            Features
+            Screening Room
           </a>
           <a
             href="#pipeline"
@@ -64,13 +64,13 @@ export function LandingNavbar() {
             Agent Engine
           </a>
           <a
-            href="#showcase"
+            href="#primitives"
             className="px-3 py-1.5 rounded-full text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
           >
-            Filmstrips
+            Studio Primitives
           </a>
           <a
-            href="#benchmarks"
+            href="#specs"
             className="px-3 py-1.5 rounded-full text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
           >
             Specs
