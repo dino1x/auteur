@@ -3,156 +3,67 @@ import { cinematicAudio } from "./cinematic-audio";
 
 // High-definition cinematic visual curation mapped across semantic categories (5 distinct scenes per theme)
 // High-definition cinematic visual curation mapped across semantic categories (8 distinct scenes per theme, zero duplicates)
+// Verified Livepeer decentralized GPU cinema asset pool mapped across semantic categories
 const THEMATIC_PALETTES: Record<string, string[]> = {
   cyberpunk: [
-    "/media/broll_tokyo.jpg",
-    "/media/broll_silicon.jpg",
-    "https://images.unsplash.com/photo-1515260268569-9271009adfdb?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1514565131-fce0801e5785?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MWUvSkhLMUNBeHVudFBBd29HQ1RZTVdCLmpwZw.969dfc1a43072ab4/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MTYvejRDTFU0THkyRjFoWml5TklJcWEyLmpwZw.660ffbf5b22ed418/z4CLU4Ly2F1hZiyNIIqa2.jpg",
   ],
   space: [
-    "/media/jwst_deep_space.jpg",
-    "/media/apollo_lunar.jpg",
-    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1447433819943-74a20887a81e?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1464802686167-b939a6910659?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk2ODEvM1ZWUGMtTXdkMnU2REVuM3RWUmptLmpwZw.e057b08306b30f75/3VVPc-Mwd2u6DEn3tVRjm.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDMvNWNfLUdhZk9jRTBwSzE0TEQ1UGNhLmpwZw.9fc767252bb912f8/5c_-GafOcE0pK14LD5Pca.jpg",
   ],
   tech: [
-    "https://images.unsplash.com/photo-1518770660439-4636190af475?q=85&w=1600&auto=format&fit=crop",
-    "/media/broll_silicon.jpg",
-    "/media/broll_tokyo.jpg",
-    "https://images.unsplash.com/photo-1518770660439-4636190af475?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MWUvSkhLMUNBeHVudFBBd29HQ1RZTVdCLmpwZw.969dfc1a43072ab4/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MTYvejRDTFU0THkyRjFoWml5TklJcWEyLmpwZw.660ffbf5b22ed418/z4CLU4Ly2F1hZiyNIIqa2.jpg",
   ],
   ocean: [
-    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1559827291-72ee739d0d9a?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1498623116890-37e912163d5d?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1544551763-77ef2d0cf96c?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MGIvWDZjYk16ZDU2VnhtREphQzdISERGLmpwZw.9ff8d740a112167f/X6cbMzd56VxmDJaC7HHDF.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDYvMFNOYkt1UWFaNWNTcDBHbElRRDdlLmpwZw.65b76b30ba58da56/0SNbKuQaZ5cSp0GlIQD7e.jpg",
   ],
   desert: [
-    "/media/apollo_lunar.jpg",
-    "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1513553404607-988bf2703777?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1545153996-e01b50d6f36a?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDMvNWNfLUdhZk9jRTBwSzE0TEQ1UGNhLmpwZw.9fc767252bb912f8/5c_-GafOcE0pK14LD5Pca.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk2ODEvM1ZWUGMtTXdkMnU2REVuM3RWUmptLmpwZw.e057b08306b30f75/3VVPc-Mwd2u6DEn3tVRjm.jpg",
   ],
   racing: [
-    "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1541348263662-e0c8de4259ba?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1502877338535-766e1452684a?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MWUvSkhLMUNBeHVudFBBd29HQ1RZTVdCLmpwZw.969dfc1a43072ab4/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDYvMFNOYkt1UWFaNWNTcDBHbElRRDdlLmpwZw.65b76b30ba58da56/0SNbKuQaZ5cSp0GlIQD7e.jpg",
   ],
   wildlife: [
-    "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1575550959106-5a7defe28b56?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1547721064-da6cfb341d50?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDEvekFjeWZCNVR6OUJHTGJJaDZ2TGZQLmpwZw.e73f200b252ea79b/zAcyfB5Tz9BGLbIh6vLfP.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDMvNWNfLUdhZk9jRTBwSzE0TEQ1UGNhLmpwZw.9fc767252bb912f8/5c_-GafOcE0pK14LD5Pca.jpg",
   ],
   mountains: [
-    "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1517824806704-9040b037703b?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDMvNWNfLUdhZk9jRTBwSzE0TEQ1UGNhLmpwZw.9fc767252bb912f8/5c_-GafOcE0pK14LD5Pca.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MGIvWDZjYk16ZDU2VnhtREphQzdISERGLmpwZw.9ff8d740a112167f/X6cbMzd56VxmDJaC7HHDF.jpg",
   ],
   nature: [
-    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1511497584788-87676104235f?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1448375240586-882707db888b?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDEvekFjeWZCNVR6OUJHTGJJaDZ2TGZQLmpwZw.e73f200b252ea79b/zAcyfB5Tz9BGLbIh6vLfP.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3YTRvX0N1NmxhQnY5WFRMeVlNUHpIbHNaLmpwZw.43ec37d854c29895/_Cu6laBv9XTLyYMPzHlsZ.jpg",
   ],
   luxury: [
-    "https://images.unsplash.com/photo-1513094735237-8f2714d57c13?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1445205170230-053b83016050?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3YTRvX0N1NmxhQnY5WFRMeVlNUHpIbHNaLmpwZw.43ec37d854c29895/_Cu6laBv9XTLyYMPzHlsZ.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MWUvSkhLMUNBeHVudFBBd29HQ1RZTVdCLmpwZw.969dfc1a43072ab4/JHK1CAxuntPAwoGCTYMWB.jpg",
   ],
   brutalist: [
-    "/media/broll_tokyo.jpg",
-    "/media/apollo_lunar.jpg",
-    "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1508450859948-4e04fabaa4ea?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1431576901776-e539bd916ba2?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDYvMFNOYkt1UWFaNWNTcDBHbElRRDdlLmpwZw.65b76b30ba58da56/0SNbKuQaZ5cSp0GlIQD7e.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3YTRvX0N1NmxhQnY5WFRMeVlNUHpIbHNaLmpwZw.43ec37d854c29895/_Cu6laBv9XTLyYMPzHlsZ.jpg",
   ],
   biotech: [
-    "https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1507668077129-56e32842fceb?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1579165466791-788226ab77b4?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1576086213369-97a306d36557?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MTYvejRDTFU0THkyRjFoWml5TklJcWEyLmpwZw.660ffbf5b22ed418/z4CLU4Ly2F1hZiyNIIqa2.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MGIvWDZjYk16ZDU2VnhtREphQzdISERGLmpwZw.9ff8d740a112167f/X6cbMzd56VxmDJaC7HHDF.jpg",
   ],
   food: [
-    "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1495521821757-a1efb6729352?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDEvekFjeWZCNVR6OUJHTGJJaDZ2TGZQLmpwZw.e73f200b252ea79b/zAcyfB5Tz9BGLbIh6vLfP.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3YTRvX0N1NmxhQnY5WFRMeVlNUHpIbHNaLmpwZw.43ec37d854c29895/_Cu6laBv9XTLyYMPzHlsZ.jpg",
   ],
   urban: [
-    "/media/broll_tokyo.jpg",
-    "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1514565131-fce0801e5785?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1517935706615-2717063c2225?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MWUvSkhLMUNBeHVudFBBd29HQ1RZTVdCLmpwZw.969dfc1a43072ab4/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDYvMFNOYkt1UWFaNWNTcDBHbElRRDdlLmpwZw.65b76b30ba58da56/0SNbKuQaZ5cSp0GlIQD7e.jpg",
   ],
   people: [
-    "/media/speaker_host.jpg",
-    "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1531545514256-b1400bc00f31?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=85&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=85&w=1600&auto=format&fit=crop",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDEvekFjeWZCNVR6OUJHTGJJaDZ2TGZQLmpwZw.e73f200b252ea79b/zAcyfB5Tz9BGLbIh6vLfP.jpg",
+    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3YTRvX0N1NmxhQnY5WFRMeVlNUHpIbHNaLmpwZw.43ec37d854c29895/_Cu6laBv9XTLyYMPzHlsZ.jpg",
   ],
 };
 
@@ -250,9 +161,9 @@ export function preloadImage(url: string, fallbackUrl?: string): Promise<HTMLIma
     }
   }
 
-  // Unsplash has native CORS * — bypass the server proxy to load directly at maximum network speed.
+  // Decentralized Livepeer CDN assets have native CORS * — bypass the server proxy to load directly at maximum network speed.
   // Ephemeral media or unknown domains route through proxy.
-  const isDirectCdn = url.includes("images.unsplash.com") || url.includes("unsplash.com");
+  const isDirectCdn = url.includes("agent.livepeer.org") || url.includes("fal.media");
   const safeLoadUrl =
     typeof window !== "undefined" &&
     url.startsWith("http") &&
@@ -304,14 +215,15 @@ export function preloadImage(url: string, fallbackUrl?: string): Promise<HTMLIma
           resolve(fb);
         });
       } else {
-        // Guaranteed local asset fallback
-        const localAsset = "/media/broll_tokyo.jpg";
+        // Guaranteed decentralized Livepeer asset fallback
+        const defaultAsset = "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MWUvSkhLMUNBeHVudFBBd29HQ1RZTVdCLmpwZw.969dfc1a43072ab4/JHK1CAxuntPAwoGCTYMWB.jpg";
         const fbImg = new Image();
+        fbImg.crossOrigin = "anonymous";
         fbImg.onload = () => {
           imageCache.set(url, fbImg);
           resolve(fbImg);
         };
-        fbImg.src = localAsset;
+        fbImg.src = defaultAsset;
       }
     };
 

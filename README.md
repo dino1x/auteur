@@ -2,7 +2,7 @@
 
 > **Livepeer Agent Hackathon Submission**
 > **Track**: Track 3 — Innovation Track ($1,000)
-> **Author**: Elena Vance ([@elenavance-cinema](https://github.com/elenavance-cinema) · elena.vance.cinema@gmail.com)
+> **Author**: dino ([@dino1x](https://github.com/dino1x) · marvelobed@gmail.com)
 > **Livepeer Creative MCP Endpoint**: `https://agent.livepeer.org/api/mcp/creative` (125 tools)
 > **Participant Compute Model**: Hacker Packet $100 on connect (auto-reups every 24h)
 
@@ -89,7 +89,7 @@ Tracks and retains director critiques across iterations. When you instruct Auteu
 
 ### 1. Installation
 ```bash
-git clone https://github.com/elenavance-cinema/auteur.git
+git clone https://github.com/dino1x/auteur.git
 cd auteur
 npm install
 ```
@@ -119,7 +119,8 @@ Open [http://localhost:3001](http://localhost:3001) in your browser.
 
 ## Author & Submission Details
 
-- **Author**: Elena Vance
-- **GitHub**: [@elenavance-cinema](https://github.com/elenavance-cinema)
-- **Track**: Track 3 — Innovation Track
+- **Author**: dino
+- **GitHub**: [@dino1x](https://github.com/dino1x)
+- **Email**: marvelobed@gmail.com
+- **Track**: Track 3 — Innovation Track ($1,000)
 - **License**: MIT
