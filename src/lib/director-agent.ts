@@ -19,12 +19,70 @@ export class DirectorAgent {
    * Translates any single-sentence creative brief or URL into 3 bespoke Creative Territories
    * with inferred tone, visual metaphors, color palette, camera language, and score styling.
    */
+  /**
+   * Extract a clean, professional brand or product title from a raw URL or brief.
+   * Prevents stripping first letters (e.g. 'Apple' -> 'pple') and eliminates
+   * ugly truncated run-on sentences in territory headers.
+   */
+  public extractBrandOrProduct(raw: string): string {
+    if (!raw || !raw.trim()) return "Cinema Master";
+    let text = raw.trim();
+
+    // 1. If it's a URL or contains a URL path, extract the meaningful entity
+    if (/https?:\/\//i.test(text) || text.includes(".com") || text.includes(".io") || text.includes(".org")) {
+      try {
+        const urlStr = text.startsWith("http") ? text : "https://" + text;
+        const parsed = new URL(urlStr);
+        const pathParts = parsed.pathname.split("/").filter(Boolean);
+        const host = parsed.hostname.replace(/^www\./, "");
+        const hostMain = host.split(".")[0];
+
+        if (pathParts.length > 0) {
+          const lastPart = pathParts[pathParts.length - 1].replace(/[-_]/g, " ");
+          const hostCap = hostMain.charAt(0).toUpperCase() + hostMain.slice(1);
+          const partCap = lastPart.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+          if (partCap.toLowerCase().includes(hostCap.toLowerCase())) {
+            return partCap;
+          }
+          return `${hostCap} ${partCap}`;
+        }
+        return hostMain.charAt(0).toUpperCase() + hostMain.slice(1);
+      } catch {
+        // Continue to text extraction
+      }
+    }
+
+    // 2. Remove URL scheme if still present
+    text = text.replace(/^https?:\/\/(?:www\.)?/i, "");
+
+    // 3. Remove leading standalone articles only with word boundary
+    text = text.replace(/^(?:a|an|the)\b\s*/i, "");
+
+    // 4. If the text has punctuation delimiters (. , — | : ; \n or spaced hyphen), take the first concise clause
+    const firstClause = text.split(/(?:\s+[—–-]\s+|[.;|:\n])+/)[0].trim();
+    if (firstClause.length >= 2 && firstClause.length <= 48) {
+      return firstClause.charAt(0).toUpperCase() + firstClause.slice(1);
+    }
+
+    // 5. Fallback: take first 2 to 4 capitalized words
+    const words = text.split(/\s+/).filter(Boolean);
+    const shortTitle = words.slice(0, Math.min(4, words.length)).join(" ");
+    return shortTitle.charAt(0).toUpperCase() + shortTitle.slice(1);
+  }
+
+  /**
+   * Synthesize 3 Distinct Creative Territories from a Brief
+   * Generates Dramatic Shadow, Atmospheric Natural, and Kinetic Velocity
+   * with inferred tone, visual metaphors, color palette, camera language, and score styling.
+   */
   public generateTerritories(brief: string): TerritoryGenerationResult {
-    const cleanBrief = brief
-      .replace(/^(a|an|the|https?:\/\/|www\.)\s*/i, "")
-      .replace(/\/.*$/, "")
+    const withoutUrl = brief
+      .replace(/^https?:\/\/(?:www\.)?/i, "")
       .trim();
-    const title = cleanBrief.length > 32 ? cleanBrief.slice(0, 30) + "..." : cleanBrief;
+    const cleanBrief = withoutUrl
+      .replace(/^(?:a|an|the)\b\s*/i, "")
+      .trim();
+    const brandTitle = this.extractBrandOrProduct(brief);
     const lower = brief.toLowerCase();
 
     // Semantic extraction: detect the dominant environment, subject, and mood from any brief
@@ -32,49 +90,49 @@ export class DirectorAgent {
     const subject = this.extractSubject(cleanBrief);
 
     return {
-      reasoning: `Synthesizing 3 bespoke cinematic territories for "${title}": ${env.dramaticTitle}, ${env.atmosphericTitle}, and ${env.kineticTitle}.`,
+      reasoning: `Synthesizing 3 bespoke cinematic territories for "${brandTitle}": ${env.dramaticTitle}, ${env.atmosphericTitle}, and ${env.kineticTitle}.`,
       territories: [
         {
           id: "t-dramatic-shadow",
-          title: `${title} · ${env.dramaticTitle}`,
+          title: `${brandTitle} · ${env.dramaticTitle}`,
           tagline: env.dramaticTagline,
           visualMetaphor: `${subject} emerging from ${env.dramaticEnvironment} into striking directional light.`,
-          previewUrl: resolveCinematicAsset(`${cleanBrief} ${env.dramaticTitle}`, 1),
+          previewUrl: resolveCinematicAsset(`${brandTitle} ${env.dramaticTitle}`, 1),
           colorPalette: env.dramaticPalette,
           lightingLogic: `Single strong key light with ${env.dramaticLightModifier} and sharp negative fill.`,
           cameraLanguage: `Steadicam slow forward pushes ${env.dramaticCameraModifier}.`,
           pacing: "Measured and magnetic.",
           aspectRatio: "2.39:1",
           musicMood: `Deep ${env.dramaticInstrument} textures with warm analog tape saturation.`,
-          stylePromptModifier: `chiaroscuro cinematic lighting, 35mm film grain, masterpiece cinematography, dramatic shadows, ${env.styleKeywords}, ${cleanBrief}`,
+          stylePromptModifier: `chiaroscuro cinematic lighting, 35mm film grain, masterpiece cinematography, dramatic shadows, ${env.styleKeywords}, ${brandTitle}`,
         },
         {
           id: "t-atmospheric-natural",
-          title: `${title} · ${env.atmosphericTitle}`,
+          title: `${brandTitle} · ${env.atmosphericTitle}`,
           tagline: env.atmosphericTagline,
-          visualMetaphor: `A contemplative perspective revealing the full expanse of ${cleanBrief} in ${env.atmosphericEnvironment}.`,
-          previewUrl: resolveCinematicAsset(`${cleanBrief} ${env.atmosphericTitle}`, 2),
+          visualMetaphor: `A contemplative perspective revealing the full expanse of ${brandTitle} in ${env.atmosphericEnvironment}.`,
+          previewUrl: resolveCinematicAsset(`${brandTitle} ${env.atmosphericTitle}`, 2),
           colorPalette: env.atmosphericPalette,
           lightingLogic: `${env.atmosphericLightModifier} with cool ambient wrap.`,
           cameraLanguage: `Locked-off wide tableaux and ${env.atmosphericCameraModifier}.`,
           pacing: "Meditative, emotional, breathtaking.",
           aspectRatio: "16:9",
           musicMood: `${env.atmosphericInstrument} with gentle ambient reverb.`,
-          stylePromptModifier: `soft natural light, minimalist composition, poetic cinema, ${env.styleKeywords}, photorealistic atmospheric perspective, ${cleanBrief}`,
+          stylePromptModifier: `soft natural light, minimalist composition, poetic cinema, ${env.styleKeywords}, photorealistic atmospheric perspective, ${brandTitle}`,
         },
         {
           id: "t-kinetic-velocity",
-          title: `${title} · ${env.kineticTitle}`,
+          title: `${brandTitle} · ${env.kineticTitle}`,
           tagline: env.kineticTagline,
-          visualMetaphor: `High-speed kinetic momentum capturing ${cleanBrief} in ${env.kineticEnvironment}.`,
-          previewUrl: resolveCinematicAsset(`${cleanBrief} ${env.kineticTitle}`, 3),
+          visualMetaphor: `High-speed kinetic momentum capturing ${brandTitle} across ${env.kineticEnvironment}.`,
+          previewUrl: resolveCinematicAsset(`${brandTitle} ${env.kineticTitle}`, 3),
           colorPalette: env.kineticPalette,
           lightingLogic: `Dynamic ${env.kineticLightModifier} with vivid colored accents.`,
           cameraLanguage: `${env.kineticCameraModifier} and dynamic parallax tracking.`,
           pacing: "High-energy, pulse-quickening, urgent.",
           aspectRatio: "16:9",
           musicMood: `Driving ${env.kineticInstrument} with crisp transient beats.`,
-          stylePromptModifier: `dynamic camera motion, commercial grade lighting, high-speed shutter, ${env.styleKeywords}, ultra-sharp 8k, ${cleanBrief}`,
+          stylePromptModifier: `dynamic camera motion, commercial grade lighting, high-speed shutter, ${env.styleKeywords}, ultra-sharp 8k, ${brandTitle}`,
         },
       ],
     };
@@ -82,7 +140,8 @@ export class DirectorAgent {
 
   /** Extract the core subject phrase from a brief */
   private extractSubject(cleanBrief: string): string {
-    const words = cleanBrief.split(/\s+/);
+    const firstClause = cleanBrief.split(/(?:\s+[—–-]\s+|[.;|:\n])+/)[0].trim();
+    const words = firstClause.split(/\s+/).filter(Boolean);
     const subject = words.slice(0, Math.min(4, words.length)).join(" ");
     return subject.charAt(0).toUpperCase() + subject.slice(1);
   }
@@ -103,7 +162,35 @@ export class DirectorAgent {
       return new RegExp(`\\b${w}\\b`, "i").test(cleanLower);
     });
 
-    // 0. Athletics, Running, Sneaker & Sports
+    // 0a. Spatial Computing, AR/VR Headsets, Optics & Wearable Hardware
+    if (hasAny("vision pro", "visionpro", "apple vision", "headset", "spatial computing", "spatial", "mixed reality", "augmented reality", "virtual reality", "quest 3", "meta quest", "hololens", "smart glasses", "ar glasses", "vr glasses", "micro-oled", "wearable display", "eye tracking", "optic id", "visionos", "spatial audio", "dual knit band", "m5 chip", "m2 chip", "m3 chip", "m4 chip") || (hasAny("apple", "device", "hardware", "gadget", "computing") && hasAny("glasses", "goggles", "headset", "visor", "wearable", "spatial", "lens", "optics"))) {
+      return {
+        dramaticTitle: "Spatial Luminescence",
+        dramaticTagline: "Sculpted three-dimensional curved glass, micro-OLED illumination, and floating spatial planes.",
+        dramaticEnvironment: "a darkened minimalist architectural studio with floating luminous glass interfaces",
+        dramaticPalette: ["#06080d", "#4ed4b7", "#98b2ff", "#f5f7fb"],
+        dramaticLightModifier: "prismatic light refraction through curved laminated glass with sharp titanium specular edges",
+        dramaticCameraModifier: "macro tracking across precision machined aluminum curves and 3D woven textile bands",
+        dramaticInstrument: "crystalline spatial synthesizer tones with deep warm sub-bass resonance",
+        atmosphericTitle: "Ambient Dimension",
+        atmosphericTagline: "Digital windows seamlessly integrated into warm architectural light and natural physical space.",
+        atmosphericEnvironment: "a sunlit modern loft blending physical reality with translucent floating optics",
+        atmosphericPalette: ["#0d1117", "#e8c76d", "#60a5fa", "#ffffff"],
+        atmosphericLightModifier: "Soft afternoon sunbeams illuminating translucent glass UI elements with real-world shadows",
+        atmosphericCameraModifier: "fluid slow-motion jib floating between user perspective and third-person elegance",
+        atmosphericInstrument: "Neo-classical acoustic piano layered with delicate spatial reverb",
+        kineticTitle: "Kinetic Interface",
+        kineticTagline: "Eye-tracking precision, spatial gesture response, and seamless multi-app velocity.",
+        kineticEnvironment: "a high-velocity interactive spatial canvas with instantaneous computational reflexes",
+        kineticPalette: ["#05080f", "#00f0ff", "#ff3366", "#ffffff"],
+        kineticLightModifier: "dynamic volumetric pulse synchronized with interface interaction states",
+        kineticCameraModifier: "sweeping rotational parallax tracking around the spatial perimeter",
+        kineticInstrument: "driving electronic pulse with crisp rhythmic transients and spatial panning",
+        styleKeywords: "industrial design cinematography, Apple Vision Pro commercial, spatial computing, curved 3D glass, anodized aluminum, studio macro lighting, 8k luxury tech commercial",
+      };
+    }
+
+    // 0b. Athletics, Running, Sneaker & Sports
     if (hasAny("nike", "running", "runner", "marathon", "shoe", "shoes", "sneaker", "sneakers", "alphafly", "vaporfly", "athlete", "athletic", "athletics", "sprint", "sprinter", "olympic", "gym", "workout", "fitness", "track and field")) {
       return {
         dramaticTitle: "Midnight Pace Noir",
@@ -179,8 +266,8 @@ export class DirectorAgent {
       };
     }
 
-    // 3. Ocean & Marine
-    if (lower.includes("ocean") || lower.includes("sea") || lower.includes("water") || lower.includes("marine") || lower.includes("jellyfish") || lower.includes("dive") || lower.includes("abyss")) {
+    // 4. Ocean & Marine (Whole-word / phrase matched to strictly prevent 'seamlessly' -> 'sea' false matches)
+    if (hasAny("ocean", "oceans", "underwater", "marine", "jellyfish", "coral reef", "coral", "abyss", "abyssal", "pelagic", "scuba", "deep sea", "subsea", "submarine", "submersible", "bathyscaphe", "sea floor", "ocean floor", "aquatic") || hasWord("sea") || hasWord("seas") || hasWord("water") || hasWord("dive") || hasWord("diving")) {
       return {
         dramaticTitle: "Abyssal Noir", dramaticTagline: "Deep sapphire water, ethereal cyan glow, and suspended oceanic particulate.",
         dramaticEnvironment: "the midnight ocean floor", dramaticPalette: ["#040914", "#00f0ff", "#2e78c7", "#0a1b3a"],
@@ -195,8 +282,8 @@ export class DirectorAgent {
       };
     }
 
-    // 4. Cosmic & Space
-    if (lower.includes("space") || lower.includes("star") || lower.includes("galaxy") || lower.includes("mars") || lower.includes("orbit") || lower.includes("planet") || lower.includes("astro")) {
+    // 5. Cosmic & Space
+    if (hasAny("space", "star", "galaxy", "mars", "orbit", "planet", "astro", "cosmos", "nebula", "astronaut", "spaceship")) {
       return {
         dramaticTitle: "Deep Cosmos Noir", dramaticTagline: "Infrared nebulae, zero-gravity isolation, and pure cosmic scale.",
         dramaticEnvironment: "vibrant infrared cosmic dust clouds", dramaticPalette: ["#03050a", "#e8c76d", "#7e94ff", "#2a1f44"],
