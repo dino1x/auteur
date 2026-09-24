@@ -2173,89 +2173,102 @@ export function AuteurWorkstation({
                 </p>
               </div>
 
-              <div className="w-full bg-[#0e1118]/90 border border-white/15 rounded-2xl p-5 shadow-[0_10px_40px_rgba(0,0,0,0.6)] backdrop-blur-md space-y-4">
-                <div className="flex items-center gap-3">
-                  <input
-                    type="text"
-                    value={urlInput}
-                    onChange={(e) => setUrlInput(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleStartGeneration()}
-                    placeholder="Enter website URL or narrative prompt..."
-                    className="flex-1 bg-transparent text-white text-sm md:text-base placeholder-zinc-500 focus:outline-none font-sans"
-                  />
-                  <button
-                    id="btn-start-generation"
-                    type="button"
-                    onClick={() => handleStartGeneration()}
-                    disabled={!urlInput.trim() || isProcessing}
-                    title="Generate Directional Beliefs"
-                    className={`w-11 h-11 rounded-full flex items-center justify-center shrink-0 transition-all duration-200 cursor-pointer ${
-                      !urlInput.trim() || isProcessing
-                        ? "bg-white/10 text-zinc-600 cursor-not-allowed opacity-50"
-                        : "bg-[#4ed4b7] text-black hover:brightness-110 active:scale-95 shadow-[0_0_16px_rgba(78,212,183,0.4)]"
-                    }`}
-                  >
-                    <ArrowUp className="w-5 h-5 stroke-[2.5]" />
-                  </button>
-                </div>
+              {/* Floating Tactile Input Container (Inspired by reference) */}
+              <div className="relative">
+                {/* Ambient Volumetric Backlight Bloom */}
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-96 h-28 bg-gradient-to-r from-[#4ed4b7]/20 via-[#5fe995]/25 to-[#7e94ff]/20 rounded-full blur-3xl pointer-events-none" />
 
-                {/* Real-Time Detected Entity Pill */}
-                {urlInput.trim() && (
-                  <div className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-black/60 border border-white/10 text-[10px] font-mono animate-fadeIn">
-                    <div className="flex items-center gap-2 text-zinc-300">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995] animate-pulse" />
-                      <span className="text-zinc-500 uppercase">Target Entity:</span>
-                      <span className="text-[#4ed4b7] font-bold">
-                        {directorAgent.extractBrandOrProduct(urlInput)}
-                      </span>
+                <div className="relative w-full rounded-[26px] bg-[#0c0f17]/95 border border-white/15 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-xl overflow-hidden transition-all duration-300 focus-within:border-[#4ed4b7]/50 focus-within:shadow-[0_24px_60px_-15px_rgba(78,212,183,0.18),inset_0_1px_0_rgba(255,255,255,0.25)]">
+                  {/* Top Input Row */}
+                  <div className="p-5 sm:p-6 pb-4">
+                    <input
+                      type="text"
+                      value={urlInput}
+                      onChange={(e) => setUrlInput(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleStartGeneration()}
+                      placeholder="Type your website URL or narrative prompt..."
+                      className="w-full bg-transparent text-white text-base sm:text-lg placeholder-zinc-500/80 focus:outline-none font-sans font-normal selection:bg-[#4ed4b7]/30"
+                    />
+                  </div>
+
+                  {/* Bottom Accessory Toolbar */}
+                  <div className="px-5 sm:px-6 py-3.5 bg-black/40 border-t border-white/[0.08] flex items-center justify-between gap-3">
+                    {/* Left Status: Default vs Live Detected Target Entity */}
+                    <div className="flex items-center gap-2 text-xs font-mono min-w-0">
+                      <Globe className="w-3.5 h-3.5 text-[#4ed4b7] shrink-0" />
+                      {urlInput.trim() ? (
+                        <div className="flex items-center gap-2 truncate">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995] animate-pulse shrink-0 shadow-[0_0_6px_#5fe995]" />
+                          <span className="text-zinc-500 uppercase text-[10px]">Target:</span>
+                          <span className="text-[#4ed4b7] font-semibold text-xs truncate">
+                            {directorAgent.extractBrandOrProduct(urlInput)}
+                          </span>
+                          <span className="text-zinc-600 hidden sm:inline">·</span>
+                          <span className="text-zinc-400 text-[11px] hidden sm:inline">Autonomous Ingest Ready</span>
+                        </div>
+                      ) : (
+                        <span className="text-zinc-400 text-[11px] truncate">
+                          Autonomous scene decomposition & Livepeer GPU inference
+                        </span>
+                      )}
                     </div>
-                    <span className="text-zinc-500 hidden sm:inline">Autonomous Scene Ingest Ready</span>
-                  </div>
-                )}
 
-                <div className="flex items-center justify-between pt-3 border-t border-white/[0.08] text-[11px] font-mono text-zinc-400">
-                  <div className="flex items-center gap-1.5 text-zinc-300">
-                    <Globe className="w-3.5 h-3.5 text-[#4ed4b7]" />
-                    <span>Autonomous Scene Decomposition</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-[#5fe995]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995] animate-pulse" />
-                    <span>Livepeer Subnet 0x4a92</span>
+                    {/* Right Action: Tactile Gel Capsule Button */}
+                    <button
+                      id="btn-start-generation"
+                      type="button"
+                      onClick={() => handleStartGeneration()}
+                      disabled={!urlInput.trim() || isProcessing}
+                      title="Synthesize Creative Direction"
+                      className={`relative px-5 py-2 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 group cursor-pointer ${
+                        !urlInput.trim() || isProcessing
+                          ? "bg-white/[0.06] text-zinc-600 border border-white/5 cursor-not-allowed opacity-40"
+                          : "bg-gradient-to-r from-[#5fe995] to-[#4ed4b7] text-black font-bold shadow-[0_6px_20px_-3px_rgba(78,212,183,0.5),inset_0_1px_1px_rgba(255,255,255,0.7),inset_0_-2px_4px_rgba(0,0,0,0.2)] hover:scale-105 active:scale-95 hover:shadow-[0_10px_26px_-2px_rgba(78,212,183,0.7)]"
+                      }`}
+                    >
+                      <ArrowUp className="w-4 h-4 stroke-[3] transition-transform duration-200 group-hover:-translate-y-0.5" />
+                    </button>
                   </div>
                 </div>
               </div>
 
               {/* Inspiration Playbooks */}
-              <div className="space-y-2">
-                <label className="text-xs font-mono text-[#626a76] uppercase block">Inspiration Playbooks:</label>
-                <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-3 pt-2">
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="text-zinc-400 uppercase tracking-wider font-semibold text-[11px]">
+                    Inspiration Playbooks:
+                  </span>
+                  <span className="text-zinc-500 text-[10px]">Click to load · Press Enter to synthesize</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {[
                     {
                       id: "pb-spatial",
+                      category: "SPATIAL HARDWARE",
                       title: "Spatial Computing Launch",
-                      tagline: "Apple Vision Pro 3D optics & visionOS",
-                      defaultBrief: "Apple Vision Pro: curved 3D glass optics, spatial visionOS interfaces, precision machined aluminum, and ambient physical room integration.",
+                      brief: "Apple Vision Pro: curved 3D glass optics, spatial visionOS interfaces, precision machined aluminum, and ambient physical room integration.",
                     },
                     {
                       id: "pb-nike",
+                      category: "ATHLETIC CINEMA",
                       title: "Nike Marathon Velocity",
-                      tagline: "High-speed road racing commercial",
-                      defaultBrief: "Commercial for Nike Alphafly 3 marathon racing shoe sprinting across rain-slicked nocturnal Tokyo streetlights with high-speed camera tracking.",
+                      brief: "Commercial for Nike Alphafly 3 marathon racing shoe sprinting across rain-slicked nocturnal Tokyo streetlights with high-speed camera tracking.",
                     },
                     {
                       id: "pb-cyber",
+                      category: "CYBER-NOIR",
                       title: "Auteur Cinema Director",
-                      tagline: "Anamorphic cyber-noir commercial",
-                      defaultBrief: "A cyber-noir operative infiltrates an orbital cryogenic server vault suspended above a tempest ocean. Panavision anamorphic glass with cold cyan rim lighting.",
+                      brief: "A cyber-noir operative infiltrates an orbital cryogenic server vault suspended above a tempest ocean. Panavision anamorphic glass with cold cyan rim lighting.",
                     },
                     {
                       id: "pb-fashion",
+                      category: "LUXURY LOOKBOOK",
                       title: "Avant-Garde Lookbook",
-                      tagline: "Volcanic landscape editorial",
-                      defaultBrief: "Avant-garde architectural streetwear film: sculptural obsidian technical garments cutting through windward Icelandic black sand dunes and geothermal steam vents.",
+                      brief: "Avant-garde architectural streetwear film: sculptural obsidian technical garments cutting through windward Icelandic black sand dunes and geothermal steam vents.",
                     },
                   ].map((pb) => {
-                    const isSelected = activePlaybookId === pb.id || urlInput === pb.defaultBrief;
+                    const isSelected = urlInput.trim() === pb.brief;
                     return (
                       <button
                         key={pb.id}
@@ -2263,27 +2276,33 @@ export function AuteurWorkstation({
                         onClick={() => {
                           cinematicAudio.playCue("click");
                           setActivePlaybookId(pb.id);
-                          setUrlInput(pb.defaultBrief);
+                          setUrlInput(pb.brief);
                         }}
                         onDoubleClick={() => {
                           cinematicAudio.playCue("action");
                           setActivePlaybookId(pb.id);
-                          setUrlInput(pb.defaultBrief);
-                          handleStartGeneration(pb.defaultBrief);
+                          setUrlInput(pb.brief);
+                          handleStartGeneration(pb.brief);
                         }}
-                        title="Click to load brief. Double-click to greenlight."
-                        className={`p-3 rounded-xl border text-left transition-all group cursor-pointer relative ${
+                        title="Click to load brief. Double-click to synthesize."
+                        className={`p-4 rounded-2xl border text-left transition-all duration-300 group cursor-pointer relative ${
                           isSelected
-                            ? "bg-[#4ed4b7]/15 border-[#4ed4b7] shadow-[0_0_16px_rgba(78,212,183,0.2)] ring-1 ring-[#4ed4b7]/40"
-                            : "bg-[#0e1118] border-white/10 hover:border-[#4ed4b7]/50 hover:bg-[#12151e]"
+                            ? "bg-[#4ed4b7]/15 border-[#4ed4b7] shadow-[0_0_20px_rgba(78,212,183,0.25)] ring-1 ring-[#4ed4b7]/40"
+                            : "bg-[#0c0f17]/85 border-white/10 hover:border-[#4ed4b7]/50 hover:bg-[#111520] hover:shadow-[0_10px_25px_rgba(0,0,0,0.5)]"
                         }`}
                       >
-                        <div className="flex items-center justify-between">
-                          <div className={`font-display font-bold text-xs ${isSelected ? "text-[#4ed4b7]" : "text-white group-hover:text-[#4ed4b7]"}`}>{pb.title}</div>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-[9px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-white/[0.04] border border-white/10 text-[#4ed4b7]">
+                            {pb.category}
+                          </span>
                           {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-[#4ed4b7] animate-pulse" />}
                         </div>
-                        <div className="text-[10px] text-zinc-400 line-clamp-1 mt-0.5">{pb.tagline}</div>
-                        <div className="text-[9px] font-mono text-zinc-500 mt-1 truncate italic group-hover:text-zinc-300 transition-colors">&ldquo;{pb.defaultBrief}&rdquo;</div>
+                        <div className={`font-display font-bold text-xs ${isSelected ? "text-[#4ed4b7]" : "text-white group-hover:text-[#4ed4b7]"} transition-colors`}>
+                          {pb.title}
+                        </div>
+                        <div className="text-[10px] text-zinc-400 line-clamp-2 mt-1.5 font-sans leading-relaxed group-hover:text-zinc-300 transition-colors">
+                          &ldquo;{pb.brief}&rdquo;
+                        </div>
                       </button>
                     );
                   })}
