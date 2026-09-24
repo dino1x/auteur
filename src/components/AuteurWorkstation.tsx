@@ -177,6 +177,7 @@ export function AuteurWorkstation({
   const [showAnamorphicFlare, setShowAnamorphicFlare] = useState<boolean>(true);
   const [showCrtScope, setShowCrtScope] = useState<boolean>(false);
   const [directPrompt, setDirectPrompt] = useState<string>("");
+  const [isAutoGenerateActive, setIsAutoGenerateActive] = useState<boolean>(true);
   const [isExporting, setIsExporting] = useState<boolean>(false);
   const [exportProgress, setExportProgress] = useState<number>(0);
   const [isLivepeerModalOpen, setIsLivepeerModalOpen] = useState<boolean>(false);
@@ -1687,12 +1688,8 @@ export function AuteurWorkstation({
                           setAspectRatio(ar);
                           if (activeTerritory) {
                             activeTerritory.aspectRatio = ar;
+                            onUpdateTerritory?.({ ...activeTerritory, aspectRatio: ar });
                           }
-                          setTerritories((prev) =>
-                            prev.map((t) =>
-                              t.id === activeTerritory?.id ? { ...t, aspectRatio: ar } : t
-                            )
-                          );
                         }}
                         className={`px-2 py-0.5 rounded transition-colors ${
                           aspectRatio === ar ? "bg-[#4ed4b7] text-black font-bold" : "text-zinc-400 hover:text-white"
