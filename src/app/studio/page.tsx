@@ -98,17 +98,52 @@ export default function AuteurStudioPage() {
 
   // Step 1: Ingest brief and generate 3 creative territories
   const handleGenerateTerritories = async (customBrief?: string) => {
-    const targetBrief = customBrief?.trim() || brief.trim();
-    if (!targetBrief) return;
-    setBrief(targetBrief);
+    const rawTargetBrief = customBrief?.trim() || brief.trim();
+    if (!rawTargetBrief) return;
+    setBrief(rawTargetBrief);
     setIsProcessing(true);
     setCurrentPhase("strategizing");
 
-    addTelemetryStep(
-      "strategy",
-      "Analyzing Creative Brief",
-      `Extracting tone, spatial geography, and stylistic vectors for: "${targetBrief}"`
-    );
+    let targetBrief = rawTargetBrief;
+    const isUrl =
+      rawTargetBrief.startsWith("http://") ||
+      rawTargetBrief.startsWith("https://") ||
+      /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$/.test(rawTargetBrief);
+
+    if (isUrl) {
+      addTelemetryStep(
+        "strategy",
+        "Live URL Ingestion & Crawl",
+        `Scraping brand DNA, product headlines, and meta description from "${rawTargetBrief}"...`
+      );
+
+      try {
+        const ingestRes = await fetch("/api/ingest", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: rawTargetBrief }),
+        });
+        if (ingestRes.ok) {
+          const ingestData = await ingestRes.json();
+          if (ingestData.success && ingestData.synthesizedBrief) {
+            targetBrief = ingestData.synthesizedBrief;
+            addTelemetryStep(
+              "strategy",
+              `Brand Extracted: ${ingestData.title}`,
+              `Context: "${targetBrief.slice(0, 110)}..."`
+            );
+          }
+        }
+      } catch (scrapeErr) {
+        console.warn("Live URL scraping notice:", scrapeErr);
+      }
+    } else {
+      addTelemetryStep(
+        "strategy",
+        "Analyzing Creative Brief",
+        `Extracting tone, spatial geography, and stylistic vectors for: "${targetBrief}"`
+      );
+    }
 
     const result = directorAgent.generateTerritories(targetBrief);
     setTerritories(result.territories);
