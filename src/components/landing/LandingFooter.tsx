@@ -23,7 +23,7 @@ export function LandingFooter() {
                 AUTEUR
               </h2>
               <p className="text-zinc-400 text-sm sm:text-base font-sans mt-3 max-w-lg leading-relaxed">
-                Autonomous multi-agent video direction, visual continuity critique, and distributed 24fps render orchestration on Livepeer.
+                Autonomous generative cinema engine orchestrating multi-shot continuity and decentralized rendering on Livepeer.
               </p>
             </div>
 
@@ -64,7 +64,7 @@ export function LandingFooter() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
           <div className="flex items-center gap-2">
             <Film className="w-4 h-4 text-[#5fe995]" />
-            <span>AUTEUR STUDIO 2025 // LIVEPEER AGENT HACKATHON</span>
+            <span>AUTEUR // LIVEPEER CREATIVE AGENT</span>
           </div>
 
           <div className="flex items-center gap-6">

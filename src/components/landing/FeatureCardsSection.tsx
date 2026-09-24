@@ -122,7 +122,7 @@ export function FeatureCardsSection() {
           </h2>
 
           <p className="text-zinc-400 text-sm sm:text-base font-sans leading-relaxed">
-            Every layer of the autonomous director pipeline is crafted for production rigor, deterministic execution, and cinematic discipline.
+            Deterministic execution, production rigor, and multi-model Livepeer orchestration.
           </p>
         </div>
 
@@ -189,14 +189,14 @@ export function FeatureCardsSection() {
         <div className="mt-12 p-6 rounded-2xl bg-[#090b10]/90 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3 text-xs font-mono text-zinc-300">
             <span className="w-2 h-2 rounded-full bg-[#10b981] animate-ping" />
-            <span>Livepeer Agent Creative MCP Subnet Online · $100 Daily Hacker Quota</span>
+            <span>Livepeer Creative MCP Subnet Online</span>
           </div>
 
           <Link
             href="/studio"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-mono font-semibold text-black bg-gradient-to-r from-[#4ed4b7] to-[#5fe995] hover:brightness-110 active:scale-95 transition-all"
           >
-            <span>Open Studio Workstation</span>
+            <span>Launch Studio</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>

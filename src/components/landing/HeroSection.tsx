@@ -6,14 +6,9 @@ import {
   ArrowRight,
   Play,
   Pause,
-  Sliders,
   Volume2,
   VolumeX,
-  Sparkles,
-  Layers,
-  Cpu,
-  Eye,
-  CheckCircle2
+  Cpu
 } from "lucide-react";
 import { cinematicAudio } from "@/lib/cinematic-audio";
 
@@ -219,15 +214,11 @@ export function HeroSection() {
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
-        {/* Top Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.1] backdrop-blur-md text-xs font-mono text-zinc-300 shadow-lg">
-            <span className="w-2 h-2 rounded-full bg-[#5fe995] animate-pulse" />
-            <span>Autonomous Multi-Agent Video Engine</span>
-          </div>
-
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#4ed4b7]/10 border border-[#4ed4b7]/30 text-xs font-mono text-[#5fe995] shadow-lg shadow-[#4ed4b7]/5">
-            <span>Livepeer Agent Innovation Track</span>
+        {/* Top Badge */}
+        <div className="flex items-center justify-center mb-8">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.1] text-xs font-mono text-zinc-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995]" />
+            <span>Livepeer Autonomous Cinema</span>
           </div>
         </div>
 
@@ -240,8 +231,8 @@ export function HeroSection() {
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-2xl mx-auto font-sans leading-relaxed">
-            Translate single prompts into multi-shot cinematic cuts. Autonomous agents decompose scripts, direct continuity, critique visual grammar, and orchestrate parallel rendering on Livepeer decentralized subnets.
+          <p className="text-base sm:text-lg text-zinc-300 max-w-xl mx-auto font-sans leading-relaxed">
+            Turn narrative prompts into multi-shot cinematic cuts with continuous visual grammar and Livepeer decentralized inference.
           </p>
         </div>
 
@@ -258,10 +249,10 @@ export function HeroSection() {
 
           <a
             href="#pipeline"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-sm font-medium text-zinc-300 bg-white/[0.04] border border-white/[0.1] hover:bg-white/[0.08] hover:text-white transition-all backdrop-blur-md"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-sm font-medium text-zinc-300 bg-white/[0.04] border border-white/[0.1] hover:bg-white/[0.08] hover:text-white transition-all"
           >
             <Cpu className="w-4 h-4 text-[#4ed4b7]" />
-            <span>Inspect Agent Architecture</span>
+            <span>Architecture</span>
           </a>
         </div>
 
@@ -283,27 +274,22 @@ export function HeroSection() {
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block animate-pulse" />
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
-                <span className="ml-2 font-semibold text-zinc-200">AUTEUR // SCREENING_ROOM_4K</span>
+                <span className="ml-2 font-semibold text-zinc-200">AUTEUR 4K</span>
               </div>
 
               <div className="flex items-center gap-4">
                 <button
                   onClick={toggleAudio}
+                  aria-label="Toggle audio"
                   className="flex items-center gap-1.5 text-zinc-400 hover:text-white px-2 py-0.5 rounded bg-white/5 border border-white/10"
                 >
                   {audioMuted ? (
-                    <>
-                      <VolumeX className="w-3.5 h-3.5 text-zinc-500" />
-                      <span className="text-[10px]">Unmute Audio</span>
-                    </>
+                    <VolumeX className="w-3.5 h-3.5 text-zinc-500" />
                   ) : (
-                    <>
-                      <Volume2 className="w-3.5 h-3.5 text-[#5fe995] animate-pulse" />
-                      <span className="text-[10px] text-[#5fe995]">Audio Active</span>
-                    </>
+                    <Volume2 className="w-3.5 h-3.5 text-[#5fe995]" />
                   )}
                 </button>
-                <span className="hidden sm:inline-block text-zinc-400">4K DCI · 24FPS</span>
+                <span className="text-zinc-500">24FPS</span>
                 <span ref={timecodeSpanRef} className="text-[#5fe995] font-semibold">00:01:14:08</span>
               </div>
             </div>
@@ -330,15 +316,9 @@ export function HeroSection() {
                 </div>
               )}
 
-              {/* 35mm Safety Letterboxing */}
-              <div className="absolute inset-x-0 top-0 h-8 sm:h-12 bg-black/60 border-b border-white/5 flex items-center justify-between px-4 text-[10px] font-mono text-zinc-400 pointer-events-none z-10">
-                <span>SAFETY FRAME 2.39:1</span>
-                <span>SHUTTER: 1/48s</span>
-              </div>
-              <div className="absolute inset-x-0 bottom-0 h-8 sm:h-12 bg-black/60 border-t border-white/5 flex items-center justify-between px-4 text-[10px] font-mono text-zinc-400 pointer-events-none z-10">
-                <span>ISO 800 · T1.5 ARRI MASTER</span>
-                <span>LIVEPEER INFERENCE NODE: ONLINE</span>
-              </div>
+              {/* 35mm Letterbox Matte Lines */}
+              <div className="absolute inset-x-0 top-0 h-6 sm:h-8 bg-black/60 border-b border-white/5 pointer-events-none z-10" />
+              <div className="absolute inset-x-0 bottom-0 h-6 sm:h-8 bg-black/60 border-t border-white/5 pointer-events-none z-10" />
 
               {/* Center Play / Pause Controller */}
               <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
@@ -353,52 +333,26 @@ export function HeroSection() {
                   )}
                 </button>
                 <span className="mt-3 text-xs font-mono text-zinc-300 bg-black/60 px-3.5 py-1 rounded-full border border-white/15 backdrop-blur-md">
-                  {isPlaying ? "Rendering 60fps Sequence" : "Click to Play Master Cut"}
+                  {isPlaying ? "Playing 60fps Cut" : "Play Master Cut"}
                 </span>
-              </div>
-
-              {/* Telemetry Critic Overlay */}
-              <div className="absolute top-14 left-4 max-w-xs p-3.5 rounded-xl bg-black/80 border border-white/15 backdrop-blur-md hidden sm:block z-10 shadow-xl">
-                <div className="flex items-center gap-2 text-[11px] font-mono text-[#5fe995] mb-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Agent Critic Score: {currentPreset.directorScore}%</span>
-                </div>
-                <p className="text-[10px] text-zinc-300 font-mono leading-relaxed">
-                  {currentPreset.criticFeedback}
-                </p>
               </div>
             </div>
 
             {/* Presets Switcher Bar */}
-            <div className="mt-3 pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 px-2">
-              <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
-                <span className="text-xs font-mono text-zinc-400 mr-2 flex items-center gap-1.5 shrink-0">
-                  <Sliders className="w-3.5 h-3.5 text-[#4ed4b7]" />
-                  <span>Scene Presets:</span>
-                </span>
-                {HERO_PRESETS.map((preset, idx) => (
-                  <button
-                    key={preset.id}
-                    onClick={() => handleSelectPreset(idx)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-mono whitespace-nowrap transition-all ${
-                      activePresetIndex === idx
-                        ? "bg-white/15 text-white border border-white/30 shadow-md font-semibold"
-                        : "bg-white/[0.03] text-zinc-400 hover:text-zinc-200 border border-white/5"
-                    }`}
-                  >
-                    {preset.name}
-                  </button>
-                ))}
-              </div>
-
-              <Link
-                href="/studio"
-                onClick={handleLaunchClick}
-                className="text-xs font-mono text-[#5fe995] hover:text-[#7af2d9] flex items-center gap-1.5 transition-colors self-end sm:self-auto"
-              >
-                <span>Edit in Studio Desk</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+            <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-center gap-2">
+              {HERO_PRESETS.map((preset, idx) => (
+                <button
+                  key={preset.id}
+                  onClick={() => handleSelectPreset(idx)}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-mono whitespace-nowrap transition-all ${
+                    activePresetIndex === idx
+                      ? "bg-white/15 text-white border border-white/30 shadow-md font-semibold"
+                      : "bg-white/[0.03] text-zinc-400 hover:text-zinc-200 border border-white/5"
+                  }`}
+                >
+                  {preset.name}
+                </button>
+              ))}
             </div>
           </div>
         </div>

@@ -135,18 +135,18 @@ export function AgentPipelineSection() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-mono text-[#5fe995] mb-4">
             <Cpu className="w-3.5 h-3.5" />
-            <span>Multi-Agent System Architecture</span>
+            <span>Agent Architecture</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-display font-bold text-white tracking-tight mb-4">
             Autonomous Orchestration <br />
             <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#4ed4b7] to-[#7af2d9]">
-              from Prompt to Master Cut
+              from Script to Master Cut
             </span>
           </h2>
 
-          <p className="text-zinc-400 text-sm sm:text-base font-sans leading-relaxed">
-            Unlike one-shot video generators that produce disjointed clips, Auteur uses an autonomous multi-agent critic loop to storyboard, evaluate continuity, and coordinate parallel rendering on Livepeer.
+          <p className="text-zinc-400 text-sm sm:text-base font-sans leading-relaxed max-w-xl mx-auto">
+            Storyboarding, continuous visual critic evaluation, and parallel rendering across Livepeer subnets.
           </p>
         </div>
 
@@ -208,10 +208,7 @@ export function AgentPipelineSection() {
         <div className="rounded-2xl bg-[#090b10]/90 border border-white/10 p-6 sm:p-8 backdrop-blur-xl">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
             <div>
-              <div className="flex items-center gap-3 mb-1">
-                <span className="text-xs font-mono text-zinc-500 uppercase tracking-wider">
-                  Node Inspector //
-                </span>
+              <div className="flex items-center gap-2 mb-1">
                 <span className="text-xs font-mono text-[#5fe995] bg-[#4ed4b7]/10 px-2 py-0.5 rounded border border-[#4ed4b7]/30">
                   {selectedNode.role}
                 </span>
@@ -222,7 +219,7 @@ export function AgentPipelineSection() {
             </div>
 
             {/* Metrics */}
-            <div className="flex flex-wrap items-center gap-4 text-xs font-mono">
+            <div className="flex flex-wrap items-center gap-3 text-xs font-mono">
               <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-zinc-500 mr-2">LATENCY</span>
                 <span className="text-white font-semibold">{selectedNode.telemetry.latency}</span>
@@ -242,11 +239,10 @@ export function AgentPipelineSection() {
           <div className="mt-6">
             <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-3">
               <Terminal className="w-3.5 h-3.5 text-[#4ed4b7]" />
-              <span>Live Node Payload State</span>
+              <span>Context Payload</span>
             </div>
 
             <div className="rounded-xl bg-[#050608] border border-white/5 p-4 font-mono text-xs overflow-x-auto">
-              <div className="text-zinc-500 mb-2">// Active pipeline context attributes</div>
               <div className="space-y-1.5">
                 {selectedNode.sampleOutput.map((item, i) => (
                   <div key={i} className="flex items-baseline gap-3">

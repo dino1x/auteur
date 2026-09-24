@@ -273,35 +273,13 @@ const StaticFilmCellCard = memo(function StaticFilmCellCard({
           }}
         />
 
-        {/* Top Header Chips */}
-        <div className="absolute top-3 inset-x-3 flex items-center justify-between text-[10px] font-mono z-10">
-          <span className="px-2 py-0.5 rounded bg-black/70 border border-white/15 text-zinc-300">
-            {shot.genre}
+        {/* Bottom Title & Timecode */}
+        <div className="absolute bottom-3 inset-x-3 z-10 flex items-center justify-between">
+          <span className="text-xs font-display font-semibold text-white/90 tracking-tight truncate">
+            {shot.title}
           </span>
-          <span
-            className="px-2 py-0.5 rounded font-semibold border"
-            style={{
-              color: shot.accent,
-              borderColor: `${shot.accent}40`,
-              backgroundColor: "rgba(0,0,0,0.75)",
-            }}
-          >
-            Critic: {shot.criticScore}
-          </span>
-        </div>
-
-        {/* Bottom Title & Locked SMPTE Timecode */}
-        <div className="absolute bottom-3 inset-x-3 z-10">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-display font-bold text-white tracking-tight truncate">
-              {shot.title}
-            </span>
-            <span className="text-[11px] font-mono text-[#5fe995] font-semibold bg-black/70 px-2 py-0.5 rounded border border-white/15">
-              {shot.timecode}
-            </span>
-          </div>
-          <span className="text-[10px] font-mono text-zinc-400 block truncate mt-0.5">
-            {shot.lens} · {shot.lut}
+          <span className="text-[10px] font-mono text-[#5fe995]/80 bg-black/60 px-1.5 py-0.5 rounded border border-white/10">
+            {shot.timecode}
           </span>
         </div>
       </div>
