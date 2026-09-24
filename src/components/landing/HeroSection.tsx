@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -34,7 +34,7 @@ const HERO_PRESETS: HeroPreset[] = [
     prompt: "Anamorphic 35mm pan over rain-slicked neon alleys, volumetric steam vents, moody blue and amber rim lighting.",
     accentColor: "#4ed4b7",
     criticFeedback: "Cadence optimized. Volumetric diffusion matched across shots 1-4.",
-    imageUrl: "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MWUvSkhLMUNBeHVudFBBd29HQ1RZTVdCLmpwZw.969dfc1a43072ab4/JHK1CAxuntPAwoGCTYMWB.jpg",
+    imageUrl: "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
   },
   {
     id: "solaris",
@@ -45,7 +45,7 @@ const HERO_PRESETS: HeroPreset[] = [
     prompt: "Slow push-in toward spherical observation cupola, blinding planetary reflection, deep vacuum contrast.",
     accentColor: "#7af2d9",
     criticFeedback: "Color balance locked. Exposure keyframes adjusted for zero solar blowout.",
-    imageUrl: "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk2ODEvM1ZWUGMtTXdkMnU2REVuM3RWUmptLmpwZw.e057b08306b30f75/3VVPc-Mwd2u6DEn3tVRjm.jpg",
+    imageUrl: "https://v3b.fal.media/files/b/0aab9681/3VVPc-Mwd2u6DEn3tVRjm.jpg",
   },
   {
     id: "dune",
@@ -56,7 +56,7 @@ const HERO_PRESETS: HeroPreset[] = [
     prompt: "Low-angle telephoto tracking shot through boiling heat shimmer, titanic ornithopter silhouette.",
     accentColor: "#e8c76d",
     criticFeedback: "Heat haze shimmer frequency matched to 24fps camera shutter.",
-    imageUrl: "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDMvNWNfLUdhZk9jRTBwSzE0TEQ1UGNhLmpwZw.9fc767252bb912f8/5c_-GafOcE0pK14LD5Pca.jpg",
+    imageUrl: "https://v3b.fal.media/files/b/0aab9703/5c_-GafOcE0pK14LD5Pca.jpg",
   }
 ];
 

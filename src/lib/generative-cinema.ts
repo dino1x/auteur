@@ -5,65 +5,70 @@ import { cinematicAudio } from "./cinematic-audio";
 // High-definition cinematic visual curation mapped across semantic categories (8 distinct scenes per theme, zero duplicates)
 // Verified Livepeer decentralized GPU cinema asset pool mapped across semantic categories
 const THEMATIC_PALETTES: Record<string, string[]> = {
+  athletics: [
+    "https://v3b.fal.media/files/b/0aabb646/qoxher1xjGHMovIBvJApT.jpg",
+    "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
+    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
+  ],
   cyberpunk: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MWUvSkhLMUNBeHVudFBBd29HQ1RZTVdCLmpwZw.969dfc1a43072ab4/JHK1CAxuntPAwoGCTYMWB.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MTYvejRDTFU0THkyRjFoWml5TklJcWEyLmpwZw.660ffbf5b22ed418/z4CLU4Ly2F1hZiyNIIqa2.jpg",
+    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
   ],
   space: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk2ODEvM1ZWUGMtTXdkMnU2REVuM3RWUmptLmpwZw.e057b08306b30f75/3VVPc-Mwd2u6DEn3tVRjm.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDMvNWNfLUdhZk9jRTBwSzE0TEQ1UGNhLmpwZw.9fc767252bb912f8/5c_-GafOcE0pK14LD5Pca.jpg",
+    "https://v3b.fal.media/files/b/0aab9681/3VVPc-Mwd2u6DEn3tVRjm.jpg",
+    "https://v3b.fal.media/files/b/0aab9703/5c_-GafOcE0pK14LD5Pca.jpg",
   ],
   tech: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MWUvSkhLMUNBeHVudFBBd29HQ1RZTVdCLmpwZw.969dfc1a43072ab4/JHK1CAxuntPAwoGCTYMWB.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MTYvejRDTFU0THkyRjFoWml5TklJcWEyLmpwZw.660ffbf5b22ed418/z4CLU4Ly2F1hZiyNIIqa2.jpg",
+    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
   ],
   ocean: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MGIvWDZjYk16ZDU2VnhtREphQzdISERGLmpwZw.9ff8d740a112167f/X6cbMzd56VxmDJaC7HHDF.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDYvMFNOYkt1UWFaNWNTcDBHbElRRDdlLmpwZw.65b76b30ba58da56/0SNbKuQaZ5cSp0GlIQD7e.jpg",
+    "https://v3b.fal.media/files/b/0aab970b/X6cbMzd56VxmDJaC7HHDF.jpg",
+    "https://v3b.fal.media/files/b/0aab9706/0SNbKuQaZ5cSp0GlIQD7e.jpg",
   ],
   desert: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDMvNWNfLUdhZk9jRTBwSzE0TEQ1UGNhLmpwZw.9fc767252bb912f8/5c_-GafOcE0pK14LD5Pca.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk2ODEvM1ZWUGMtTXdkMnU2REVuM3RWUmptLmpwZw.e057b08306b30f75/3VVPc-Mwd2u6DEn3tVRjm.jpg",
+    "https://v3b.fal.media/files/b/0aab9703/5c_-GafOcE0pK14LD5Pca.jpg",
+    "https://v3b.fal.media/files/b/0aab9681/3VVPc-Mwd2u6DEn3tVRjm.jpg",
   ],
   racing: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYmI2NDYvcW94aGVyMXhqR0hNb3ZJQnZKQXBULmpwZw.49412f66622296dd/qoxher1xjGHMovIBvJApT.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MTYvejRDTFU0THkyRjFoWml5TklJcWEyLmpwZw.660ffbf5b22ed418/z4CLU4Ly2F1hZiyNIIqa2.jpg",
+    "https://v3b.fal.media/files/b/0aabb646/qoxher1xjGHMovIBvJApT.jpg",
+    "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
   ],
   wildlife: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDEvekFjeWZCNVR6OUJHTGJJaDZ2TGZQLmpwZw.e73f200b252ea79b/zAcyfB5Tz9BGLbIh6vLfP.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDMvNWNfLUdhZk9jRTBwSzE0TEQ1UGNhLmpwZw.9fc767252bb912f8/5c_-GafOcE0pK14LD5Pca.jpg",
+    "https://v3b.fal.media/files/b/0aab9701/zAcyfB5Tz9BGLbIh6vLfP.jpg",
+    "https://v3b.fal.media/files/b/0aab9703/5c_-GafOcE0pK14LD5Pca.jpg",
   ],
   mountains: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYmI2NWQvQ0FvVFozSVpsMG9ybXJHdTN3cFlPLmpwZw.78696e133226f1eb/CAoTZ3IZl0ormrGu3wpYO.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDEvekFjeWZCNVR6OUJHTGJJaDZ2TGZQLmpwZw.e73f200b252ea79b/zAcyfB5Tz9BGLbIh6vLfP.jpg",
+    "https://v3b.fal.media/files/b/0aabb65d/CAoTZ3IZl0ormrGu3wpYO.jpg",
+    "https://v3b.fal.media/files/b/0aab9701/zAcyfB5Tz9BGLbIh6vLfP.jpg",
   ],
   nature: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYmI2NWQvQ0FvVFozSVpsMG9ybXJHdTN3cFlPLmpwZw.78696e133226f1eb/CAoTZ3IZl0ormrGu3wpYO.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3YTRvX0N1NmxhQnY5WFRMeVlNUHpIbHNaLmpwZw.43ec37d854c29895/_Cu6laBv9XTLyYMPzHlsZ.jpg",
+    "https://v3b.fal.media/files/b/0aabb65d/CAoTZ3IZl0ormrGu3wpYO.jpg",
+    "https://v3b.fal.media/files/b/0aab9701/zAcyfB5Tz9BGLbIh6vLfP.jpg",
   ],
   luxury: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3YTRvX0N1NmxhQnY5WFRMeVlNUHpIbHNaLmpwZw.43ec37d854c29895/_Cu6laBv9XTLyYMPzHlsZ.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MWUvSkhLMUNBeHVudFBBd29HQ1RZTVdCLmpwZw.969dfc1a43072ab4/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
   ],
   brutalist: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDYvMFNOYkt1UWFaNWNTcDBHbElRRDdlLmpwZw.65b76b30ba58da56/0SNbKuQaZ5cSp0GlIQD7e.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3YTRvX0N1NmxhQnY5WFRMeVlNUHpIbHNaLmpwZw.43ec37d854c29895/_Cu6laBv9XTLyYMPzHlsZ.jpg",
+    "https://v3b.fal.media/files/b/0aab9706/0SNbKuQaZ5cSp0GlIQD7e.jpg",
+    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
   ],
   biotech: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MTYvejRDTFU0THkyRjFoWml5TklJcWEyLmpwZw.660ffbf5b22ed418/z4CLU4Ly2F1hZiyNIIqa2.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MGIvWDZjYk16ZDU2VnhtREphQzdISERGLmpwZw.9ff8d740a112167f/X6cbMzd56VxmDJaC7HHDF.jpg",
+    "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
+    "https://v3b.fal.media/files/b/0aab970b/X6cbMzd56VxmDJaC7HHDF.jpg",
   ],
   food: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYmI2NWQvTjJERTA4MXBvWC00c2xCbkZ1VmVLLmpwZw.3414528c347ff6e5/N2DE081poX-4slBnFuVeK.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3YTRvX0N1NmxhQnY5WFRMeVlNUHpIbHNaLmpwZw.43ec37d854c29895/_Cu6laBv9XTLyYMPzHlsZ.jpg",
+    "https://v3b.fal.media/files/b/0aabb65d/N2DE081poX-4slBnFuVeK.jpg",
+    "https://v3b.fal.media/files/b/0aab9701/zAcyfB5Tz9BGLbIh6vLfP.jpg",
   ],
   urban: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MWUvSkhLMUNBeHVudFBBd29HQ1RZTVdCLmpwZw.969dfc1a43072ab4/JHK1CAxuntPAwoGCTYMWB.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDYvMFNOYkt1UWFaNWNTcDBHbElRRDdlLmpwZw.65b76b30ba58da56/0SNbKuQaZ5cSp0GlIQD7e.jpg",
+    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "https://v3b.fal.media/files/b/0aab9706/0SNbKuQaZ5cSp0GlIQD7e.jpg",
   ],
   people: [
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MDEvekFjeWZCNVR6OUJHTGJJaDZ2TGZQLmpwZw.e73f200b252ea79b/zAcyfB5Tz9BGLbIh6vLfP.jpg",
-    "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3YTRvX0N1NmxhQnY5WFRMeVlNUHpIbHNaLmpwZw.43ec37d854c29895/_Cu6laBv9XTLyYMPzHlsZ.jpg",
+    "https://v3b.fal.media/files/b/0aab9701/zAcyfB5Tz9BGLbIh6vLfP.jpg",
+    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
   ],
 };
 
@@ -89,8 +94,12 @@ export function resolveCinematicAsset(prompt: string, sceneNumber: number): stri
 
   let category = "urban";
 
+  // 0. Athletics, Running, Sneaker & Sports
+  if (hasAny("nike", "running", "runner", "marathon", "shoe", "shoes", "sneaker", "sneakers", "alphafly", "vaporfly", "athlete", "athletic", "athletics", "sprint", "sprinter", "olympic", "gym", "workout", "fitness", "track and field")) {
+    category = "athletics";
+  }
   // 1. Automotive, Motorsport & Driving (Any vehicle in any setting: mountain, track, highway, coast)
-  if (hasAny("f1", "formula 1", "formula one", "racecar", "racecars", "supercar", "supercars", "nascar", "motorsport", "motorsports", "automotive", "porsche", "ferrari", "mclaren", "lamborghini", "pit lane", "lap time") || hasAny("car", "cars", "vehicle", "vehicles", "automobile", "sports car", "driving", "drift", "drifting", "tarmac", "speedway")) {
+  else if (hasAny("f1", "formula 1", "formula one", "racecar", "racecars", "supercar", "supercars", "nascar", "motorsport", "motorsports", "automotive", "porsche", "ferrari", "mclaren", "lamborghini", "pit lane", "lap time") || hasAny("car", "cars", "vehicle", "vehicles", "automobile", "sports car", "driving", "drift", "drifting", "tarmac", "speedway")) {
     category = "racing";
   }
   // 2. Wildlife, Big Cats & Predators (Catches snow leopards, tigers, lions, animals)
@@ -154,24 +163,41 @@ export function resolveCinematicAsset(prompt: string, sceneNumber: number): stri
 const imageCache: Map<string, HTMLImageElement> = new Map();
 
 export function preloadImage(url: string, fallbackUrl?: string): Promise<HTMLImageElement> {
-  if (imageCache.has(url)) {
-    const existing = imageCache.get(url)!;
+  // Normalize legacy agent.livepeer.org/a/ base64 URLs to direct fal.media CDN
+  let normalizedUrl = url;
+  if (normalizedUrl.includes("agent.livepeer.org/a/")) {
+    try {
+      const match = normalizedUrl.match(/agent\.livepeer\.org\/a\/([a-zA-Z0-9_\-]+)/);
+      if (match && match[1]) {
+        const decoded = typeof atob !== "undefined"
+          ? atob(match[1])
+          : Buffer.from(match[1], "base64").toString("utf-8");
+        if (decoded.startsWith("http")) {
+          normalizedUrl = decoded;
+        }
+      }
+    } catch {
+      normalizedUrl = "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg";
+    }
+  }
+
+  if (imageCache.has(normalizedUrl)) {
+    const existing = imageCache.get(normalizedUrl)!;
     if (existing.complete && existing.naturalWidth > 0) {
       return Promise.resolve(existing);
     }
   }
 
-  // Decentralized Livepeer CDN assets have native CORS * — bypass the server proxy to load directly at maximum network speed.
-  // Ephemeral media or unknown domains route through proxy.
-  const isDirectCdn = url.includes("agent.livepeer.org") || url.includes("fal.media");
+  // Livepeer decentralized GPU CDN assets (fal.media) have native CORS *
+  const isDirectCdn = normalizedUrl.includes("fal.media");
   const safeLoadUrl =
     typeof window !== "undefined" &&
-    url.startsWith("http") &&
+    normalizedUrl.startsWith("http") &&
     !isDirectCdn &&
-    !url.includes("/api/proxy-media") &&
-    !url.includes(window.location.host)
-      ? `/api/proxy-media?url=${encodeURIComponent(url)}`
-      : url;
+    !normalizedUrl.includes("/api/proxy-media") &&
+    !normalizedUrl.includes(window.location.host)
+      ? `/api/proxy-media?url=${encodeURIComponent(normalizedUrl)}`
+      : normalizedUrl;
 
   return new Promise((resolve) => {
     const img = new Image();
@@ -179,7 +205,8 @@ export function preloadImage(url: string, fallbackUrl?: string): Promise<HTMLIma
 
     const onDone = () => {
       imageCache.set(url, img);
-      if (safeLoadUrl !== url) {
+      imageCache.set(normalizedUrl, img);
+      if (safeLoadUrl !== normalizedUrl) {
         imageCache.set(safeLoadUrl, img);
       }
       // Trigger background GPU decode so painting to 2D canvas is instantaneous
@@ -194,10 +221,11 @@ export function preloadImage(url: string, fallbackUrl?: string): Promise<HTMLIma
 
     img.onerror = () => {
       // If direct CDN loading fails, try proxy as fallback
-      if (isDirectCdn && safeLoadUrl === url) {
-        const proxied = `/api/proxy-media?url=${encodeURIComponent(url)}`;
+      if (isDirectCdn && safeLoadUrl === normalizedUrl) {
+        const proxied = `/api/proxy-media?url=${encodeURIComponent(normalizedUrl)}`;
         preloadImage(proxied, fallbackUrl).then((pImg) => {
           imageCache.set(url, pImg);
+          imageCache.set(normalizedUrl, pImg);
           resolve(pImg);
         });
         return;
@@ -205,22 +233,24 @@ export function preloadImage(url: string, fallbackUrl?: string): Promise<HTMLIma
 
       // If external or ephemeral media fails, immediately recover using a reliable thematic photographic asset
       const effectiveFallback =
-        fallbackUrl && fallbackUrl !== url
+        fallbackUrl && fallbackUrl !== url && fallbackUrl !== normalizedUrl
           ? fallbackUrl
           : resolveCinematicAsset("cinematic photorealistic 35mm", 1);
 
-      if (effectiveFallback && effectiveFallback !== url) {
+      if (effectiveFallback && effectiveFallback !== url && effectiveFallback !== normalizedUrl) {
         preloadImage(effectiveFallback).then((fb) => {
           imageCache.set(url, fb);
+          imageCache.set(normalizedUrl, fb);
           resolve(fb);
         });
       } else {
         // Guaranteed decentralized Livepeer asset fallback
-        const defaultAsset = "https://agent.livepeer.org/a/aHR0cHM6Ly92M2IuZmFsLm1lZGlhL2ZpbGVzL2IvMGFhYjk3MWUvSkhLMUNBeHVudFBBd29HQ1RZTVdCLmpwZw.969dfc1a43072ab4/JHK1CAxuntPAwoGCTYMWB.jpg";
+        const defaultAsset = "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg";
         const fbImg = new Image();
         fbImg.crossOrigin = "anonymous";
         fbImg.onload = () => {
           imageCache.set(url, fbImg);
+          imageCache.set(normalizedUrl, fbImg);
           resolve(fbImg);
         };
         fbImg.src = defaultAsset;

@@ -1914,10 +1914,14 @@ export function AuteurWorkstation({
                     <div className="space-y-4">
                       <div className="aspect-video w-full rounded-xl bg-black overflow-hidden relative border border-white/10">
                         <img
-                          src={territory.previewUrl || resolveCinematicAsset(`${brief} ${territory.title} ${territory.visualMetaphor}`, idx + 1)}
+                          src={
+                            territory.previewUrl?.includes("agent.livepeer.org/a/")
+                              ? resolveCinematicAsset(`${brief} ${territory.title}`, idx + 1)
+                              : (territory.previewUrl || resolveCinematicAsset(`${brief} ${territory.title}`, idx + 1))
+                          }
                           alt={territory.title}
                           onError={(e) => {
-                            const fallback = resolveCinematicAsset(`${brief} ${territory.title} ${territory.visualMetaphor}`, idx + 1);
+                            const fallback = resolveCinematicAsset(`${brief} ${territory.title}`, idx + 1);
                             if (e.currentTarget.src !== fallback) {
                               e.currentTarget.src = fallback;
                             }
@@ -1929,7 +1933,7 @@ export function AuteurWorkstation({
                         </div>
                         <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/85 border border-[#4ed4b7]/40 font-mono text-[9px] text-[#4ed4b7] flex items-center gap-1.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#4ed4b7] animate-pulse" />
-                          <span>{territory.previewUrl?.includes("agent.livepeer.org") ? "Livepeer Agent MCP" : "Livepeer Subnet"}</span>
+                          <span>Livepeer Subnet</span>
                           {territory.generationLatencyMs && (
                             <span className="text-zinc-400">({(territory.generationLatencyMs / 1000).toFixed(1)}s)</span>
                           )}

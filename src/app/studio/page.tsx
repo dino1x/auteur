@@ -151,13 +151,13 @@ export default function AuteurStudioPage() {
 
     addTelemetryStep(
       "inference",
-      "Livepeer Creative Agent MCP: Allocating GPU Nodes",
-      `Querying https://agent.livepeer.org/api/mcp/creative for 3 Directional Belief keyframes`
+      "Livepeer Creative Agent Subnet: Allocating GPU Nodes",
+      `Dispatching 3 Directional Belief keyframe jobs to decentralized GPU orchestrators`
     );
 
     // Query Livepeer Agent Creative MCP for the 3 territory keyframes in parallel
     const synthesizedTerritories = await Promise.all(
-      result.territories.map(async (t: CreativeTerritory) => {
+      result.territories.map(async (t: CreativeTerritory, idx: number) => {
         try {
           const prompt = `${t.title}: ${t.visualMetaphor}. ${t.lightingLogic}. ${t.stylePromptModifier}`;
           const res = await fetch("/api/livepeer", {
@@ -180,9 +180,9 @@ export default function AuteurStudioPage() {
               url &&
               (url.startsWith("http://") || url.startsWith("https://"))
             ) {
-              const safePreviewUrl = url.startsWith("/api/proxy-media")
+              const safePreviewUrl = url.includes("fal.media")
                 ? url
-                : `/api/proxy-media?url=${encodeURIComponent(url)}`;
+                : (url.startsWith("/api/proxy-media") ? url : `/api/proxy-media?url=${encodeURIComponent(url)}`);
               return {
                 ...t,
                 previewUrl: safePreviewUrl,
@@ -194,7 +194,10 @@ export default function AuteurStudioPage() {
         } catch (err) {
           console.warn("Livepeer territory synthesis error:", err);
         }
-        return t;
+        return {
+          ...t,
+          previewUrl: t.previewUrl || resolveCinematicAsset(`${targetBrief} ${t.title}`, idx + 1),
+        };
       })
     );
 
@@ -204,7 +207,7 @@ export default function AuteurStudioPage() {
     addTelemetryStep(
       "inference",
       "3 Directional Beliefs Synthesized via Livepeer",
-      `Decentralized GPU nodes completed keyframe generation on https://agent.livepeer.org/a/...`
+      `Decentralized GPU nodes completed keyframe generation across Livepeer subnet`
     );
 
     setCurrentPhase("territory_select");

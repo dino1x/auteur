@@ -39,6 +39,7 @@ export class DirectorAgent {
           title: `${title} · ${env.dramaticTitle}`,
           tagline: env.dramaticTagline,
           visualMetaphor: `${subject} emerging from ${env.dramaticEnvironment} into striking directional light.`,
+          previewUrl: resolveCinematicAsset(`${cleanBrief} ${env.dramaticTitle}`, 1),
           colorPalette: env.dramaticPalette,
           lightingLogic: `Single strong key light with ${env.dramaticLightModifier} and sharp negative fill.`,
           cameraLanguage: `Steadicam slow forward pushes ${env.dramaticCameraModifier}.`,
@@ -52,6 +53,7 @@ export class DirectorAgent {
           title: `${title} · ${env.atmosphericTitle}`,
           tagline: env.atmosphericTagline,
           visualMetaphor: `A contemplative perspective revealing the full expanse of ${cleanBrief} in ${env.atmosphericEnvironment}.`,
+          previewUrl: resolveCinematicAsset(`${cleanBrief} ${env.atmosphericTitle}`, 2),
           colorPalette: env.atmosphericPalette,
           lightingLogic: `${env.atmosphericLightModifier} with cool ambient wrap.`,
           cameraLanguage: `Locked-off wide tableaux and ${env.atmosphericCameraModifier}.`,
@@ -65,6 +67,7 @@ export class DirectorAgent {
           title: `${title} · ${env.kineticTitle}`,
           tagline: env.kineticTagline,
           visualMetaphor: `High-speed kinetic momentum capturing ${cleanBrief} in ${env.kineticEnvironment}.`,
+          previewUrl: resolveCinematicAsset(`${cleanBrief} ${env.kineticTitle}`, 3),
           colorPalette: env.kineticPalette,
           lightingLogic: `Dynamic ${env.kineticLightModifier} with vivid colored accents.`,
           cameraLanguage: `${env.kineticCameraModifier} and dynamic parallax tracking.`,
@@ -99,6 +102,34 @@ export class DirectorAgent {
       }
       return new RegExp(`\\b${w}\\b`, "i").test(cleanLower);
     });
+
+    // 0. Athletics, Running, Sneaker & Sports
+    if (hasAny("nike", "running", "runner", "marathon", "shoe", "shoes", "sneaker", "sneakers", "alphafly", "vaporfly", "athlete", "athletic", "athletics", "sprint", "sprinter", "olympic", "gym", "workout", "fitness", "track and field")) {
+      return {
+        dramaticTitle: "Midnight Pace Noir",
+        dramaticTagline: "Wet city asphalt, sharp neon silhouettes, and biomechanical precision.",
+        dramaticEnvironment: "rain-slicked nocturnal city streets and high-contrast streetlights",
+        dramaticPalette: ["#070a0e", "#00ffcc", "#ff0055", "#ffffff"],
+        dramaticLightModifier: "streaking neon backlight and wet pavement reflections",
+        dramaticCameraModifier: "low-angle high-speed dolly tracking footfalls",
+        dramaticInstrument: "pounding 120bpm sub-bass kick and dark analog synthesizer",
+        atmosphericTitle: "Dawn Breakaway",
+        atmosphericTagline: "Crisp morning mist, solitary strides, and the raw pursuit of the marathon.",
+        atmosphericEnvironment: "misty riverbanks and expansive dawn skyline bridges",
+        atmosphericPalette: ["#0c121e", "#e8c76d", "#4ed4b7", "#f5f6fa"],
+        atmosphericLightModifier: "Low raking dawn sunlight filtering through morning vapor",
+        atmosphericCameraModifier: "sweeping profile tracking on runner in motion",
+        atmosphericInstrument: "Uplifting ambient pads layered with rhythmic acoustic cadence",
+        kineticTitle: "Sub-Two Velocity",
+        kineticTagline: "Explosive toe-off, carbon fiber spring recoil, and elite cadence.",
+        kineticEnvironment: "the final straightaway under blazing stadium and city lights",
+        kineticPalette: ["#05080f", "#00f0ff", "#ff3366", "#ffffff"],
+        kineticLightModifier: "high-frequency strobe pulses with crisp optical motion blur",
+        kineticCameraModifier: "high-speed phantom tracking alongside the shoe impact",
+        kineticInstrument: "driving percussion with relentless synthetic arpeggios",
+        styleKeywords: "commercial sports cinematography, marathon runner, Nike elite footwear, 1000fps high-speed camera, 35mm lens",
+      };
+    }
 
     // 1. Automotive, Motorsport & Racing (Check before generic landscapes so mountain/street driving matches correctly)
     if (hasAny("f1", "formula 1", "formula one", "supercar", "hypercar", "racecar", "motorsport", "nascar", "le mans", "grand prix", "drag strip", "circuit race", "pit lane", "porsche", "ferrari", "mclaren", "lamborghini", "speedway", "drift", "drifting", "tarmac") || (hasAny("car", "vehicle", "automobile", "driving", "drive") && !hasAny("carpet", "card", "carbon-fiber drone"))) {
