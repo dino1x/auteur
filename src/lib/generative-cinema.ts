@@ -450,21 +450,22 @@ export function renderCinematicShot(
   if (drawSubtitles && rawScript) {
     const scriptText = rawScript.length > 90 ? rawScript.slice(0, 87) + "..." : rawScript;
     ctx.save();
-    ctx.font = "600 15px 'Inter', -apple-system, sans-serif";
+    const isPortrait = activeAspectRatio === "9:16";
+    const fontSize = isPortrait ? 12 : 15;
+    ctx.font = `600 ${fontSize}px 'Inter', -apple-system, sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
-    const textY = height - Math.max(letterboxH, 45) - 52;
+    const textY = height - Math.max(letterboxH, isPortrait ? 30 : 45) - (isPortrait ? 36 : 52);
 
     // Subtitle background pill
     const metrics = ctx.measureText(scriptText);
-    const padX = 20;
-    const padY = 8;
-    const pillW = Math.min(metrics.width + padX * 2, width - 120);
-    const pillH = 32;
+    const padX = isPortrait ? 12 : 20;
+    const pillW = Math.min(metrics.width + padX * 2, width - (isPortrait ? 24 : 120));
+    const pillH = isPortrait ? 28 : 32;
 
-    ctx.fillStyle = "rgba(8, 10, 14, 0.85)";
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+    ctx.fillStyle = "rgba(8, 10, 14, 0.88)";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.16)";
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.roundRect(width / 2 - pillW / 2, textY - pillH / 2, pillW, pillH, 8);
@@ -475,7 +476,7 @@ export function renderCinematicShot(
     ctx.fillStyle = normProgress > 0.08 && normProgress < 0.92 ? "#ffffff" : "#cbd5e1";
     ctx.shadowColor = "rgba(0, 0, 0, 0.9)";
     ctx.shadowBlur = 6;
-    ctx.fillText(scriptText, width / 2, textY, width - 140);
+    ctx.fillText(scriptText, width / 2, textY, width - (isPortrait ? 36 : 140));
     ctx.restore();
   }
 

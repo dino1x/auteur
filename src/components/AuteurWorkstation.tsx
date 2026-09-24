@@ -1449,27 +1449,60 @@ export function AuteurWorkstation({
                   </div>
                 )}
 
-                {/* Cinematic Floating Subtitles (Clickable to audition/replay voiceover) */}
+                {/* Cinematic Subtitles (Clickable to audition/replay voiceover) */}
                 {(activeTerritory?.masterVoiceoverScript || activeShot?.masterVoiceoverScript || activeShot?.voiceoverScript) && (
-                  <div className={`absolute ${aspectRatio === "9:16" ? "bottom-3 inset-x-2 px-1" : "bottom-4 inset-x-0 px-6"} z-20 flex justify-center`}>
-                    <button
-                      onClick={() => handleAuditionVo(activeShot || undefined)}
-                      title="Click to audition/replay Livepeer voiceover narration"
-                      className={`bg-[#0b0e14]/90 border border-white/15 px-3 py-1.5 rounded-full text-xs text-zinc-100 shadow-2xl backdrop-blur-md max-w-2xl flex items-center gap-2 hover:border-[#4ed4b7]/50 transition-colors pointer-events-auto cursor-pointer ${
-                        isAuditioningVo ? "border-[#4ed4b7] shadow-[0_0_12px_rgba(78,212,183,0.3)]" : ""
-                      }`}
-                    >
-                      <span className={`w-2 h-2 rounded-full shrink-0 ${activeShot?.voiceoverAudioUrl || activeTerritory?.masterVoiceoverAudioUrl ? "bg-[#5fe995] shadow-[0_0_8px_#5fe995]" : "bg-[#4ed4b7]"}`} />
-                      <span className="text-[#4ed4b7] font-mono text-[10px] font-bold uppercase tracking-wider shrink-0">
-                        {activeShot?.voiceoverAudioUrl || activeTerritory?.masterVoiceoverAudioUrl ? "LIVEPEER 48KHZ" : "TTS PENDING"}
-                      </span>
-                      <span className="text-zinc-600 font-mono text-xs">/</span>
-                      <span className="font-serif italic text-xs tracking-wide text-zinc-200 truncate">
-                        &ldquo;{activeTerritory?.masterVoiceoverScript || activeShot?.masterVoiceoverScript || activeShot?.voiceoverScript}&rdquo;
-                      </span>
-                      <Volume2 className={`w-3.5 h-3.5 shrink-0 ${isAuditioningVo ? "text-[#4ed4b7] animate-pulse" : "text-zinc-400"}`} />
-                    </button>
-                  </div>
+                  aspectRatio === "9:16" ? (
+                    /* 9:16 Reel Mode: Tailored vertical social card, multi-line wrap, zero horizontal clipping */
+                    <div className="absolute bottom-3 inset-x-2.5 z-20 flex justify-center pointer-events-none">
+                      <button
+                        onClick={() => handleAuditionVo(activeShot || undefined)}
+                        title="Click to audition/replay Livepeer voiceover narration"
+                        className={`w-full max-w-[95%] bg-[#080b11]/92 border border-white/20 p-2.5 rounded-xl text-zinc-100 shadow-2xl backdrop-blur-md flex flex-col gap-1.5 hover:border-[#4ed4b7]/60 transition-all pointer-events-auto cursor-pointer text-left group ${
+                          isAuditioningVo ? "border-[#4ed4b7] shadow-[0_0_16px_rgba(78,212,183,0.35)] ring-1 ring-[#4ed4b7]/50" : ""
+                        }`}
+                      >
+                        {/* Status bar */}
+                        <div className="flex items-center justify-between gap-1 w-full font-mono text-[9px]">
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <span className={`w-1.5 h-1.5 rounded-full ${activeShot?.voiceoverAudioUrl || activeTerritory?.masterVoiceoverAudioUrl ? "bg-[#5fe995] shadow-[0_0_6px_#5fe995]" : "bg-[#4ed4b7]"}`} />
+                            <span className="text-[#4ed4b7] font-bold uppercase tracking-wider">
+                              {activeShot?.voiceoverAudioUrl || activeTerritory?.masterVoiceoverAudioUrl ? "LIVEPEER 48KHZ VO" : "SYNTHESIZED NARRATION"}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1 text-zinc-400 group-hover:text-zinc-200 transition-colors">
+                            <span className="text-[8px] uppercase tracking-wider">{isAuditioningVo ? "PLAYING" : "AUDITION"}</span>
+                            <Volume2 className={`w-3 h-3 shrink-0 ${isAuditioningVo ? "text-[#4ed4b7] animate-pulse" : "text-zinc-400"}`} />
+                          </div>
+                        </div>
+
+                        {/* Spoken Narration: Multi-line wrapped, high contrast, clean line height */}
+                        <div className="font-serif italic text-[11px] leading-snug tracking-wide text-zinc-100 line-clamp-3 w-full break-words">
+                          &ldquo;{activeTerritory?.masterVoiceoverScript || activeShot?.masterVoiceoverScript || activeShot?.voiceoverScript}&rdquo;
+                        </div>
+                      </button>
+                    </div>
+                  ) : (
+                    /* 2.39:1 Scope & 16:9 Flat Mode: Sleek horizontal floating pill */
+                    <div className="absolute bottom-4 inset-x-0 px-6 z-20 flex justify-center pointer-events-none">
+                      <button
+                        onClick={() => handleAuditionVo(activeShot || undefined)}
+                        title="Click to audition/replay Livepeer voiceover narration"
+                        className={`bg-[#0b0e14]/90 border border-white/15 px-3.5 py-1.5 rounded-full text-xs text-zinc-100 shadow-2xl backdrop-blur-md max-w-2xl min-w-0 flex items-center gap-2 hover:border-[#4ed4b7]/50 transition-colors pointer-events-auto cursor-pointer ${
+                          isAuditioningVo ? "border-[#4ed4b7] shadow-[0_0_12px_rgba(78,212,183,0.3)]" : ""
+                        }`}
+                      >
+                        <span className={`w-2 h-2 rounded-full shrink-0 ${activeShot?.voiceoverAudioUrl || activeTerritory?.masterVoiceoverAudioUrl ? "bg-[#5fe995] shadow-[0_0_8px_#5fe995]" : "bg-[#4ed4b7]"}`} />
+                        <span className="text-[#4ed4b7] font-mono text-[10px] font-bold uppercase tracking-wider shrink-0">
+                          {activeShot?.voiceoverAudioUrl || activeTerritory?.masterVoiceoverAudioUrl ? "LIVEPEER 48KHZ" : "TTS PENDING"}
+                        </span>
+                        <span className="text-zinc-600 font-mono text-xs shrink-0">/</span>
+                        <span className="font-serif italic text-xs tracking-wide text-zinc-200 truncate min-w-0 flex-1">
+                          &ldquo;{activeTerritory?.masterVoiceoverScript || activeShot?.masterVoiceoverScript || activeShot?.voiceoverScript}&rdquo;
+                        </span>
+                        <Volume2 className={`w-3.5 h-3.5 shrink-0 ${isAuditioningVo ? "text-[#4ed4b7] animate-pulse" : "text-zinc-400"}`} />
+                      </button>
+                    </div>
+                  )
                 )}
               </div>
             </div>
