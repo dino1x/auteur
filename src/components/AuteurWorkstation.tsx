@@ -177,8 +177,8 @@ export function AuteurWorkstation({
   const [showAnamorphicFlare, setShowAnamorphicFlare] = useState<boolean>(true);
   const [showCrtScope, setShowCrtScope] = useState<boolean>(false);
   const [directPrompt, setDirectPrompt] = useState<string>("");
-  const [isAutoGenerateActive, setIsAutoGenerateActive] = useState<boolean>(true);
   const [isExporting, setIsExporting] = useState<boolean>(false);
+  const [exportProgress, setExportProgress] = useState<number>(0);
   const [isLivepeerModalOpen, setIsLivepeerModalOpen] = useState<boolean>(false);
   const [livepeerApiKey, setLivepeerApiKey] = useState<string>("");
   const [livepeerLatency, setLivepeerLatency] = useState<number>(184);
@@ -877,9 +877,10 @@ export function AuteurWorkstation({
 
   const handleExport = async () => {
     setIsExporting(true);
+    setExportProgress(0);
     cinematicAudio.playCue("action");
     try {
-      // Dispatches export to Livepeer Agent MCP director_export
+      // Dispatches export metadata to Livepeer agent telemetry
       fetch("/api/livepeer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -894,11 +895,15 @@ export function AuteurWorkstation({
 
       const targetTerritory = activeTerritory || territories[0];
       if (targetTerritory) {
-        const videoBlob = await compileMasterVideo(shots, targetTerritory);
-        const downloadUrl = URL.createObjectURL(videoBlob);
+        const { blob, extension } = await compileMasterVideo(
+          shots,
+          targetTerritory,
+          (pct) => setExportProgress(pct)
+        );
+        const downloadUrl = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = downloadUrl;
-        a.download = `auteur-master-${targetTerritory.id || "cut"}.webm`;
+        a.download = `auteur-master-${targetTerritory.id || "cut"}.${extension}`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -914,6 +919,7 @@ export function AuteurWorkstation({
       console.error("Export compilation error:", err);
     } finally {
       setIsExporting(false);
+      setExportProgress(0);
     }
   };
 
@@ -1057,7 +1063,7 @@ export function AuteurWorkstation({
             size="sm"
           >
             <Download className="w-3.5 h-3.5 text-[#4ed4b7]" />
-            <span>{isExporting ? "Compiling..." : "Export 4K"}</span>
+            <span>{isExporting ? `Exporting MP4 (${exportProgress}%)...` : "Export MP4"}</span>
           </SpinningBorderCta>
         </div>
       </header>
@@ -2395,7 +2401,7 @@ export function AuteurWorkstation({
                     className="flex-1 py-2.5 rounded-xl bg-[#4ed4b7] text-black font-display font-bold text-xs flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 cursor-pointer shadow-[0_0_16px_rgba(78,212,183,0.3)]"
                   >
                     <Download className="w-4 h-4 text-black" />
-                    <span>{isExporting ? "Compiling Master..." : "Compile & Export 4K Master Cut"}</span>
+                    <span>{isExporting ? `Exporting MP4 (${exportProgress}%)...` : "Compile & Export Master MP4"}</span>
                   </button>
                 )}
                 <button

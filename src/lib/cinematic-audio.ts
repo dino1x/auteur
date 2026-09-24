@@ -370,44 +370,43 @@ export class CinematicAudioEngine {
     }
   }
 
+  public resumeAudioContext(): Promise<void> {
+    this.init();
+    if (this.ctx && this.ctx.state === "suspended") {
+      return this.ctx.resume().catch(() => {});
+    }
+    return Promise.resolve();
+  }
+
   /**
    * Starts score playback. Prioritizes real Livepeer GPU soundtrack URL,
    * or plays the bespoke procedural ambient score parameterized by the brief.
    */
   public startScore(territory: any, brief?: string) {
     this.init();
+    if (this.ctx && this.ctx.state === "suspended") {
+      this.ctx.resume().catch(() => {});
+    }
     const musicUrl = territory?.musicAudioUrl;
 
     if (musicUrl && typeof window !== "undefined") {
       this.stopSoundtrack();
-      if (this.ctx && this.ctx.state === "suspended") {
-        this.ctx.resume().catch(() => {});
-      }
       try {
         const audio = new Audio();
-        audio.crossOrigin = "anonymous";
         audio.src = musicUrl;
         audio.loop = true;
         this.scoreAudio = audio;
-
-        if (this.ctx && this.masterGain) {
-          try {
-            const source = this.ctx.createMediaElementSource(audio);
-            source.connect(this.masterGain);
-            this.scoreSourceNode = source;
-          } catch (err) {
-            audio.volume = this.isMuted ? 0 : this.currentVolume * 0.75;
-          }
-        } else {
-          audio.volume = this.isMuted ? 0 : this.currentVolume * 0.75;
-        }
+        audio.volume = this.isMuted ? 0 : this.currentVolume * 0.75;
 
         audio.play().catch((err) => {
-          console.warn("Livepeer music autoplay blocked:", err);
+          console.warn("Livepeer music autoplay blocked, falling back to procedural soundtrack:", err);
+          const tid = typeof territory === "string" ? territory : territory?.id || "cyber";
+          const contextBrief = brief || (typeof territory === "object" ? `${territory.title || ""} ${territory.musicMood || ""}` : "");
+          this.startSoundtrack(tid, contextBrief);
         });
         return;
       } catch (err) {
-        console.warn("Livepeer music playback failed:", err);
+        console.warn("Livepeer music playback failed, falling back to procedural:", err);
       }
     }
 

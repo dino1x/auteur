@@ -87,7 +87,7 @@ const PRIMITIVES: StudioPrimitive[] = [
     highlightLabel: "Four Major Theatrical Territories",
     specs: [
       { label: "Key Art", value: "Prompt-Derived Anamorphic Stills" },
-      { label: "Deliverables", value: "SMPTE ProRes / H.264 WebM" },
+      { label: "Deliverables", value: "SMPTE Master / H.264 MP4" },
       { label: "Verification", value: "C2PA Provenance Manifests" },
     ],
     accentColor: "#e8c76d",
