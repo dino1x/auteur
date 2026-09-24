@@ -48,7 +48,7 @@ import {
   InnovationPlaybook,
 } from "@/lib/types";
 import { INNOVATION_PLAYBOOKS } from "@/lib/playbooks";
-import { formatTimecode } from "@/lib/utils";
+import { formatTimecode, formatSmpteTimecode, formatSeconds } from "@/lib/utils";
 import { cinematicAudio, cinematicVoiceover } from "@/lib/cinematic-audio";
 import {
   compileMasterVideo,
@@ -237,6 +237,39 @@ export function AuteurWorkstation({
 
   const shotDuration = Math.max(activeShotDuration, activeShot?.durationSec || 3.6);
 
+  // Timecode display mode (SMPTE Reel 1 starting at 01:00:00:00, Absolute timeline time, or raw Seconds)
+  const [timecodeDisplayMode, setTimecodeDisplayMode] = useState<"smpte" | "absolute" | "seconds">("smpte");
+  const timecodeModeRef = useRef<"smpte" | "absolute" | "seconds">(timecodeDisplayMode);
+  timecodeModeRef.current = timecodeDisplayMode;
+
+  const timecodeCurrentRef = useRef<HTMLSpanElement | null>(null);
+  const timecodeTotalRef = useRef<HTMLSpanElement | null>(null);
+  const hudTimecodeRef = useRef<HTMLDivElement | null>(null);
+
+  // Continuous Sequence Playhead & Accurate SMPTE Timecode Calculation
+  const elapsedPriorToActiveShot = useMemo(() => {
+    let acc = 0;
+    for (let i = 0; i < activeShotIndex && i < shots.length; i++) {
+      acc += shots[i]?.durationSec || 3.6;
+    }
+    return acc;
+  }, [shots, activeShotIndex]);
+
+  const elapsedPriorToActiveShotRef = useRef<number>(elapsedPriorToActiveShot);
+  elapsedPriorToActiveShotRef.current = elapsedPriorToActiveShot;
+
+  const totalSequenceDuration = useMemo(() => {
+    return shots.reduce((acc, s, idx) => {
+      const dur = idx === activeShotIndex ? Math.max(activeShotDuration, s.durationSec || 3.6) : (s.durationSec || 3.6);
+      return acc + dur;
+    }, 0);
+  }, [shots, activeShotIndex, activeShotDuration]);
+
+  const totalSequenceDurationRef = useRef<number>(totalSequenceDuration);
+  totalSequenceDurationRef.current = totalSequenceDuration;
+
+  const currentSequenceElapsed = elapsedPriorToActiveShot + currentTime;
+
   // Dynamically compute episodic scenes from shots, brief, and active territory (supports 5 to 7 acts)
   const episodicScenes: StoryboardScene[] = useMemo(() => {
     const actNames = ["ACT I", "ACT II", "ACT III", "ACT IV", "ACT V", "ACT VI", "ACT VII"];
@@ -349,6 +382,22 @@ export function AuteurWorkstation({
     });
     return unsub;
   }, []);
+
+  // Browser Audio Unlocking on First User Interaction (bypasses browser autoplay restrictions)
+  useEffect(() => {
+    const handleFirstGesture = () => {
+      cinematicAudio.resumeAudioContext();
+      if (isPlaying && (mode === "nle" || selectedScene) && activeTerritory && !isMuted) {
+        cinematicAudio.startScore(activeTerritory, brief);
+      }
+    };
+    window.addEventListener("pointerdown", handleFirstGesture, { once: true });
+    window.addEventListener("keydown", handleFirstGesture, { once: true });
+    return () => {
+      window.removeEventListener("pointerdown", handleFirstGesture);
+      window.removeEventListener("keydown", handleFirstGesture);
+    };
+  }, [isPlaying, mode, selectedScene, activeTerritory, brief, isMuted]);
 
   // Audio Playback & Synchronization: Unified Master Voiceover plays once continuously across act transitions
   useEffect(() => {
@@ -720,9 +769,22 @@ export function AuteurWorkstation({
 
     const handleResize = () => {
       if (!canvas.parentElement) return;
-      width = canvas.width = canvas.parentElement.clientWidth;
-      height = canvas.height = canvas.parentElement.clientHeight;
+      const pw = canvas.parentElement.clientWidth;
+      const ph = canvas.parentElement.clientHeight;
+      if (pw > 0 && ph > 0 && (canvas.width !== pw || canvas.height !== ph)) {
+        width = canvas.width = pw;
+        height = canvas.height = ph;
+      }
     };
+    handleResize();
+
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined" && canvas.parentElement) {
+      ro = new ResizeObserver(() => {
+        handleResize();
+      });
+      ro.observe(canvas.parentElement);
+    }
     window.addEventListener("resize", handleResize);
 
     const render = () => {
@@ -809,6 +871,32 @@ export function AuteurWorkstation({
         ctx.restore();
       }
 
+      // Update DOM timecode directly without React state re-render overhead (Compositor Law)
+      if (timecodeCurrentRef.current) {
+        const curSeqTime = elapsedPriorToActiveShotRef.current + currentTimeRef.current;
+        if (timecodeModeRef.current === "smpte") {
+          timecodeCurrentRef.current.textContent = formatSmpteTimecode(curSeqTime, 1, 24);
+        } else if (timecodeModeRef.current === "absolute") {
+          timecodeCurrentRef.current.textContent = formatSmpteTimecode(curSeqTime, 0, 24);
+        } else {
+          timecodeCurrentRef.current.textContent = formatSeconds(curSeqTime);
+        }
+      }
+      if (hudTimecodeRef.current) {
+        const curSeqTime = elapsedPriorToActiveShotRef.current + currentTimeRef.current;
+        hudTimecodeRef.current.textContent = `SMPTE ${formatSmpteTimecode(curSeqTime, 1, 24)} · REC 24 FPS`;
+      }
+      if (timecodeTotalRef.current) {
+        const totalSeqTime = totalSequenceDurationRef.current;
+        if (timecodeModeRef.current === "smpte") {
+          timecodeTotalRef.current.textContent = formatSmpteTimecode(totalSeqTime, 1, 24);
+        } else if (timecodeModeRef.current === "absolute") {
+          timecodeTotalRef.current.textContent = formatSmpteTimecode(totalSeqTime, 0, 24);
+        } else {
+          timecodeTotalRef.current.textContent = formatSeconds(totalSeqTime);
+        }
+      }
+
       animId = requestAnimationFrame(render);
     };
 
@@ -816,6 +904,7 @@ export function AuteurWorkstation({
 
     return () => {
       cancelAnimationFrame(animId);
+      ro?.disconnect();
       window.removeEventListener("resize", handleResize);
     };
   }, [mode, activeShotIndex, showSafeGrid, showAnamorphicFlare, activeShot, activeShotDuration, selectedTerritoryId, territories, activeTerritory, aspectRatio]);
@@ -1202,55 +1291,10 @@ export function AuteurWorkstation({
             
             {/* Viewport Stage */}
             <div className="flex-1 bg-[#050608] relative flex items-center justify-center p-3 overflow-hidden min-h-0">
-              <div
-                style={{
-                  aspectRatio:
-                    aspectRatio === "2.39:1"
-                      ? "2.39/1"
-                      : aspectRatio === "16:9"
-                      ? "16/9"
-                      : "9/16",
-                }}
-                className="w-full max-h-full max-w-full bg-[#08090c] border border-white/[0.08] rounded-xl overflow-hidden relative shadow-2xl flex items-center justify-center"
-              >
-                <canvas ref={nleCanvasRef} className="w-full h-full block" />
-                <CrtMonitorOverlay isActive={showCrtScope} />
-
-                {/* Telemetry HUD */}
-                <div className="absolute top-3 left-3 z-20 pointer-events-none font-mono text-[10px] space-y-0.5 bg-black/75 px-2.5 py-1.5 rounded-md border border-white/10 backdrop-blur-sm">
-                  <div className="text-[#4ed4b7] font-bold uppercase tracking-wider">
-                    {activeTerritory?.title || "Cinema Master"}
-                  </div>
-                  <div className="text-zinc-200">
-                    SHOT: 0{activeShot?.sceneNumber || 1} · {activeShot?.framing}
-                  </div>
-                  <div className="text-zinc-400 font-mono">
-                    SMPTE 01:00:0{activeShotIndex + 1}:{String(Math.floor((currentTime % 1) * 24)).padStart(2, "0")} · REC 24 FPS
-                  </div>
-                  <div className="text-[#5fe995] flex items-center gap-1.5">
-                    {activeShot?.status === "generating" ? (
-                      <>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#e8c76d] animate-ping" />
-                        <span className="text-[#e8c76d]">LIVEPEER GPU SYNTHESIZING</span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995]" />
-                        <span>LIVEPEER 60.0 FPS LOCKED</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                {activeShot?.status === "generating" && (
-                  <div className="absolute top-3 inset-x-0 mx-auto w-fit z-20 pointer-events-none px-3 py-1 rounded-full bg-black/85 border border-[#e8c76d]/40 font-mono text-[10px] text-[#e8c76d] flex items-center gap-2 shadow-lg animate-fadeIn">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#e8c76d] animate-ping" />
-                    <span>Livepeer Flux Subnet · Synthesizing Act 0{activeShot?.sceneNumber || 1}</span>
-                  </div>
-                )}
-
-                {/* Viewport Toggles */}
-                <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 font-mono text-[10px]">
+              
+              {/* In Reel 9:16 mode, stage toggles sit cleanly on top-right of dark stage to avoid covering phone frame */}
+              {aspectRatio === "9:16" && (
+                <div className="absolute top-3 right-4 z-30 flex items-center gap-1.5 font-mono text-[10px]">
                   <button
                     onClick={() => {
                       cinematicAudio.playCue("action");
@@ -1291,20 +1335,139 @@ export function AuteurWorkstation({
                     Flare
                   </button>
                 </div>
+              )}
 
-                {/* Cinematic Floating Subtitles */}
+              <div
+                style={{
+                  aspectRatio:
+                    aspectRatio === "2.39:1"
+                      ? "2.39/1"
+                      : aspectRatio === "16:9"
+                      ? "16/9"
+                      : "9/16",
+                  height: aspectRatio === "9:16" ? "100%" : "auto",
+                  width: aspectRatio === "9:16" ? "auto" : "100%",
+                  maxHeight: "100%",
+                  maxWidth: "100%",
+                }}
+                className={`bg-[#08090c] border overflow-hidden relative shadow-2xl flex items-center justify-center transition-all ${
+                  aspectRatio === "9:16"
+                    ? "h-full max-h-full aspect-[9/16] w-auto max-w-full rounded-2xl border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.85)]"
+                    : "w-full max-h-full max-w-full border-white/[0.08] rounded-xl"
+                }`}
+              >
+                <canvas ref={nleCanvasRef} className="w-full h-full block" />
+                <CrtMonitorOverlay isActive={showCrtScope} />
+
+                {/* Telemetry HUD */}
+                {aspectRatio === "9:16" ? (
+                  <div className="absolute top-2.5 inset-x-2.5 z-20 pointer-events-none font-mono text-[9px] bg-black/85 px-2.5 py-1.5 rounded-lg border border-white/10 backdrop-blur-sm flex items-center justify-between shadow-lg">
+                    <div className="flex items-center gap-1.5 truncate">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995]" />
+                      <span className="text-[#4ed4b7] font-bold uppercase truncate max-w-[100px]">{activeTerritory?.title || "Reel"}</span>
+                      <span className="text-zinc-400">· 0{activeShot?.sceneNumber || 1}</span>
+                    </div>
+                    <div className="text-[#5fe995] font-bold shrink-0">9:16 REEL</div>
+                  </div>
+                ) : (
+                  <div className="absolute top-3 left-3 z-20 pointer-events-none font-mono text-[10px] space-y-0.5 bg-black/75 px-2.5 py-1.5 rounded-md border border-white/10 backdrop-blur-sm">
+                    <div className="text-[#4ed4b7] font-bold uppercase tracking-wider">
+                      {activeTerritory?.title || "Cinema Master"}
+                    </div>
+                    <div className="text-zinc-200">
+                      SHOT: 0{activeShot?.sceneNumber || 1} · {activeShot?.framing}
+                    </div>
+                    <div ref={hudTimecodeRef} className="text-zinc-400 font-mono">
+                      SMPTE {formatSmpteTimecode(currentSequenceElapsed, 1, 24)} · REC 24 FPS
+                    </div>
+                    <div className="text-[#5fe995] flex items-center gap-1.5">
+                      {activeShot?.status === "generating" ? (
+                        <>
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#e8c76d] animate-ping" />
+                          <span className="text-[#e8c76d]">LIVEPEER GPU SYNTHESIZING</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995]" />
+                          <span>LIVEPEER 60.0 FPS LOCKED</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {activeShot?.status === "generating" && (
+                  <div className="absolute top-3 inset-x-0 mx-auto w-fit z-20 pointer-events-none px-3 py-1 rounded-full bg-black/85 border border-[#e8c76d]/40 font-mono text-[10px] text-[#e8c76d] flex items-center gap-2 shadow-lg animate-fadeIn">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#e8c76d] animate-ping" />
+                    <span>Livepeer Flux Subnet · Synthesizing Act 0{activeShot?.sceneNumber || 1}</span>
+                  </div>
+                )}
+
+                {/* Viewport Toggles (Scope & Flat modes) */}
+                {aspectRatio !== "9:16" && (
+                  <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 font-mono text-[10px]">
+                    <button
+                      onClick={() => {
+                        cinematicAudio.playCue("action");
+                        setShowCrtScope((c) => !c);
+                      }}
+                      className={`px-2 py-1 rounded border backdrop-blur-sm transition-colors ${
+                        showCrtScope
+                          ? "bg-[#4ed4b7] text-black border-[#4ed4b7] font-bold shadow-[0_0_10px_rgba(78,212,183,0.3)]"
+                          : "bg-black/70 text-zinc-300 border-white/15 hover:text-white"
+                      }`}
+                    >
+                      CRT Scope
+                    </button>
+                    <button
+                      onClick={() => {
+                        cinematicAudio.playCue("click");
+                        setShowSafeGrid((g) => !g);
+                      }}
+                      className={`px-2 py-1 rounded border backdrop-blur-sm transition-colors ${
+                        showSafeGrid
+                          ? "bg-[#4ed4b7] text-black border-[#4ed4b7] font-bold"
+                          : "bg-black/70 text-zinc-300 border-white/15 hover:text-white"
+                      }`}
+                    >
+                      Guides
+                    </button>
+                    <button
+                      onClick={() => {
+                        cinematicAudio.playCue("action");
+                        setShowAnamorphicFlare((f) => !f);
+                      }}
+                      className={`px-2 py-1 rounded border backdrop-blur-sm transition-colors ${
+                        showAnamorphicFlare
+                          ? "bg-[#4ed4b7] text-black border-[#4ed4b7] font-bold"
+                          : "bg-black/70 text-zinc-300 border-white/15 hover:text-white"
+                      }`}
+                    >
+                      Flare
+                    </button>
+                  </div>
+                )}
+
+                {/* Cinematic Floating Subtitles (Clickable to audition/replay voiceover) */}
                 {(activeTerritory?.masterVoiceoverScript || activeShot?.masterVoiceoverScript || activeShot?.voiceoverScript) && (
-                  <div className="absolute bottom-4 inset-x-0 z-20 pointer-events-none flex justify-center px-6">
-                    <div className="bg-[#0b0e14]/90 border border-white/15 px-4 py-1.5 rounded-full text-xs text-zinc-100 shadow-2xl backdrop-blur-md max-w-2xl flex items-center gap-2.5">
+                  <div className={`absolute ${aspectRatio === "9:16" ? "bottom-3 inset-x-2 px-1" : "bottom-4 inset-x-0 px-6"} z-20 flex justify-center`}>
+                    <button
+                      onClick={() => handleAuditionVo(activeShot || undefined)}
+                      title="Click to audition/replay Livepeer voiceover narration"
+                      className={`bg-[#0b0e14]/90 border border-white/15 px-3 py-1.5 rounded-full text-xs text-zinc-100 shadow-2xl backdrop-blur-md max-w-2xl flex items-center gap-2 hover:border-[#4ed4b7]/50 transition-colors pointer-events-auto cursor-pointer ${
+                        isAuditioningVo ? "border-[#4ed4b7] shadow-[0_0_12px_rgba(78,212,183,0.3)]" : ""
+                      }`}
+                    >
                       <span className={`w-2 h-2 rounded-full shrink-0 ${activeShot?.voiceoverAudioUrl || activeTerritory?.masterVoiceoverAudioUrl ? "bg-[#5fe995] shadow-[0_0_8px_#5fe995]" : "bg-[#4ed4b7]"}`} />
                       <span className="text-[#4ed4b7] font-mono text-[10px] font-bold uppercase tracking-wider shrink-0">
-                        {activeShot?.voiceoverAudioUrl || activeTerritory?.masterVoiceoverAudioUrl ? "LIVEPEER 48KHZ WAV" : "LIVEPEER TTS PENDING"}
+                        {activeShot?.voiceoverAudioUrl || activeTerritory?.masterVoiceoverAudioUrl ? "LIVEPEER 48KHZ" : "TTS PENDING"}
                       </span>
                       <span className="text-zinc-600 font-mono text-xs">/</span>
                       <span className="font-serif italic text-xs tracking-wide text-zinc-200 truncate">
                         &ldquo;{activeTerritory?.masterVoiceoverScript || activeShot?.masterVoiceoverScript || activeShot?.voiceoverScript}&rdquo;
                       </span>
-                    </div>
+                      <Volume2 className={`w-3.5 h-3.5 shrink-0 ${isAuditioningVo ? "text-[#4ed4b7] animate-pulse" : "text-zinc-400"}`} />
+                    </button>
                   </div>
                 )}
               </div>
@@ -1366,13 +1529,30 @@ export function AuteurWorkstation({
               <div className="h-11 bg-[#0a0d13] border-b border-white/[0.08] px-3 flex items-center justify-between shrink-0 text-xs font-mono gap-4">
                 {/* Left: SMPTE Timecode & Playback */}
                 <div className="flex items-center gap-3 shrink-0">
-                  <div className="flex items-center gap-1.5 bg-black/80 px-2.5 py-1 rounded-md border border-white/10 text-[11px]">
-                    <span className="text-[#4ed4b7] font-bold tracking-widest">
-                      01:00:0{activeShotIndex + 1}:{Math.floor((currentTime % 1) * 24).toString().padStart(2, "0")}
+                  <div
+                    onClick={() => {
+                      cinematicAudio.playCue("click");
+                      setTimecodeDisplayMode((prev) =>
+                        prev === "smpte" ? "absolute" : prev === "absolute" ? "seconds" : "smpte"
+                      );
+                    }}
+                    title={`Sequence Time: ${currentSequenceElapsed.toFixed(2)}s / ${totalSequenceDuration.toFixed(2)}s · Click to cycle SMPTE / Absolute / Seconds`}
+                    className="flex items-center gap-1.5 bg-black/80 hover:bg-black px-2.5 py-1 rounded-md border border-white/10 hover:border-[#4ed4b7]/50 text-[11px] cursor-pointer transition-colors group/tc select-none"
+                  >
+                    <span ref={timecodeCurrentRef} className="text-[#4ed4b7] font-bold tracking-widest font-mono">
+                      {timecodeDisplayMode === "smpte"
+                        ? formatSmpteTimecode(currentSequenceElapsed, 1, 24)
+                        : timecodeDisplayMode === "absolute"
+                        ? formatSmpteTimecode(currentSequenceElapsed, 0, 24)
+                        : formatSeconds(currentSequenceElapsed)}
                     </span>
                     <span className="text-zinc-600">/</span>
-                    <span className="text-zinc-400 text-[10px]">
-                      01:00:0{shots.length}:00
+                    <span ref={timecodeTotalRef} className="text-zinc-400 text-[10px] font-mono group-hover/tc:text-zinc-200">
+                      {timecodeDisplayMode === "smpte"
+                        ? formatSmpteTimecode(totalSequenceDuration, 1, 24)
+                        : timecodeDisplayMode === "absolute"
+                        ? formatSmpteTimecode(totalSequenceDuration, 0, 24)
+                        : formatSeconds(totalSequenceDuration)}
                     </span>
                   </div>
 
@@ -1390,8 +1570,29 @@ export function AuteurWorkstation({
                     </button>
                     <button
                       onClick={() => {
-                        cinematicAudio.playCue("play");
-                        setIsPlaying(!isPlaying);
+                        const next = !isPlaying;
+                        setIsPlaying(next);
+                        if (next) {
+                          cinematicAudio.resumeAudioContext();
+                          cinematicAudio.playCue("play");
+                          if (activeTerritory) {
+                            cinematicAudio.startScore(activeTerritory, brief);
+                          }
+                          const masterVoAudio =
+                            activeTerritory?.masterVoiceoverAudioUrl ||
+                            activeShot?.masterVoiceoverAudioUrl ||
+                            activeShot?.voiceoverAudioUrl;
+                          const masterVoScript =
+                            activeTerritory?.masterVoiceoverScript ||
+                            activeShot?.masterVoiceoverScript ||
+                            activeShot?.voiceoverScript;
+                          if (masterVoScript && !isMuted) {
+                            cinematicVoiceover.speakAudio(masterVoAudio, masterVoScript);
+                          }
+                        } else {
+                          cinematicAudio.stopScore();
+                          cinematicVoiceover.stop();
+                        }
                       }}
                       title={isPlaying ? "Pause Sequence" : "Play Sequence"}
                       className="px-3 py-1 rounded-md bg-[#4ed4b7] text-black font-bold flex items-center gap-1 hover:brightness-110 active:scale-95 transition-all shadow-[0_0_12px_rgba(78,212,183,0.35)]"
@@ -1414,6 +1615,12 @@ export function AuteurWorkstation({
                       onClick={() => {
                         const nextMuted = cinematicAudio.toggleMute();
                         setIsMuted(nextMuted);
+                        if (!nextMuted && isPlaying) {
+                          cinematicAudio.resumeAudioContext();
+                          if (activeTerritory) {
+                            cinematicAudio.startScore(activeTerritory, brief);
+                          }
+                        }
                       }}
                       title={isMuted ? "Unmute Master" : "Mute Master"}
                       className="p-1.5 rounded-md hover:bg-white/5 text-zinc-400 hover:text-white transition-colors"
@@ -1478,6 +1685,14 @@ export function AuteurWorkstation({
                         onClick={() => {
                           cinematicAudio.playCue("click");
                           setAspectRatio(ar);
+                          if (activeTerritory) {
+                            activeTerritory.aspectRatio = ar;
+                          }
+                          setTerritories((prev) =>
+                            prev.map((t) =>
+                              t.id === activeTerritory?.id ? { ...t, aspectRatio: ar } : t
+                            )
+                          );
                         }}
                         className={`px-2 py-0.5 rounded transition-colors ${
                           aspectRatio === ar ? "bg-[#4ed4b7] text-black font-bold" : "text-zinc-400 hover:text-white"
