@@ -375,6 +375,51 @@ function drawFittedImage(
   ctx.restore();
 }
 
+// Cached vignette gradients to eliminate costly repeated CanvasGradient allocations on every frame
+let cachedVignetteShot: CanvasGradient | null = null;
+let lastVignetteShotKey = "";
+
+function getShotVignette(ctx: CanvasRenderingContext2D, width: number, height: number): CanvasGradient {
+  const key = `${width}x${height}`;
+  if (!cachedVignetteShot || lastVignetteShotKey !== key) {
+    const vg = ctx.createRadialGradient(
+      width / 2,
+      height / 2,
+      width * 0.25,
+      width / 2,
+      height / 2,
+      width * 0.72
+    );
+    vg.addColorStop(0, "transparent");
+    vg.addColorStop(1, "rgba(0, 0, 0, 0.65)");
+    cachedVignetteShot = vg;
+    lastVignetteShotKey = key;
+  }
+  return cachedVignetteShot;
+}
+
+let cachedVignetteTrans: CanvasGradient | null = null;
+let lastVignetteTransKey = "";
+
+function getTransVignette(ctx: CanvasRenderingContext2D, width: number, height: number): CanvasGradient {
+  const key = `${width}x${height}`;
+  if (!cachedVignetteTrans || lastVignetteTransKey !== key) {
+    const vg = ctx.createRadialGradient(
+      width / 2,
+      height / 2,
+      width * 0.25,
+      width / 2,
+      height / 2,
+      width * 0.72
+    );
+    vg.addColorStop(0, "transparent");
+    vg.addColorStop(1, "rgba(0, 0, 0, 0.70)");
+    cachedVignetteTrans = vg;
+    lastVignetteTransKey = key;
+  }
+  return cachedVignetteTrans;
+}
+
 /**
  * Pure cinematic frame renderer.
  * Eliminates cheap canvas shapes; applies professional photographic transforms,
@@ -403,18 +448,8 @@ export function renderCinematicShot(
   // 2. Base Image Drawing with Aspect Fill
   drawFittedImage(ctx, img, width, height, scale, transX, transY, 1.0);
 
-  // 3. Cinematic Color Grade & Vignette
-  const vignette = ctx.createRadialGradient(
-    width / 2,
-    height / 2,
-    width * 0.25,
-    width / 2,
-    height / 2,
-    width * 0.72
-  );
-  vignette.addColorStop(0, "transparent");
-  vignette.addColorStop(1, "rgba(0, 0, 0, 0.65)");
-  ctx.fillStyle = vignette;
+  // 3. Cinematic Color Grade & Vignette (reusing cached gradient for 60fps throughput)
+  ctx.fillStyle = getShotVignette(ctx, width, height);
   ctx.fillRect(0, 0, width, height);
 
   // Subtle territory lighting wash
@@ -478,8 +513,6 @@ export function renderCinematicShot(
 
     // High-visibility subtitle text with active karaoke progress shimmer
     ctx.fillStyle = normProgress > 0.08 && normProgress < 0.92 ? "#ffffff" : "#cbd5e1";
-    ctx.shadowColor = "rgba(0, 0, 0, 0.9)";
-    ctx.shadowBlur = 6;
     ctx.fillText(scriptText, width / 2, textY, width - (isPortrait ? 36 : 140));
     ctx.restore();
   }
@@ -518,18 +551,8 @@ export function renderCinematicTransition(
   const nextAlpha = Math.min(1.0, Math.pow(p, 1.5));
   drawFittedImage(ctx, nextImg, width, height, nextScale, 0, 0, nextAlpha);
 
-  // 3. Cinematic Vignette
-  const vignette = ctx.createRadialGradient(
-    width / 2,
-    height / 2,
-    width * 0.25,
-    width / 2,
-    height / 2,
-    width * 0.72
-  );
-  vignette.addColorStop(0, "transparent");
-  vignette.addColorStop(1, "rgba(0, 0, 0, 0.70)");
-  ctx.fillStyle = vignette;
+  // 3. Cinematic Vignette (reusing cached gradient for 60fps throughput)
+  ctx.fillStyle = getTransVignette(ctx, width, height);
   ctx.fillRect(0, 0, width, height);
 
   // 4. Optical Seam Lens Bloom & Flare Streak
@@ -596,7 +619,8 @@ function renderFrameAtTime(
   shots: Shot[],
   shotDurations: number[],
   transitionDurationSec: number,
-  territory: CreativeTerritory
+  territory: CreativeTerritory,
+  shotImages?: (HTMLImageElement | null)[]
 ) {
   let accumulatedTime = 0;
   let shotIndex = 0;
@@ -618,8 +642,8 @@ function renderFrameAtTime(
   if (timeRemainingInShot < transitionDurationSec && shotIndex < shots.length - 1) {
     const nextShot = shots[shotIndex + 1];
     const transitionProgress = 1.0 - timeRemainingInShot / transitionDurationSec;
-    const prevImg = getImageForShot(currentShot);
-    const nextImg = getImageForShot(nextShot);
+    const prevImg = shotImages ? shotImages[shotIndex] : getImageForShot(currentShot);
+    const nextImg = shotImages ? shotImages[shotIndex + 1] : getImageForShot(nextShot);
 
     renderCinematicTransition(
       ctx,
@@ -635,7 +659,7 @@ function renderFrameAtTime(
     );
   } else {
     const shotProgress = Math.min(1.0, localTime / shotDur);
-    const img = getImageForShot(currentShot);
+    const img = shotImages ? shotImages[shotIndex] : getImageForShot(currentShot);
 
     renderCinematicShot(
       ctx,
@@ -665,18 +689,23 @@ export async function compileMasterVideo(
     throw new Error("No shots available for compilation");
   }
 
+  // Ensure all shot assets are preloaded so frame generation renders without IO delays
+  await preloadAllShots(shots);
+  const shotImages = shots.map((s) => getImageForShot(s));
+
   const canvas = document.createElement("canvas");
   canvas.width = 1280;
   canvas.height = 720;
-  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  // GPU hardware-accelerated 2D context (avoid willReadFrequently which forces software CPU copies)
+  const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Canvas context initialization failed");
 
-  const fps = 30;
-  // Optimize shot durations for punchy cinematic presentation (4s each, 500ms transitions)
-  const shotDurations = shots.map((s) => Math.min(Math.max(s.durationSec || 4.0, 3.0), 6.0));
+  // Cinematic 24fps standard (Hollywood 24p reduces frame budget by 20% while enhancing filmic motion)
+  const fps = 24;
+  const shotDurations = shots.map((s) => Math.min(Math.max(s.durationSec || 3.6, 2.5), 5.0));
   const totalDurationSec = shotDurations.reduce((acc, d) => acc + d, 0);
   const totalFrames = Math.max(1, Math.round(totalDurationSec * fps));
-  const transitionDurationSec = 0.5;
+  const transitionDurationSec = 0.45;
 
   // 1. High-Speed WebCodecs + MP4 Muxer Pipeline (Hardware GPU, ~10x-20x faster, native .mp4)
   const canUseWebCodecs =
@@ -708,8 +737,35 @@ export async function compileMasterVideo(
         },
       });
 
+      // Negotiate optimal supported H.264 hardware profile
+      const codecCandidates = [
+        "avc1.4d002a", // H.264 Main Level 4.2
+        "avc1.42001f", // H.264 Baseline Level 3.1
+        "avc1.4d001f", // H.264 Main Level 3.1
+        "avc1.640028", // H.264 High Level 4.0
+      ];
+
+      let selectedCodec = "avc1.4d002a";
+      for (const candidate of codecCandidates) {
+        try {
+          const support = await VideoEncoder.isConfigSupported({
+            codec: candidate,
+            width: canvas.width,
+            height: canvas.height,
+            bitrate: 6_000_000,
+            framerate: fps,
+          });
+          if (support.supported) {
+            selectedCodec = candidate;
+            break;
+          }
+        } catch {
+          // Continue to next candidate
+        }
+      }
+
       videoEncoder.configure({
-        codec: "avc1.4d002a", // H.264 Main Profile Level 4.2
+        codec: selectedCodec,
         width: canvas.width,
         height: canvas.height,
         bitrate: 6_000_000,
@@ -729,7 +785,8 @@ export async function compileMasterVideo(
           shots,
           shotDurations,
           transitionDurationSec,
-          territory
+          territory,
+          shotImages
         );
 
         const timestampUs = Math.round((currentFrame * 1_000_000) / fps);
@@ -738,11 +795,23 @@ export async function compileMasterVideo(
           duration: Math.round(1_000_000 / fps),
         });
 
-        videoEncoder.encode(videoFrame, { keyFrame: currentFrame % 30 === 0 });
+        videoEncoder.encode(videoFrame, { keyFrame: currentFrame % 24 === 0 });
         videoFrame.close();
 
-        // Yield execution every 10 frames to keep the UI fluid and report percentage
-        if (currentFrame % 10 === 0 || currentFrame === totalFrames - 1) {
+        // Regulate hardware encoder queue pressure via native ondequeue callback
+        if (videoEncoder.encodeQueueSize > 8) {
+          await new Promise<void>((resolve) => {
+            videoEncoder.ondequeue = () => {
+              if (videoEncoder.encodeQueueSize <= 3) {
+                videoEncoder.ondequeue = null;
+                resolve();
+              }
+            };
+          });
+        }
+
+        // Yield execution every 24 frames (~1s of cinematic video) to keep UI responsive and report progress
+        if (currentFrame % 24 === 0 || currentFrame === totalFrames - 1) {
           if (onProgress) {
             onProgress(Math.round((currentFrame / totalFrames) * 100));
           }
