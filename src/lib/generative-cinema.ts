@@ -6,11 +6,13 @@ import { cinematicAudio } from "./cinematic-audio";
 // Verified Livepeer decentralized GPU cinema asset pool mapped across semantic categories
 const THEMATIC_PALETTES: Record<string, string[]> = {
   athletics: [
+    "https://v3b.fal.media/files/b/0aabd1cf/TYH74TJmZLVjH4v9iwyds.jpg",
     "https://v3b.fal.media/files/b/0aabb646/qoxher1xjGHMovIBvJApT.jpg",
     "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
     "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
   ],
   cyberpunk: [
+    "https://v3b.fal.media/files/b/0aabd1d0/Xf2XPsFPlWxVq4qWCrVwg.jpg",
     "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
     "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
   ],
@@ -19,6 +21,7 @@ const THEMATIC_PALETTES: Record<string, string[]> = {
     "https://v3b.fal.media/files/b/0aab9703/5c_-GafOcE0pK14LD5Pca.jpg",
   ],
   tech: [
+    "https://v3b.fal.media/files/b/0aabd1ce/BDsvgaKgr8d4JHGKFoscl.jpg",
     "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
     "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
   ],
@@ -47,6 +50,7 @@ const THEMATIC_PALETTES: Record<string, string[]> = {
     "https://v3b.fal.media/files/b/0aab9701/zAcyfB5Tz9BGLbIh6vLfP.jpg",
   ],
   luxury: [
+    "https://v3b.fal.media/files/b/0aabd1d0/u0QIewnzYA7qSkMYXCWas.jpg",
     "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
     "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
   ],

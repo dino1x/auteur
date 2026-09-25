@@ -2253,28 +2253,28 @@ export function AuteurWorkstation({
                       category: "SPATIAL",
                       title: "Spatial Launch",
                       brief: "Apple Vision Pro: curved 3D glass optics, spatial visionOS interfaces, precision machined aluminum, and ambient physical room integration.",
-                      thumbnail: resolveCinematicAsset("Apple Vision Pro curved 3D glass optics spatial", 1),
+                      thumbnail: "https://v3b.fal.media/files/b/0aabd1ce/BDsvgaKgr8d4JHGKFoscl.jpg",
                     },
                     {
                       id: "pb-nike",
                       category: "ATHLETIC",
                       title: "Nike Velocity",
                       brief: "Commercial for Nike Alphafly 3 marathon racing shoe sprinting across rain-slicked nocturnal Tokyo streetlights with high-speed camera tracking.",
-                      thumbnail: resolveCinematicAsset("Nike marathon racing shoe nocturnal Tokyo", 2),
+                      thumbnail: "https://v3b.fal.media/files/b/0aabd1cf/TYH74TJmZLVjH4v9iwyds.jpg",
                     },
                     {
                       id: "pb-cyber",
                       category: "CYBER-NOIR",
-                      title: "Auteur Director",
+                      title: "Cyber-Noir",
                       brief: "A cyber-noir operative infiltrates an orbital cryogenic server vault suspended above a tempest ocean. Panavision anamorphic glass with cold cyan rim lighting.",
-                      thumbnail: resolveCinematicAsset("cyber-noir operative orbital server vault", 3),
+                      thumbnail: "https://v3b.fal.media/files/b/0aabd1d0/Xf2XPsFPlWxVq4qWCrVwg.jpg",
                     },
                     {
                       id: "pb-fashion",
                       category: "LUXURY",
                       title: "Avant-Garde",
                       brief: "Avant-garde architectural streetwear film: sculptural obsidian technical garments cutting through windward Icelandic black sand dunes and geothermal steam vents.",
-                      thumbnail: resolveCinematicAsset("avant-garde architectural streetwear black sand", 4),
+                      thumbnail: "https://v3b.fal.media/files/b/0aabd1d0/u0QIewnzYA7qSkMYXCWas.jpg",
                     },
                   ].map((pb) => {
                     const isSelected = urlInput.trim() === pb.brief;
