@@ -1147,6 +1147,16 @@ export function AuteurWorkstation({
             <BookOpen className="w-3.5 h-3.5 text-[#e8c76d]" />
             <span>Shot Ledger</span>
           </button>
+          <a
+            href="/demo/index.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#4ed4b7]/10 hover:bg-[#4ed4b7]/20 border border-[#4ed4b7]/30 text-xs font-mono text-[#4ed4b7] transition-colors"
+            title="Launch 60 FPS Demo Reel"
+          >
+            <Film className="w-3.5 h-3.5 text-[#4ed4b7]" />
+            <span>Demo Reel</span>
+          </a>
 
           <SpinningBorderCta
             onClick={handleExport}

@@ -1,10 +1,8 @@
 # Auteur Studio: Autonomous Multimodal Cinema Director
 
-> **Livepeer Agent Hackathon Submission**
-> **Track**: Track 3 — Innovation Track ($1,000)
-> **Author**: dino ([@dino1x](https://github.com/dino1x) · marvelobed@gmail.com)
-> **Livepeer Creative MCP Endpoint**: `https://agent.livepeer.org/api/mcp/creative` (125 tools)
-> **Participant Compute Model**: Hacker Packet $100 on connect (auto-reups every 24h)
+> **Production Generative Cinema Director on the Livepeer AI Subnet**  
+> **Interactive Launch Demo**: Available at `/demo` (60 FPS HyperFrames Cinema Player with 6-Beat Narration)  
+> **Livepeer Creative MCP**: `https://agent.livepeer.org/api/mcp/creative` (125 tools)  
 
 ---
 
@@ -19,13 +17,13 @@ Rather than operating as a conventional single-prompt text-to-video wrapper, Aut
 
 ---
 
-## Livepeer Hacker Packet & MCP Integration
+## Livepeer AI Subnet & MCP Integration
 
-Auteur is built strictly around the official Livepeer Agent Hackathon participant framework:
+Auteur is built natively on the Livepeer decentralized AI compute framework:
 
 - **Official MCP Endpoint**: `https://agent.livepeer.org/api/mcp/creative` via standard JSON-RPC 2.0 with `Accept: application/json, text/event-stream` protocol compliance.
-- **$100 Daily Hacker Allowance**: Designed to honor the official hackathon credit model (each hacker receives their own $100 credit on connect, automatically re-upping every 24 hours). Auteur tracks real-time compute cost drawdown per shot (`~$0.02 - $0.05/shot`).
-- **Flexible Auth (Keyless or Bearer)**: Supports instant keyless connection (utilizing Livepeer Agent demo/participant credits) as well as direct Bearer key authentication via the in-app Developer Drawer.
+- **Subnet Credit Engine**: Connects to the Livepeer AI compute network with real-time budget forecasting and cost drawdown tracking per shot (`~$0.02 - $0.05/shot`).
+- **Flexible Auth (Keyless or Bearer)**: Supports instant keyless connection as well as direct Bearer key authentication via the in-app Developer Drawer.
 - **Zero-CORS Streaming Media Proxy**: Features an integrated server-side streaming proxy (`/api/proxy-media`) with `Access-Control-Allow-Origin: *` headers, eliminating HTML5 canvas tainting and 302 redirect errors from upstream storage nodes.
 - **Hardware-Composited 60 FPS Screening Room**: Strict compliance with browser compositor laws—zero React state updates during playback, direct HTML5 canvas refs, and GPU-accelerated transforms (`translate3d`).
 
@@ -117,10 +115,9 @@ Open [http://localhost:3001](http://localhost:3001) in your browser.
 
 ---
 
-## Author & Submission Details
+## Author & Project Details
 
 - **Author**: dino
 - **GitHub**: [@dino1x](https://github.com/dino1x)
 - **Email**: marvelobed@gmail.com
-- **Track**: Track 3 — Innovation Track ($1,000)
 - **License**: MIT

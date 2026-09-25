@@ -8,6 +8,8 @@ desktop.ini
 .env*.local
 .env
 *.png
+!public/demo/assets/*.png
+demo-video/
 .turbo/
 .cache/
 *.tsbuildinfo

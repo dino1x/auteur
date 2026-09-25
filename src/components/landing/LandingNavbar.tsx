@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -71,8 +71,17 @@ export function LandingNavbar() {
           </a>
         </nav>
 
-        {/* Launch Studio CTA */}
-        <div className="flex items-center gap-3">
+        {/* Launch Studio CTA & Watch Demo */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <a
+            href="/demo/index.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-medium text-zinc-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors"
+          >
+            <Film className="w-3.5 h-3.5 text-[#4ed4b7]" />
+            <span>Watch Demo</span>
+          </a>
           <Link
             href="/studio"
             onClick={handleStudioClick}
