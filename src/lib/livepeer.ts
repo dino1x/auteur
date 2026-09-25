@@ -56,6 +56,7 @@ export class LivepeerAgentClient {
             prompt: compiledPrompt,
             aspectRatio: request.aspectRatio === "9:16" ? "9:16" : "16:9",
             preferFast: true,
+            sceneNumber: request.shot.sceneNumber,
           },
         }),
       });
@@ -64,8 +65,10 @@ export class LivepeerAgentClient {
         const data = await response.json();
         const mediaUrl = data.result?.url;
         // Preload valid media URL into browser image cache
-        if (mediaUrl && (mediaUrl.startsWith("http://") || mediaUrl.startsWith("https://"))) {
-          const proxiedUrl = `/api/proxy-media?url=${encodeURIComponent(mediaUrl)}`;
+        if (mediaUrl && (mediaUrl.startsWith("http://") || mediaUrl.startsWith("https://") || mediaUrl.startsWith("/"))) {
+          const proxiedUrl = mediaUrl.startsWith("/")
+            ? mediaUrl
+            : (mediaUrl.includes("fal.media") ? mediaUrl : `/api/proxy-media?url=${encodeURIComponent(mediaUrl)}`);
           await preloadImage(proxiedUrl, visualAssetUrl);
           return {
             shotId: request.shot.id,

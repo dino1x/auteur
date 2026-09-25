@@ -4,170 +4,300 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
-  Play,
-  Pause,
   Volume2,
   VolumeX,
   Cpu
 } from "lucide-react";
 import { cinematicAudio } from "@/lib/cinematic-audio";
 
-interface HeroPreset {
+interface SequenceShot {
   id: string;
-  name: string;
+  title: string;
   genre: string;
-  timecode: string;
-  directorScore: number;
-  prompt: string;
+  lens: string;
   accentColor: string;
-  criticFeedback: string;
   imageUrl: string;
 }
 
-const HERO_PRESETS: HeroPreset[] = [
+const CINEMA_SEQUENCE_SHOTS: SequenceShot[] = [
   {
-    id: "cyberpunk",
-    name: "Neo Shinjuku 2088",
-    genre: "Sci-Fi Noir",
-    timecode: "00:00:14:08",
-    directorScore: 98.4,
-    prompt: "Anamorphic 35mm pan over rain-slicked neon alleys, volumetric steam vents, moody blue and amber rim lighting.",
-    accentColor: "#4ed4b7",
-    criticFeedback: "Cadence optimized. Volumetric diffusion matched across shots 1-4.",
-    imageUrl: "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
+    id: "leopard",
+    title: "Himalayan Ridge Ghost",
+    genre: "Highland Wildlife",
+    lens: "Leica APO-Telyt 280mm f/2.8",
+    accentColor: "#5fe995",
+    imageUrl: "/images/cinema-sequence/snow_leopard_ridge.jpg",
   },
   {
-    id: "solaris",
-    name: "Solaris Orbital Station",
-    genre: "Space Realism",
-    timecode: "00:00:28:16",
-    directorScore: 96.7,
-    prompt: "Slow push-in toward spherical observation cupola, blinding planetary reflection, deep vacuum contrast.",
-    accentColor: "#7af2d9",
-    criticFeedback: "Color balance locked. Exposure keyframes adjusted for zero solar blowout.",
-    imageUrl: "https://v3b.fal.media/files/b/0aab9681/3VVPc-Mwd2u6DEn3tVRjm.jpg",
+    id: "tiger",
+    title: "Bengal Monsoon Dawn",
+    genre: "Apex Wildlife",
+    lens: "Cooke S4/i 75mm Prime",
+    accentColor: "#e8c76d",
+    imageUrl: "/images/cinema-sequence/bengal_tiger_mist.jpg",
+  },
+  {
+    id: "eagle",
+    title: "Golden Summit Dive",
+    genre: "Aerial Cinematic",
+    lens: "ARRI Master Prime 35mm",
+    accentColor: "#fb923c",
+    imageUrl: "/images/cinema-sequence/golden_eagle_peaks.jpg",
+  },
+  {
+    id: "whale",
+    title: "Pacific Abyss Glide",
+    genre: "Deep Ocean Epic",
+    lens: "Master Macro 100mm",
+    accentColor: "#38bdf8",
+    imageUrl: "/images/cinema-sequence/ocean_whale_sunbeams.jpg",
+  },
+  {
+    id: "aurora",
+    title: "Lofoten Aurora Arc",
+    genre: "Glacial Phenomenon",
+    lens: "Zeiss Supreme 21mm",
+    accentColor: "#4ed4b7",
+    imageUrl: "/images/cinema-sequence/aurora_glacial_fjord.jpg",
   },
   {
     id: "dune",
-    name: "Arrakis High Noon",
+    title: "Arrakis Dune Runner",
     genre: "Desert Brutalism",
-    timecode: "00:00:42:04",
-    directorScore: 97.9,
-    prompt: "Low-angle telephoto tracking shot through boiling heat shimmer, titanic ornithopter silhouette.",
-    accentColor: "#e8c76d",
-    criticFeedback: "Heat haze shimmer frequency matched to 24fps camera shutter.",
-    imageUrl: "https://v3b.fal.media/files/b/0aab9703/5c_-GafOcE0pK14LD5Pca.jpg",
+    lens: "Panavision 65mm Ultra",
+    accentColor: "#f59e0b",
+    imageUrl: "/images/cinema-sequence/dune_desert_golden.jpg",
+  },
+  {
+    id: "shinjuku",
+    title: "Shinjuku Rain Protocol",
+    genre: "Cyberpunk Noir",
+    lens: "Cooke Anamorphic 40mm",
+    accentColor: "#7af2d9",
+    imageUrl: "/images/cinema-sequence/shinjuku_neon_rain.jpg",
   }
 ];
 
 export function HeroSection() {
-  const [activePresetIndex, setActivePresetIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [audioMuted, setAudioMuted] = useState(true);
-  const timecodeSpanRef = useRef<HTMLSpanElement | null>(null);
-
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const animRef = useRef<number | null>(null);
+  const ambientGlowRef = useRef<HTMLDivElement | null>(null);
+  const takeTextRef = useRef<HTMLSpanElement | null>(null);
+  const titleTextRef = useRef<HTMLSpanElement | null>(null);
+  const lensTextRef = useRef<HTMLSpanElement | null>(null);
+  const dotsContainerRef = useRef<HTMLDivElement | null>(null);
+  const shutterFlashRef = useRef<HTMLDivElement | null>(null);
+  const fallbackImgRef = useRef<HTMLImageElement | null>(null);
+  const currentIdxRef = useRef<number>(0);
+  const shotStartTimeRef = useRef<number>(Date.now());
 
-  const currentPreset = HERO_PRESETS[activePresetIndex];
-
-  // 60fps Canvas Animation Loop for Live Simulated Cinema Viewport
+  // 60 FPS Hardware-Accelerated Fast-Sequence Cinema Viewport
   useEffect(() => {
-    if (!isPlaying) {
-      if (animRef.current) cancelAnimationFrame(animRef.current);
-      return;
-    }
-
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
+
+    // Preload all shots as in-memory HTMLImageElement objects
+    const loadedImages: (HTMLImageElement | null)[] = CINEMA_SEQUENCE_SHOTS.map((shot) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = shot.imageUrl;
+      return img;
+    });
 
     let width = (canvas.width = canvas.parentElement?.clientWidth || 960);
     let height = (canvas.height = canvas.parentElement?.clientHeight || 540);
 
-    let progress = 0;
-    let frame = 0;
+    const handleResize = () => {
+      if (!canvas.parentElement) return;
+      const pw = canvas.parentElement.clientWidth;
+      const ph = canvas.parentElement.clientHeight;
+      if (pw > 0 && ph > 0 && (canvas.width !== pw || canvas.height !== ph)) {
+        width = canvas.width = pw;
+        height = canvas.height = ph;
+      }
+    };
+    handleResize();
 
-    // Load image for active preset
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = currentPreset.imageUrl;
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined" && canvas.parentElement) {
+      ro = new ResizeObserver(handleResize);
+      ro.observe(canvas.parentElement);
+    }
+    window.addEventListener("resize", handleResize);
 
-    const render = () => {
-      progress += 0.003;
-      frame++;
+    const SHOT_DURATION_MS = 1350; // Rapid ~1.35s cinematic sequence cut
+    let animId: number;
 
-      // Update simulated running timecode directly via DOM ref (0 React re-renders at 60fps)
-      const sec = Math.floor(frame / 24) % 60;
-      const fr = frame % 24;
-      if (timecodeSpanRef.current) {
-        timecodeSpanRef.current.textContent = `00:01:${sec < 10 ? `0${sec}` : sec}:${fr < 10 ? `0${fr}` : fr}`;
+    const updateHudAndVisual = (idx: number) => {
+      const shot = CINEMA_SEQUENCE_SHOTS[idx];
+      if (takeTextRef.current) {
+        takeTextRef.current.textContent = `TAKE 0${idx + 1} / 0${CINEMA_SEQUENCE_SHOTS.length}`;
+      }
+      if (titleTextRef.current) {
+        titleTextRef.current.textContent = shot.title;
+      }
+      if (lensTextRef.current) {
+        lensTextRef.current.textContent = shot.lens;
+      }
+      if (ambientGlowRef.current) {
+        ambientGlowRef.current.style.background = `radial-gradient(circle at 50% 50%, ${shot.accentColor}, transparent 70%)`;
+      }
+      if (fallbackImgRef.current) {
+        fallbackImgRef.current.src = shot.imageUrl;
+        fallbackImgRef.current.alt = shot.title;
+      }
+      if (dotsContainerRef.current) {
+        const dots = dotsContainerRef.current.children;
+        for (let d = 0; d < dots.length; d++) {
+          const el = dots[d] as HTMLElement;
+          if (d === idx) {
+            el.className = "w-2.5 h-1 rounded-full bg-[#5fe995] transition-all duration-300";
+          } else {
+            el.className = "w-1 h-1 rounded-full bg-white/20 transition-all duration-300";
+          }
+        }
+      }
+    };
+
+    updateHudAndVisual(0);
+
+    // Guaranteed shot advance timer (unaffected by tab backgrounding or rAF pause)
+    const intervalId = setInterval(() => {
+      currentIdxRef.current = (currentIdxRef.current + 1) % CINEMA_SEQUENCE_SHOTS.length;
+      shotStartTimeRef.current = Date.now();
+      updateHudAndVisual(currentIdxRef.current);
+
+      // Shutter flash seam
+      if (shutterFlashRef.current) {
+        shutterFlashRef.current.style.opacity = "0.75";
+        setTimeout(() => {
+          if (shutterFlashRef.current) shutterFlashRef.current.style.opacity = "0";
+        }, 90);
       }
 
-      ctx.clearRect(0, 0, width, height);
+      try {
+        if (!audioMuted) {
+          cinematicAudio.playCue("click");
+        }
+      } catch {}
+    }, SHOT_DURATION_MS);
 
-      // Draw active image with cinematic camera push-in
-      if (img.complete && img.naturalWidth > 0) {
-        ctx.save();
-        const scale = 1.0 + (progress % 0.18);
-        const panX = Math.sin(progress * 4) * 15;
-        const panY = Math.cos(progress * 3) * 10;
+    // 60fps Live Canvas Camera Motion Loop
+    const render = () => {
+      const now = Date.now();
+      const currentShotIdx = currentIdxRef.current;
+      const shotProgress = Math.min(1.0, (now - shotStartTimeRef.current) / SHOT_DURATION_MS);
+      const activeShot = CINEMA_SEQUENCE_SHOTS[currentShotIdx];
+      const activeImg = loadedImages[currentShotIdx];
 
-        ctx.translate(width / 2 + panX, height / 2 + panY);
-        ctx.scale(scale, scale);
-        ctx.drawImage(img, -width / 2, -height / 2, width, height);
-        ctx.restore();
+      // 1. Clear Frame
+      ctx.fillStyle = "#05070a";
+      ctx.fillRect(0, 0, width, height);
+
+      // 2. Continuous 60fps Camera Kinetic Move (Ken Burns Pan / Zoom)
+      const isEven = currentShotIdx % 2 === 0;
+      const zoom = 1.03 + shotProgress * 0.08;
+      const panX = isEven ? (shotProgress - 0.5) * 16 : (0.5 - shotProgress) * 16;
+      const panY = (shotProgress - 0.5) * 8;
+
+      ctx.save();
+      if (activeImg && activeImg.complete && activeImg.naturalWidth > 0) {
+        const imgAspect = activeImg.naturalWidth / activeImg.naturalHeight;
+        const screenAspect = width / height;
+
+        let drawW = width;
+        let drawH = height;
+
+        if (screenAspect > imgAspect) {
+          drawW = width;
+          drawH = width / imgAspect;
+        } else {
+          drawH = height;
+          drawW = height * imgAspect;
+        }
+
+        drawW *= zoom;
+        drawH *= zoom;
+
+        const drawX = (width - drawW) / 2 + panX;
+        const drawY = (height - drawH) / 2 + panY;
+
+        ctx.drawImage(activeImg, drawX, drawY, drawW, drawH);
       } else {
-        // Fallback procedural visual gradient
-        ctx.fillStyle = "#0a0e17";
+        // High-tech fallback gradient while image loads
+        const grad = ctx.createLinearGradient(0, 0, width, height);
+        grad.addColorStop(0, "#080b12");
+        grad.addColorStop(0.5, activeShot.accentColor + "22");
+        grad.addColorStop(1, "#040608");
+        ctx.fillStyle = grad;
         ctx.fillRect(0, 0, width, height);
       }
 
-      // Volumetric Anamorphic Flare Streak
-      const flareY = height * 0.45;
-      const flareGrad = ctx.createLinearGradient(0, flareY, width, flareY);
-      flareGrad.addColorStop(0, "rgba(78, 212, 183, 0)");
-      flareGrad.addColorStop(0.3, "rgba(56, 189, 248, 0.1)");
-      flareGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.4)");
-      flareGrad.addColorStop(0.7, "rgba(122, 242, 217, 0.1)");
-      flareGrad.addColorStop(1, "rgba(78, 212, 183, 0)");
-      ctx.fillStyle = flareGrad;
-      ctx.fillRect(0, flareY - 1, width, 2);
+      // 3. Cinematic Film Grain & Shutter Scanline
+      ctx.fillStyle = "rgba(0, 0, 0, 0.22)";
+      ctx.fillRect(0, 0, width, height);
 
-      // Scanning Laser Reticle Line
-      const scanY = (frame * 1.5) % height;
-      ctx.beginPath();
-      ctx.moveTo(0, scanY);
-      ctx.lineTo(width, scanY);
-      ctx.strokeStyle = "rgba(78, 212, 183, 0.12)";
-      ctx.lineWidth = 1;
-      ctx.stroke();
+      // 4. Anamorphic Vignette
+      const radGrad = ctx.createRadialGradient(
+        width / 2,
+        height / 2,
+        width * 0.2,
+        width / 2,
+        height / 2,
+        width * 0.75
+      );
+      radGrad.addColorStop(0, "transparent");
+      radGrad.addColorStop(0.7, "rgba(0,0,0,0.45)");
+      radGrad.addColorStop(1, "rgba(0,0,0,0.88)");
+      ctx.fillStyle = radGrad;
+      ctx.fillRect(0, 0, width, height);
 
-      // Top and Bottom 2.39:1 Letterbox Matte
-      const matteH = height * 0.12;
-      ctx.fillStyle = "rgba(0, 0, 0, 0.85)";
-      ctx.fillRect(0, 0, width, matteH);
-      ctx.fillRect(0, height - matteH, width, matteH);
+      // 5. Optical Anamorphic Streak
+      const streakY = height * 0.48;
+      ctx.globalCompositeOperation = "screen";
+      const streakGrad = ctx.createLinearGradient(0, streakY, width, streakY);
+      streakGrad.addColorStop(0, "transparent");
+      streakGrad.addColorStop(0.4, activeShot.accentColor + "33");
+      streakGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.7)");
+      streakGrad.addColorStop(0.6, activeShot.accentColor + "33");
+      streakGrad.addColorStop(1, "transparent");
+      ctx.fillStyle = streakGrad;
+      ctx.fillRect(0, streakY - 1, width, 2);
+      ctx.globalCompositeOperation = "source-over";
 
-      // Letterbox Guides
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
-      ctx.beginPath();
-      ctx.moveTo(0, matteH);
-      ctx.lineTo(width, matteH);
-      ctx.moveTo(0, height - matteH);
-      ctx.lineTo(width, height - matteH);
-      ctx.stroke();
+      // 6. 2.39:1 Scope Letterbox Matte
+      const scopeH = width / 2.39;
+      const matteH = Math.max(0, (height - scopeH) / 2);
+      if (matteH > 0) {
+        ctx.fillStyle = "#05070a";
+        ctx.fillRect(0, 0, width, matteH);
+        ctx.fillRect(0, height - matteH, width, matteH);
 
-      animRef.current = requestAnimationFrame(render);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, matteH);
+        ctx.lineTo(width, matteH);
+        ctx.moveTo(0, height - matteH);
+        ctx.lineTo(width, height - matteH);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+      animId = requestAnimationFrame(render);
     };
 
-    animRef.current = requestAnimationFrame(render);
+    animId = requestAnimationFrame(render);
 
     return () => {
-      if (animRef.current) cancelAnimationFrame(animRef.current);
+      clearInterval(intervalId);
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", handleResize);
+      if (ro) ro.disconnect();
     };
-  }, [isPlaying, activePresetIndex, currentPreset]);
+  }, [audioMuted]);
 
   const handleLaunchClick = () => {
     try {
@@ -175,39 +305,16 @@ export function HeroSection() {
     } catch {}
   };
 
-  const togglePlayback = () => {
-    const nextPlay = !isPlaying;
-    setIsPlaying(nextPlay);
-    try {
-      cinematicAudio.playCue("play");
-      if (nextPlay && !audioMuted) {
-        cinematicAudio.startSoundtrack(currentPreset.id);
-      } else {
-        cinematicAudio.stopSoundtrack();
-      }
-    } catch {}
-  };
-
   const toggleAudio = () => {
     const nextMute = !audioMuted;
     setAudioMuted(nextMute);
     try {
-      if (!nextMute && isPlaying) {
-        cinematicAudio.startSoundtrack(currentPreset.id);
+      if (!nextMute) {
+        cinematicAudio.startSoundtrack("cyber");
       } else {
         cinematicAudio.stopSoundtrack();
       }
       cinematicAudio.playCue("click");
-    } catch {}
-  };
-
-  const handleSelectPreset = (idx: number) => {
-    setActivePresetIndex(idx);
-    try {
-      cinematicAudio.playCue("click");
-      if (isPlaying && !audioMuted) {
-        cinematicAudio.startSoundtrack(HERO_PRESETS[idx].id);
-      }
     } catch {}
   };
 
@@ -217,7 +324,7 @@ export function HeroSection() {
         {/* Top Badge */}
         <div className="flex items-center justify-center mb-8">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.1] text-xs font-mono text-zinc-300">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995] animate-pulse" />
             <span>Livepeer Autonomous Cinema</span>
           </div>
         </div>
@@ -241,7 +348,7 @@ export function HeroSection() {
           <Link
             href="/studio"
             onClick={handleLaunchClick}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-full text-sm font-semibold text-black bg-gradient-to-r from-[#4ed4b7] via-[#5fe995] to-[#7af2d9] shadow-xl shadow-[#4ed4b7]/20 hover:shadow-[#4ed4b7]/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-full text-sm font-semibold text-black bg-gradient-to-r from-[#4ed4b7] via-[#5fe995] to-[#7af2d9] shadow-xl shadow-[#4ed4b7]/20 hover:shadow-[#4ed4b7]/40 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
           >
             <span>Enter Director Studio</span>
             <ArrowRight className="w-4 h-4" />
@@ -258,17 +365,18 @@ export function HeroSection() {
 
         {/* 3D Perspective Cinema Viewport Showcase */}
         <div id="screening-room" className="relative mx-auto max-w-5xl scroll-mt-28">
-          {/* Ambient Glow */}
+          {/* Ambient Glow that dynamically reflects current take */}
           <div
-            className="absolute -inset-1 rounded-3xl blur-2xl opacity-30 transition-all duration-700 pointer-events-none"
+            ref={ambientGlowRef}
+            className="absolute -inset-1 rounded-3xl blur-2xl opacity-35 transition-all duration-700 pointer-events-none"
             style={{
-              background: `radial-gradient(circle at 50% 50%, ${currentPreset.accentColor}, transparent 70%)`
+              background: `radial-gradient(circle at 50% 50%, #4ed4b7, transparent 70%)`
             }}
           />
 
           {/* Viewport Frame */}
           <div className="relative rounded-2xl sm:rounded-3xl bg-[#090b10]/95 border border-white/20 p-2 sm:p-4 backdrop-blur-2xl shadow-2xl shadow-black/90">
-            {/* Viewport Top Bar */}
+            {/* Viewport Top Bar (Timer and 24fps completely removed) */}
             <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-white/10 text-xs font-mono text-zinc-400">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block animate-pulse" />
@@ -277,11 +385,14 @@ export function HeroSection() {
                 <span className="ml-2 font-semibold text-zinc-200">AUTEUR 4K</span>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
+                <span className="px-2.5 py-0.5 rounded text-[10px] font-mono bg-white/[0.05] border border-white/10 text-[#5fe995] font-semibold tracking-wider">
+                  AUTONOMOUS SEQUENCE
+                </span>
                 <button
                   onClick={toggleAudio}
                   aria-label="Toggle audio"
-                  className="flex items-center gap-1.5 text-zinc-400 hover:text-white px-2 py-0.5 rounded bg-white/5 border border-white/10"
+                  className="flex items-center gap-1.5 text-zinc-400 hover:text-white px-2 py-0.5 rounded bg-white/5 border border-white/10 transition-colors"
                 >
                   {audioMuted ? (
                     <VolumeX className="w-3.5 h-3.5 text-zinc-500" />
@@ -289,70 +400,67 @@ export function HeroSection() {
                     <Volume2 className="w-3.5 h-3.5 text-[#5fe995]" />
                   )}
                 </button>
-                <span className="text-zinc-500">24FPS</span>
-                <span ref={timecodeSpanRef} className="text-[#5fe995] font-semibold">00:01:14:08</span>
               </div>
             </div>
 
-            {/* Live Screening Stage Viewport */}
-            <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-black mt-2 border border-white/10 group">
-              {/* Active Canvas when Playing */}
-              <canvas
-                ref={canvasRef}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-                  isPlaying ? "opacity-100" : "opacity-0 pointer-events-none"
-                }`}
+            {/* Fast-Sequence Cinema Viewport (Play button and bottom buttons completely removed) */}
+            <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-black mt-2 border border-white/10 select-none">
+              {/* Fallback Base Image (Synchronized via Ref) */}
+              <img
+                ref={fallbackImgRef}
+                src={CINEMA_SEQUENCE_SHOTS[0].imageUrl}
+                alt="Cinema Sequence Preview"
+                className="absolute inset-0 w-full h-full object-cover z-0"
               />
 
-              {/* Static Still Poster when Paused */}
-              {!isPlaying && (
-                <div className="absolute inset-0">
-                  <img
-                    src={currentPreset.imageUrl}
-                    alt={currentPreset.name}
-                    className="w-full h-full object-cover opacity-60 scale-100 group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/60" />
+              {/* 60 FPS Hardware Render Canvas */}
+              <canvas
+                ref={canvasRef}
+                className="absolute inset-0 w-full h-full block object-cover z-10"
+              />
+
+              {/* Fast Cut Shutter Flash Seam */}
+              <div
+                ref={shutterFlashRef}
+                className="absolute inset-0 bg-white pointer-events-none z-20 opacity-0 transition-opacity duration-75"
+              />
+
+              {/* 35mm Letterbox Matte Lines (2.39:1 Anamorphic Scope) */}
+              <div className="absolute inset-x-0 top-0 h-7 sm:h-9 bg-black/90 border-b border-white/10 pointer-events-none z-30" />
+              <div className="absolute inset-x-0 bottom-0 h-7 sm:h-9 bg-black/90 border-t border-white/10 pointer-events-none z-30" />
+
+              {/* Live Shot Cadence HUD inside Bottom Matte */}
+              <div className="absolute inset-x-0 bottom-0 h-7 sm:h-9 px-4 flex items-center justify-between pointer-events-none z-30 text-[9px] font-mono text-zinc-400">
+                <div className="flex items-center gap-2">
+                  <span ref={takeTextRef} className="text-[#5fe995] font-bold">
+                    TAKE 01 / 07
+                  </span>
+                  <span className="text-zinc-600">·</span>
+                  <span ref={titleTextRef} className="text-zinc-200 font-semibold uppercase tracking-wider">
+                    NEO SHINJUKU 2088
+                  </span>
+                  <span className="text-zinc-600 hidden sm:inline">·</span>
+                  <span ref={lensTextRef} className="text-zinc-400 hidden sm:inline">
+                    Cooke Anamorphic 40mm
+                  </span>
+                  <span className="text-zinc-600 hidden md:inline">·</span>
+                  <span className="text-zinc-500 hidden md:inline">2.39:1 SCOPE</span>
                 </div>
-              )}
 
-              {/* 35mm Letterbox Matte Lines */}
-              <div className="absolute inset-x-0 top-0 h-6 sm:h-8 bg-black/60 border-b border-white/5 pointer-events-none z-10" />
-              <div className="absolute inset-x-0 bottom-0 h-6 sm:h-8 bg-black/60 border-t border-white/5 pointer-events-none z-10" />
-
-              {/* Center Play / Pause Controller */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-                <button
-                  onClick={togglePlayback}
-                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-black/70 border border-white/30 backdrop-blur-md flex items-center justify-center text-white hover:scale-110 hover:border-[#4ed4b7] transition-all shadow-2xl group/btn"
-                >
-                  {isPlaying ? (
-                    <Pause className="w-7 h-7 text-[#5fe995]" />
-                  ) : (
-                    <Play className="w-7 h-7 text-[#5fe995] translate-x-0.5" />
-                  )}
-                </button>
-                <span className="mt-3 text-xs font-mono text-zinc-300 bg-black/60 px-3.5 py-1 rounded-full border border-white/15 backdrop-blur-md">
-                  {isPlaying ? "Playing 60fps Cut" : "Play Master Cut"}
-                </span>
+                {/* Sequence Indicator Dots */}
+                <div ref={dotsContainerRef} className="flex items-center gap-1.5">
+                  {CINEMA_SEQUENCE_SHOTS.map((s, i) => (
+                    <span
+                      key={s.id}
+                      className={`rounded-full transition-all duration-300 ${
+                        i === 0
+                          ? "w-2.5 h-1 bg-[#5fe995]"
+                          : "w-1 h-1 bg-white/20"
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-
-            {/* Presets Switcher Bar */}
-            <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-center gap-2">
-              {HERO_PRESETS.map((preset, idx) => (
-                <button
-                  key={preset.id}
-                  onClick={() => handleSelectPreset(idx)}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-mono whitespace-nowrap transition-all ${
-                    activePresetIndex === idx
-                      ? "bg-white/15 text-white border border-white/30 shadow-md font-semibold"
-                      : "bg-white/[0.03] text-zinc-400 hover:text-zinc-200 border border-white/5"
-                  }`}
-                >
-                  {preset.name}
-                </button>
-              ))}
             </div>
           </div>
         </div>

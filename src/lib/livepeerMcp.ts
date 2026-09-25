@@ -35,6 +35,7 @@ export interface LivepeerCreateMediaParams {
   maxCostUsd?: number;
   preferFast?: boolean;
   templateId?: string;
+  sceneNumber?: number;
 }
 
 export interface LivepeerCreateMediaResult {
@@ -288,7 +289,7 @@ export class LivepeerMcpService {
         if (match) extractedUrl = match[0];
       }
 
-      const verifiedLivepeerAsset = extractedUrl || resolveCinematicAsset(params.prompt, 1);
+      const verifiedLivepeerAsset = extractedUrl || resolveCinematicAsset(params.prompt, params.sceneNumber || 1);
 
       return {
         jobId: structured.job_id || `livepeer-${Date.now()}`,
@@ -303,7 +304,7 @@ export class LivepeerMcpService {
     } catch (err) {
       console.warn("Livepeer MCP createMedia notice:", err);
       const latencyMs = Date.now() - startTime;
-      const livepeerSubnetAsset = resolveCinematicAsset(params.prompt, 1);
+      const livepeerSubnetAsset = resolveCinematicAsset(params.prompt, params.sceneNumber || 1);
       return {
         jobId: `livepeer-subnet-${Date.now()}`,
         url: livepeerSubnetAsset,

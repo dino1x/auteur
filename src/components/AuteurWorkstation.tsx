@@ -142,14 +142,14 @@ export function AuteurWorkstation({
   const [generationStep, setGenerationStep] = useState<number>(0);
   const [producingStep, setProducingStep] = useState<number>(1);
   const [producingMessage, setProducingMessage] = useState<string>("Decomposing episodic storyboard into 5 continuous acts...");
-  const [urlInput, setUrlInput] = useState<string>(brief || "");
+  const [urlInput, setUrlInput] = useState<string>("");
   const directorAgent = useMemo(() => new DirectorAgent(), []);
 
   useEffect(() => {
-    if (!urlInput && brief) {
+    if (!urlInput && brief && mode !== "input") {
       setUrlInput(brief);
     }
-  }, [brief]);
+  }, [brief, mode]);
 
   // Progressive unlock: Territories unlocks Step 2, NLE/Critic/Storyboard unlock Steps 3-5
   useEffect(() => {
@@ -187,7 +187,7 @@ export function AuteurWorkstation({
   const [livepeerLatency, setLivepeerLatency] = useState<number>(184);
   const [isPingingLivepeer, setIsPingingLivepeer] = useState<boolean>(false);
   const [activeLivepeerRecipe, setActiveLivepeerRecipe] = useState<string>("anamorphic-spot");
-  const [activePlaybookId, setActivePlaybookId] = useState<string>("cinema-director");
+  const [activePlaybookId, setActivePlaybookId] = useState<string | null>(null);
 
   // Canvas Refs
   const modalCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -1950,13 +1950,13 @@ export function AuteurWorkstation({
                       <div className="aspect-video w-full rounded-xl bg-black overflow-hidden relative border border-white/10">
                         <img
                           src={
-                            territory.previewUrl?.includes("agent.livepeer.org/a/")
-                              ? resolveCinematicAsset(`${brief} ${territory.title}`, idx + 1)
-                              : (territory.previewUrl || resolveCinematicAsset(`${brief} ${territory.title}`, idx + 1))
+                            (territory.previewUrl && !territory.previewUrl.includes("JHK1CAxuntPAwoGCTYMWB") && !territory.previewUrl.includes("agent.livepeer.org/a/"))
+                              ? territory.previewUrl
+                              : resolveCinematicAsset(`${brief || urlInput} ${territory.title}`, idx + 1)
                           }
                           alt={territory.title}
                           onError={(e) => {
-                            const fallback = resolveCinematicAsset(`${brief} ${territory.title}`, idx + 1);
+                            const fallback = resolveCinematicAsset(`${brief || urlInput} ${territory.title}`, idx + 1);
                             if (e.currentTarget.src !== fallback) {
                               e.currentTarget.src = fallback;
                             }
@@ -2253,7 +2253,7 @@ export function AuteurWorkstation({
                       category: "SPATIAL",
                       title: "Spatial Launch",
                       brief: "Apple Vision Pro: curved 3D glass optics, spatial visionOS interfaces, precision machined aluminum, and ambient physical room integration.",
-                      thumbnail: "https://v3b.fal.media/files/b/0aabd1ce/BDsvgaKgr8d4JHGKFoscl.jpg",
+                      thumbnail: "/images/spatial/spatial_01_optics.jpg",
                     },
                     {
                       id: "pb-nike",
@@ -2267,7 +2267,7 @@ export function AuteurWorkstation({
                       category: "CYBER-NOIR",
                       title: "Cyber-Noir",
                       brief: "A cyber-noir operative infiltrates an orbital cryogenic server vault suspended above a tempest ocean. Panavision anamorphic glass with cold cyan rim lighting.",
-                      thumbnail: "https://v3b.fal.media/files/b/0aabd1d0/Xf2XPsFPlWxVq4qWCrVwg.jpg",
+                      thumbnail: "/images/cinema-sequence/shinjuku_neon_rain.jpg",
                     },
                     {
                       id: "pb-fashion",
@@ -2277,7 +2277,7 @@ export function AuteurWorkstation({
                       thumbnail: "https://v3b.fal.media/files/b/0aabd1d0/u0QIewnzYA7qSkMYXCWas.jpg",
                     },
                   ].map((pb) => {
-                    const isSelected = urlInput.trim() === pb.brief;
+                    const isSelected = activePlaybookId === pb.id && urlInput.trim() === pb.brief;
                     return (
                       <button
                         key={pb.id}
@@ -2383,8 +2383,9 @@ export function AuteurWorkstation({
                     badge: "35MM · KODAK",
                     title: territories[0]?.title || "DIRECTION A",
                     imageUrl:
-                      territories[0]?.previewUrl ||
-                      resolveCinematicAsset(`${brief || urlInput} curved 3D glass optics`, 1),
+                      (territories[0]?.previewUrl && !territories[0].previewUrl.includes("JHK1CAxuntPAwoGCTYMWB") && !territories[0].previewUrl.includes("agent.livepeer.org/a/"))
+                        ? territories[0].previewUrl
+                        : resolveCinematicAsset(`${brief || urlInput} direction 1`, 1),
                     transformClass:
                       "-rotate-[7deg] sm:-rotate-[8deg] -translate-x-2.5 sm:-translate-x-4 translate-y-2 hover:-rotate-2 hover:translate-y-0.5 hover:z-30",
                     zIndex: "z-10",
@@ -2395,10 +2396,11 @@ export function AuteurWorkstation({
                   {
                     takeNum: "02",
                     badge: "MASTER · 2.39:1",
-                    title: territories[1]?.title || "PELAGIC HORIZON",
+                    title: territories[1]?.title || "DIRECTION B",
                     imageUrl:
-                      territories[1]?.previewUrl ||
-                      resolveCinematicAsset(`${brief || urlInput} spatial interface ambient dimension`, 2),
+                      (territories[1]?.previewUrl && !territories[1].previewUrl.includes("JHK1CAxuntPAwoGCTYMWB") && !territories[1].previewUrl.includes("agent.livepeer.org/a/"))
+                        ? territories[1].previewUrl
+                        : resolveCinematicAsset(`${brief || urlInput} direction 2`, 2),
                     transformClass:
                       "rotate-0 scale-105 hover:scale-110 z-20",
                     zIndex: "z-20",
@@ -2409,10 +2411,11 @@ export function AuteurWorkstation({
                   {
                     takeNum: "03",
                     badge: "CLOSE · PRIMES",
-                    title: territories[2]?.title || "TITAN SURGE",
+                    title: territories[2]?.title || "DIRECTION C",
                     imageUrl:
-                      territories[2]?.previewUrl ||
-                      resolveCinematicAsset(`${brief || urlInput} precision machined aluminum hardware`, 3),
+                      (territories[2]?.previewUrl && !territories[2].previewUrl.includes("JHK1CAxuntPAwoGCTYMWB") && !territories[2].previewUrl.includes("agent.livepeer.org/a/"))
+                        ? territories[2].previewUrl
+                        : resolveCinematicAsset(`${brief || urlInput} direction 3`, 3),
                     transformClass:
                       "rotate-[7deg] sm:rotate-[8deg] translate-x-2.5 sm:translate-x-4 translate-y-2 hover:rotate-2 hover:translate-y-0.5 hover:z-30",
                     zIndex: "z-10",

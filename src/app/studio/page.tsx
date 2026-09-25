@@ -25,7 +25,7 @@ const INITIAL_REVIEW = visualCriticAgent.evaluateSequence(
 import { AuteurWorkstation } from "@/components/AuteurWorkstation";
 
 export default function AuteurStudioPage() {
-  const [brief, setBrief] = useState(DEFAULT_BRIEF);
+  const [brief, setBrief] = useState("");
   const [territories, setTerritories] = useState<CreativeTerritory[]>(
     () => INITIAL_PROD.territories
   );
@@ -41,25 +41,25 @@ export default function AuteurStudioPage() {
     {
       id: "step-init-3",
       phase: "assembly",
-      label: "Master Cut Assembled",
+      label: "Master Cut Engine Armed",
       details:
-        "Livepeer Agent 60fps pipeline synchronized. Procedural score and voiceover active.",
+        "Livepeer Agent 60fps pipeline ready. Awaiting narrative prompt or product URL.",
       timestamp: "00:00:00",
       status: "done",
     },
     {
       id: "step-init-2",
       phase: "critic",
-      label: "Visual Critic Scorecard Approved",
-      details: `Continuity Score: ${INITIAL_REVIEW.continuityScore}%, Lighting Adherence: ${INITIAL_REVIEW.lightingScore}%.`,
+      label: "Visual Critic Standby",
+      details: "Aesthetic memory banks calibrated for continuous visual grammar.",
       timestamp: "00:00:00",
       status: "done",
     },
     {
       id: "step-init-1",
       phase: "strategy",
-      label: "Creative Brief Ingested",
-      details: `Inferred 3 Creative Territories for: "${DEFAULT_BRIEF}"`,
+      label: "Creative Brief Ingest Ready",
+      details: "Awaiting creative brief or product URL ingestion.",
       timestamp: "00:00:00",
       status: "done",
     },
@@ -170,6 +170,7 @@ export default function AuteurStudioPage() {
                 prompt,
                 aspectRatio: t.aspectRatio === "9:16" ? "9:16" : "16:9",
                 preferFast: true,
+                sceneNumber: idx + 1,
               },
             }),
           });
@@ -178,11 +179,13 @@ export default function AuteurStudioPage() {
             const url = data.result?.url;
             if (
               url &&
-              (url.startsWith("http://") || url.startsWith("https://"))
+              (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/"))
             ) {
-              const safePreviewUrl = url.includes("fal.media")
+              const safePreviewUrl = url.startsWith("/")
                 ? url
-                : (url.startsWith("/api/proxy-media") ? url : `/api/proxy-media?url=${encodeURIComponent(url)}`);
+                : (url.includes("fal.media")
+                    ? url
+                    : (url.startsWith("/api/proxy-media") ? url : `/api/proxy-media?url=${encodeURIComponent(url)}`));
               return {
                 ...t,
                 previewUrl: safePreviewUrl,
@@ -289,8 +292,12 @@ export default function AuteurStudioPage() {
           const reliableAsset = resolveCinematicAsset(shot.prompt || shot.framing, shot.sceneNumber);
           const rawUrl = genResult.posterUrl || genResult.videoUrl;
           const validPosterUrl =
-            rawUrl && (rawUrl.startsWith("http://") || rawUrl.startsWith("https://") || rawUrl.startsWith("/api/proxy-media"))
-              ? (rawUrl.startsWith("/api/proxy-media") ? rawUrl : `/api/proxy-media?url=${encodeURIComponent(rawUrl)}`)
+            rawUrl && (rawUrl.startsWith("http://") || rawUrl.startsWith("https://") || rawUrl.startsWith("/") || rawUrl.startsWith("/api/proxy-media"))
+              ? (rawUrl.startsWith("/")
+                  ? rawUrl
+                  : (rawUrl.startsWith("/api/proxy-media") || rawUrl.includes("fal.media")
+                      ? rawUrl
+                      : `/api/proxy-media?url=${encodeURIComponent(rawUrl)}`))
               : reliableAsset;
 
           const finishedShot: Shot = {

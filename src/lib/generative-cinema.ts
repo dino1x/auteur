@@ -5,31 +5,44 @@ import { cinematicAudio } from "./cinematic-audio";
 // High-definition cinematic visual curation mapped across semantic categories (8 distinct scenes per theme, zero duplicates)
 // Verified Livepeer decentralized GPU cinema asset pool mapped across semantic categories
 const THEMATIC_PALETTES: Record<string, string[]> = {
+  spatial: [
+    "/images/spatial/spatial_01_optics.jpg",
+    "/images/spatial/spatial_02_ambient.jpg",
+    "/images/spatial/spatial_03_kinetic.jpg",
+    "/images/spatial/spatial_04_cinema.jpg",
+    "/images/spatial/spatial_05_hardware.jpg",
+  ],
   athletics: [
     "https://v3b.fal.media/files/b/0aabd1cf/TYH74TJmZLVjH4v9iwyds.jpg",
     "https://v3b.fal.media/files/b/0aabb646/qoxher1xjGHMovIBvJApT.jpg",
     "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
-    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "https://v3b.fal.media/files/b/0aabd1ce/BDsvgaKgr8d4JHGKFoscl.jpg",
   ],
   cyberpunk: [
+    "/images/cinema-sequence/shinjuku_neon_rain.jpg",
     "https://v3b.fal.media/files/b/0aabd1d0/Xf2XPsFPlWxVq4qWCrVwg.jpg",
-    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
     "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
+    "https://v3b.fal.media/files/b/0aabd1ce/BDsvgaKgr8d4JHGKFoscl.jpg",
   ],
   space: [
     "https://v3b.fal.media/files/b/0aab9681/3VVPc-Mwd2u6DEn3tVRjm.jpg",
     "https://v3b.fal.media/files/b/0aab9703/5c_-GafOcE0pK14LD5Pca.jpg",
   ],
   tech: [
+    "/images/spatial/spatial_01_optics.jpg",
+    "/images/spatial/spatial_02_ambient.jpg",
+    "/images/spatial/spatial_03_kinetic.jpg",
     "https://v3b.fal.media/files/b/0aabd1ce/BDsvgaKgr8d4JHGKFoscl.jpg",
     "https://v3b.fal.media/files/b/0aab9706/0SNbKuQaZ5cSp0GlIQD7e.jpg",
-    "https://v3b.fal.media/files/b/0aabd1d0/Xf2XPsFPlWxVq4qWCrVwg.jpg",
   ],
   ocean: [
+    "/images/cinema-sequence/ocean_whale_sunbeams.jpg",
     "https://v3b.fal.media/files/b/0aab970b/X6cbMzd56VxmDJaC7HHDF.jpg",
+    "/images/cinema-sequence/aurora_glacial_fjord.jpg",
     "https://v3b.fal.media/files/b/0aab9706/0SNbKuQaZ5cSp0GlIQD7e.jpg",
   ],
   desert: [
+    "/images/cinema-sequence/dune_desert_golden.jpg",
     "https://v3b.fal.media/files/b/0aab9703/5c_-GafOcE0pK14LD5Pca.jpg",
     "https://v3b.fal.media/files/b/0aab9681/3VVPc-Mwd2u6DEn3tVRjm.jpg",
   ],
@@ -38,25 +51,32 @@ const THEMATIC_PALETTES: Record<string, string[]> = {
     "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
   ],
   wildlife: [
+    "/images/cinema-sequence/snow_leopard_ridge.jpg",
+    "/images/cinema-sequence/bengal_tiger_mist.jpg",
+    "/images/cinema-sequence/golden_eagle_peaks.jpg",
     "https://v3b.fal.media/files/b/0aab9701/zAcyfB5Tz9BGLbIh6vLfP.jpg",
-    "https://v3b.fal.media/files/b/0aab9703/5c_-GafOcE0pK14LD5Pca.jpg",
   ],
   mountains: [
+    "/images/cinema-sequence/golden_eagle_peaks.jpg",
+    "/images/cinema-sequence/snow_leopard_ridge.jpg",
     "https://v3b.fal.media/files/b/0aabb65d/CAoTZ3IZl0ormrGu3wpYO.jpg",
-    "https://v3b.fal.media/files/b/0aab9701/zAcyfB5Tz9BGLbIh6vLfP.jpg",
   ],
   nature: [
+    "/images/cinema-sequence/aurora_glacial_fjord.jpg",
+    "/images/cinema-sequence/ocean_whale_sunbeams.jpg",
+    "/images/cinema-sequence/dune_desert_golden.jpg",
     "https://v3b.fal.media/files/b/0aabb65d/CAoTZ3IZl0ormrGu3wpYO.jpg",
-    "https://v3b.fal.media/files/b/0aab9701/zAcyfB5Tz9BGLbIh6vLfP.jpg",
   ],
   luxury: [
     "https://v3b.fal.media/files/b/0aabd1d0/u0QIewnzYA7qSkMYXCWas.jpg",
-    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "/images/spatial/spatial_01_optics.jpg",
+    "/images/spatial/spatial_02_ambient.jpg",
     "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
   ],
   brutalist: [
     "https://v3b.fal.media/files/b/0aab9706/0SNbKuQaZ5cSp0GlIQD7e.jpg",
-    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "/images/cinema-sequence/dune_desert_golden.jpg",
+    "https://v3b.fal.media/files/b/0aabd1ce/BDsvgaKgr8d4JHGKFoscl.jpg",
   ],
   biotech: [
     "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
@@ -67,12 +87,15 @@ const THEMATIC_PALETTES: Record<string, string[]> = {
     "https://v3b.fal.media/files/b/0aab9701/zAcyfB5Tz9BGLbIh6vLfP.jpg",
   ],
   urban: [
-    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "/images/cinema-sequence/shinjuku_neon_rain.jpg",
     "https://v3b.fal.media/files/b/0aab9706/0SNbKuQaZ5cSp0GlIQD7e.jpg",
+    "https://v3b.fal.media/files/b/0aabd1cf/TYH74TJmZLVjH4v9iwyds.jpg",
+    "/images/spatial/spatial_02_ambient.jpg",
   ],
   people: [
     "https://v3b.fal.media/files/b/0aab9701/zAcyfB5Tz9BGLbIh6vLfP.jpg",
-    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
+    "https://v3b.fal.media/files/b/0aabd1cf/TYH74TJmZLVjH4v9iwyds.jpg",
+    "/images/spatial/spatial_02_ambient.jpg",
   ],
 };
 
@@ -98,8 +121,12 @@ export function resolveCinematicAsset(prompt: string, sceneNumber: number): stri
 
   let category = "urban";
 
-  // 0. Athletics, Running, Sneaker & Sports
-  if (hasAny("nike", "running", "runner", "marathon", "shoe", "shoes", "sneaker", "sneakers", "alphafly", "vaporfly", "athlete", "athletic", "athletics", "sprint", "sprinter", "olympic", "gym", "workout", "fitness", "track and field")) {
+  // 0a. Spatial Computing, AR/VR Headsets, Optics, Vision Pro & Wearables
+  if (hasAny("vision", "vision pro", "visionpro", "apple vision", "spatial", "spatial computing", "headset", "headsets", "optics", "visionos", "micro-oled", "ar", "vr", "virtual reality", "augmented reality", "mixed reality", "hololens", "meta quest", "quest 3", "smart glasses", "3d glass", "curved 3d glass", "aluminum enclosure", "spatial luminescence", "ambient dimension", "kinetic interface")) {
+    category = "spatial";
+  }
+  // 0b. Athletics, Running, Sneaker & Sports
+  else if (hasAny("nike", "running", "runner", "marathon", "shoe", "shoes", "sneaker", "sneakers", "alphafly", "vaporfly", "athlete", "athletic", "athletics", "sprint", "sprinter", "olympic", "gym", "workout", "fitness", "track and field")) {
     category = "athletics";
   }
   // 1. Automotive, Motorsport & Driving (Any vehicle in any setting: mountain, track, highway, coast)
@@ -181,7 +208,7 @@ export function preloadImage(url: string, fallbackUrl?: string): Promise<HTMLIma
         }
       }
     } catch {
-      normalizedUrl = "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg";
+      normalizedUrl = "/images/cinema-sequence/shinjuku_neon_rain.jpg";
     }
   }
 

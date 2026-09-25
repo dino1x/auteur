@@ -54,6 +54,9 @@ export class DirectorAgent {
     // 3. Remove leading standalone articles only with word boundary
     text = text.replace(/^(?:a|an|the)\b\s*/i, "");
 
+    // 3b. Remove common commercial / pitch prefixes
+    text = text.replace(/^(?:commercial|ad|advertisement|video|film|teaser|trailer|promo)\s+(?:for|about|of)\s+/i, "");
+
     // 4. If the text has punctuation delimiters (. , — | : ; \n or spaced hyphen), take the first concise clause
     const firstClause = text.split(/(?:\s+[—–-]\s+|[.;|:\n])+/)[0].trim();
     if (firstClause.length >= 2 && firstClause.length <= 48) {
@@ -465,6 +468,46 @@ export class DirectorAgent {
     const lighting = territory.lightingLogic.replace(/\.+$/, "").toLowerCase();
     const visualMeta = territory.visualMetaphor.replace(/\.+$/, "").toLowerCase();
 
+    // 0a. Spatial Computing, AR/VR Headsets, Optics & Vision Pro
+    if (p.includes("vision") || p.includes("spatial") || p.includes("headset") || p.includes("visionos") || p.includes("optics") || p.includes("micro-oled")) {
+      switch (sceneNumber) {
+        case 1:
+          return `In a darkened architectural studio, ${titleCaseBrief} emerges into focus—sculpted three-dimensional laminated glass refracting ambient light.`;
+        case 2:
+          return `Dual custom micro-OLED displays illuminate with twenty-three million pixels, rendering true-to-life spatial fidelity.`;
+        case 3:
+          return `Instantaneous eye tracking and subtle hand gestures transform physical space into an infinite interactive canvas.`;
+        case 4:
+          return `Ambient dimension integrates digital interfaces seamlessly into the room, casting natural physical shadows.`;
+        case 5:
+          return `Computing is no longer bound by a display—${subjectCapitalized} dissolves the boundary between imagination and reality.`;
+        case 6:
+          return `A singular vision of spatial computing, engineered with uncompromising craft.`;
+        default:
+          return `A new dimension of spatial computing distilled into pure form.`;
+      }
+    }
+
+    // 0b. Athletics, Running & Marathon Footwear
+    if (p.includes("nike") || p.includes("running") || p.includes("runner") || p.includes("marathon") || p.includes("alphafly") || p.includes("athlete") || p.includes("shoe")) {
+      switch (sceneNumber) {
+        case 1:
+          return `Under rain-slicked nocturnal city lights, ${titleCaseBrief} steps to the line with focused stillness.`;
+        case 2:
+          return `Carbon-fiber Flyplate tension and ZoomX foam compression engineered for relentless energy return.`;
+        case 3:
+          return `Explosive toe-off down the wet asphalt, stride cadence locking into pure rhythm.`;
+        case 4:
+          return `Streetlights streak into optic motion blur as ${lighting} illuminates every stride.`;
+        case 5:
+          return `Accelerating through the final kilometer, mechanical recoil and human endurance become one.`;
+        case 6:
+          return `${subjectCapitalized} breaks through the threshold of speed—bold, unyielding, and forever moving forward.`;
+        default:
+          return `The pursuit of human speed distilled into pure cadence.`;
+      }
+    }
+
     // 1. Wildlife / Snow Leopard / Big Cats (Strict matching only)
     if (p.includes("leopard") || p.includes("tiger") || p.includes("lion") || p.includes("cheetah") || p.includes("panther") || p.includes("jaguar") || p.includes("feline") || (p.includes("predator") && !p.includes("drone"))) {
       switch (sceneNumber) {
@@ -700,6 +743,16 @@ export class DirectorAgent {
     const subjectCapitalized = subjectCore.charAt(0).toUpperCase() + subjectCore.slice(1);
     const candidateTitle = firstClause.length >= 2 && firstClause.length <= 40 ? firstClause.replace(/[:;,—–-]+$/, "").trim() : subjectCapitalized;
     const titleCaseBrief = candidateTitle.charAt(0).toUpperCase() + candidateTitle.slice(1);
+
+    // 0a. Spatial Computing / Vision Pro / Wearables
+    if (p.includes("vision") || p.includes("spatial") || p.includes("headset") || p.includes("visionos") || p.includes("optics") || p.includes("micro-oled")) {
+      return `Three-dimensional curved glass, micro-OLED precision, and fluid spatial planes converge: ${titleCaseBrief}. Reality expands beyond the display into seamless ambient dimension.`;
+    }
+
+    // 0b. Athletics / Running / Nike
+    if (p.includes("nike") || p.includes("running") || p.includes("runner") || p.includes("marathon") || p.includes("alphafly") || p.includes("athlete") || p.includes("shoe")) {
+      return `Rain-slicked asphalt, carbon-fiber propulsion, and the relentless pursuit of speed: ${titleCaseBrief}. Every stride shatters the boundary between endurance and flight.`;
+    }
 
     // 1. Wildlife / Big Cats (Strict matching only)
     if (p.includes("leopard") || p.includes("tiger") || p.includes("lion") || p.includes("cheetah") || p.includes("panther") || p.includes("jaguar") || p.includes("feline") || (p.includes("predator") && !p.includes("drone"))) {
