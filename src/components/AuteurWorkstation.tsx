@@ -2317,77 +2317,157 @@ export function AuteurWorkstation({
         {/* VIEW 6: LIVEPEER CINEMA GENERATION CONSOLE                   */}
         {/* ============================================================ */}
         {mode === "generating" && (
-          <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-8 animate-fadeIn max-w-2xl mx-auto w-full">
-            {/* Cinematic Screening Slate */}
-            <div className="w-full max-w-xl rounded-2xl bg-[#080a10] border border-white/10 relative overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.85),0_0_35px_rgba(78,212,183,0.08)] flex flex-col justify-between p-6">
-              
-              {/* Header HUD */}
-              <div className="flex items-center justify-between text-zinc-400 font-mono text-[11px] tracking-wider border-b border-white/10 pb-3.5">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-2 h-2 rounded-full bg-[#4ed4b7] animate-pulse shadow-[0_0_8px_#4ed4b7]" />
-                  <span className="text-white font-bold tracking-widest uppercase">AUTEUR CINEMA STUDIO</span>
-                </div>
-                <div className="text-zinc-400 font-mono text-[10px] tracking-widest">
-                  35MM · 24 FPS · DCI 4K
-                </div>
-              </div>
+          <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 space-y-6 sm:space-y-8 animate-fadeIn max-w-3xl mx-auto w-full">
+            {/* Ambient Volumetric Backlight Bloom */}
+            <div className="relative w-full flex flex-col items-center">
+              <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-[520px] h-44 bg-gradient-to-r from-[#4ed4b7]/15 via-[#5fe995]/20 to-[#7e94ff]/15 rounded-full blur-3xl pointer-events-none" />
 
-              {/* Center Slate Content */}
-              <div className="space-y-4 my-6 text-center px-4">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#4ed4b7]/10 border border-[#4ed4b7]/25 font-mono text-[10px] text-[#5fe995]">
-                  <Sparkles className="w-3 h-3" />
-                  <span>Livepeer Neural Diffusion</span>
+              {/* 1. Necessary Wordings Placed Above the Images */}
+              <div className="w-full max-w-xl text-center space-y-4 z-10">
+                {/* Header HUD */}
+                <div className="flex items-center justify-between text-zinc-400 font-mono text-[11px] tracking-wider border-b border-white/10 pb-3 w-full">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2 h-2 rounded-full bg-[#4ed4b7] animate-pulse shadow-[0_0_8px_#4ed4b7]" />
+                    <span className="text-white font-bold tracking-widest uppercase">AUTEUR CINEMA STUDIO</span>
+                  </div>
+                  <div className="text-zinc-400 font-mono text-[10px] tracking-widest">
+                    35MM · 24 FPS · DCI 4K
+                  </div>
                 </div>
 
-                <p className="font-serif italic text-base sm:text-lg text-zinc-100 max-w-md mx-auto line-clamp-3 leading-relaxed">
+                {/* Subnet badge */}
+                <div className="flex items-center justify-center gap-2">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#4ed4b7]/10 border border-[#4ed4b7]/25 font-mono text-[10px] text-[#5fe995]">
+                    <Sparkles className="w-3 h-3" />
+                    <span>Livepeer Neural Diffusion</span>
+                  </div>
+                </div>
+
+                {/* Quoted Brief */}
+                <p className="font-serif italic text-base sm:text-lg text-zinc-100 max-w-lg mx-auto line-clamp-2 leading-relaxed px-2">
                   &ldquo;{brief || urlInput}&rdquo;
                 </p>
 
-                <div className="flex items-center justify-center gap-3 text-xs font-mono text-zinc-400">
-                  <span className="text-zinc-300">Livepeer GPU Swarm</span>
-                  <span className="text-zinc-600">·</span>
-                  <span className="text-zinc-300">Kodak 2383 LUT</span>
-                  <span className="text-zinc-600">·</span>
-                  <span className="text-[#4ed4b7] font-semibold">Generating Takes</span>
+                {/* Live Progress Stage & Specs */}
+                <div className="space-y-2.5 max-w-md mx-auto pt-1">
+                  <div className="flex items-center justify-center gap-2 text-xs font-mono text-zinc-300">
+                    <span className="font-bold text-[#4ed4b7] tracking-wider">AUTEUR</span>
+                    <span className="text-zinc-600">•</span>
+                    <span className="text-zinc-200 text-xs">
+                      {generationStep === 1 && "Decomposing creative brief into cinematic acts..."}
+                      {generationStep === 2 && "Synthesizing visual keyframes on Livepeer GPU..."}
+                      {generationStep === 3 && "Calibrating camera blocking and volumetric lighting..."}
+                      {generationStep >= 4 && "Master sequence ready · Launching workstation"}
+                    </span>
+                  </div>
+
+                  <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden shadow-inner">
+                    <div
+                      className="h-full bg-gradient-to-r from-[#4ed4b7] via-[#5fe995] to-[#7e94ff] transition-all duration-700 rounded-full shadow-[0_0_12px_#4ed4b7]"
+                      style={{ width: `${Math.max(18, (generationStep / 4) * 100)}%` }}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 px-0.5">
+                    <span>STAGE 0{generationStep}/04</span>
+                    <span className="text-zinc-400">Livepeer GPU Swarm · Kodak 2383 LUT</span>
+                    <span className="text-[#5fe995] flex items-center gap-1 font-semibold">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995] animate-ping" />
+                      ACTIVE GPU
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              {/* Footer Metadata */}
-              <div className="flex items-center justify-between border-t border-white/10 pt-3.5 text-[10px] font-mono text-zinc-500">
-                <div className="flex items-center gap-2">
-                  <span className="text-zinc-400 uppercase tracking-wider">PIPELINE:</span>
-                  <span className="text-zinc-200">DECENTRALIZED INFERENCE</span>
-                </div>
-                <div className="text-[#5fe995] flex items-center gap-1.5 font-semibold">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995] animate-ping" />
-                  <span>ACTIVE GPU CLUSTER</span>
-                </div>
-              </div>
-            </div>
+              {/* 2. Triptych Fanned Cards (As in reference) */}
+              <div className="relative pt-6 sm:pt-8 pb-4 flex items-center justify-center w-full max-w-xl">
+                {[
+                  {
+                    takeNum: "01",
+                    badge: "35MM · KODAK 500T",
+                    title: territories[0]?.title || "DIRECTION A",
+                    imageUrl:
+                      territories[0]?.previewUrl ||
+                      resolveCinematicAsset(`${brief || urlInput} wide anamorphic cinema act 1`, 1),
+                    transformClass:
+                      "-rotate-[7deg] sm:-rotate-[8deg] -translate-x-3 sm:-translate-x-6 translate-y-3 hover:-rotate-2 hover:translate-y-1 hover:z-30",
+                    zIndex: "z-10",
+                    widthClass: "w-36 sm:w-44 md:w-48 aspect-[9/14]",
+                    borderClass: "border border-white/15",
+                    shadowClass: "shadow-[0_16px_36px_rgba(0,0,0,0.85)]",
+                  },
+                  {
+                    takeNum: "02",
+                    badge: "MASTER TAKE · 2.39:1",
+                    title: territories[1]?.title || "PELAGIC HORIZON",
+                    imageUrl:
+                      territories[1]?.previewUrl ||
+                      resolveCinematicAsset(`${brief || urlInput} medium cinematic frame act 2`, 2),
+                    transformClass:
+                      "rotate-0 scale-105 hover:scale-110 z-20",
+                    zIndex: "z-20",
+                    widthClass: "w-40 sm:w-48 md:w-52 aspect-[9/14]",
+                    borderClass: "border border-[#4ed4b7]/60 ring-1 ring-[#4ed4b7]/30",
+                    shadowClass: "shadow-[0_24px_55px_rgba(0,0,0,0.92),0_0_30px_rgba(78,212,183,0.22)]",
+                  },
+                  {
+                    takeNum: "03",
+                    badge: "CLOSE · PRIMES",
+                    title: territories[2]?.title || "TITAN SURGE",
+                    imageUrl:
+                      territories[2]?.previewUrl ||
+                      resolveCinematicAsset(`${brief || urlInput} dynamic lighting close-up act 3`, 3),
+                    transformClass:
+                      "rotate-[7deg] sm:rotate-[8deg] translate-x-3 sm:translate-x-6 translate-y-3 hover:rotate-2 hover:translate-y-1 hover:z-30",
+                    zIndex: "z-10",
+                    widthClass: "w-36 sm:w-44 md:w-48 aspect-[9/14]",
+                    borderClass: "border border-white/15",
+                    shadowClass: "shadow-[0_16px_36px_rgba(0,0,0,0.85)]",
+                  },
+                ].map((card, idx) => (
+                  <div
+                    key={card.takeNum}
+                    className={`relative rounded-2xl overflow-hidden bg-[#090b12] ${card.widthClass} ${card.borderClass} ${card.shadowClass} ${card.transformClass} ${card.zIndex} transition-all duration-500 ease-out group shrink-0`}
+                    style={{ willChange: "transform" }}
+                  >
+                    {/* Simulated live visual still */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={card.imageUrl}
+                      alt={card.title}
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        target.onerror = null;
+                        target.src = resolveCinematicAsset("cinematic 35mm film still", idx + 1);
+                      }}
+                    />
 
-            {/* Live Progress Stage */}
-            <div className="space-y-3 w-full max-w-md text-center">
-              <div className="flex items-center justify-center gap-2 text-sm font-display font-medium text-white">
-                <span className="font-bold text-[#4ed4b7] tracking-wider">AUTEUR</span>
-                <span className="text-zinc-500">•</span>
-                <span className="text-zinc-200 font-sans text-xs">
-                  {generationStep === 1 && "Decomposing creative brief into cinematic acts..."}
-                  {generationStep === 2 && "Synthesizing visual keyframes on Livepeer GPU..."}
-                  {generationStep === 3 && "Calibrating camera blocking and volumetric lighting..."}
-                  {generationStep >= 4 && "Master sequence ready · Launching workstation"}
-                </span>
-              </div>
+                    {/* Top Scrim HUD */}
+                    <div className="absolute inset-x-0 top-0 p-2.5 bg-gradient-to-b from-black/80 via-black/40 to-transparent flex items-center justify-between text-[9px] font-mono text-white/90">
+                      <span className="px-1.5 py-0.5 rounded bg-black/60 border border-white/10 uppercase tracking-wider">
+                        {card.badge}
+                      </span>
+                      <span className="flex items-center gap-1 text-[8px] text-[#4ed4b7]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#4ed4b7] animate-pulse" />
+                        REC
+                      </span>
+                    </div>
 
-              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-[#4ed4b7] via-[#5fe995] to-[#7e94ff] transition-all duration-700 rounded-full shadow-[0_0_12px_#4ed4b7]"
-                  style={{ width: `${Math.max(15, (generationStep / 4) * 100)}%` }}
-                />
-              </div>
+                    {/* Bottom Scrim HUD */}
+                    <div className="absolute inset-x-0 bottom-0 p-2.5 bg-gradient-to-t from-black/95 via-black/60 to-transparent">
+                      <div className="text-[9px] font-mono text-[#4ed4b7] uppercase tracking-wider font-semibold">
+                        TAKE {card.takeNum}
+                      </div>
+                      <div className="text-[11px] font-display font-bold text-white truncate">
+                        {card.title}
+                      </div>
+                    </div>
 
-              <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500">
-                <span>STAGE 0{generationStep}/04</span>
-                <span>LIVEPEER CINEMA ENGINE</span>
+                    {/* Film grain / specular sheen */}
+                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.04] to-transparent opacity-60" />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -2397,81 +2477,166 @@ export function AuteurWorkstation({
         {/* VIEW 7: LIVEPEER CINEMA NLE PIPELINE PRODUCTION CONSOLE      */}
         {/* ============================================================ */}
         {mode === "producing" && (
-          <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-8 animate-fadeIn max-w-2xl mx-auto w-full">
-            {/* Cinematic Screening Slate */}
-            <div className="w-full max-w-xl rounded-2xl bg-[#080a10] border border-white/10 relative overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.85),0_0_35px_rgba(78,212,183,0.08)] flex flex-col justify-between p-6">
-              
-              {/* Header HUD */}
-              <div className="flex items-center justify-between text-zinc-400 font-mono text-[11px] tracking-wider border-b border-white/10 pb-3.5">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-2 h-2 rounded-full bg-[#5fe995] animate-pulse shadow-[0_0_8px_#5fe995]" />
-                  <span className="text-white font-bold tracking-widest uppercase">AUTEUR 60FPS NLE</span>
-                </div>
-                <div className="text-zinc-400 font-mono text-[10px] tracking-widest">
-                  PRORES 422 · 2.39:1 DCI
-                </div>
-              </div>
+          <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 space-y-6 sm:space-y-8 animate-fadeIn max-w-3xl mx-auto w-full">
+            {/* Ambient Volumetric Backlight Bloom */}
+            <div className="relative w-full flex flex-col items-center">
+              <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-[520px] h-44 bg-gradient-to-r from-[#5fe995]/15 via-[#4ed4b7]/20 to-[#7e94ff]/15 rounded-full blur-3xl pointer-events-none" />
 
-              {/* Center Slate Content */}
-              <div className="space-y-4 my-6 text-center px-4">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#5fe995]/10 border border-[#5fe995]/25 font-mono text-[10px] text-[#5fe995]">
-                  <Film className="w-3 h-3" />
-                  <span>5-Act Master Composition</span>
+              {/* 1. Necessary Wordings Placed Above the Images */}
+              <div className="w-full max-w-xl text-center space-y-4 z-10">
+                {/* Header HUD */}
+                <div className="flex items-center justify-between text-zinc-400 font-mono text-[11px] tracking-wider border-b border-white/10 pb-3 w-full">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2 h-2 rounded-full bg-[#5fe995] animate-pulse shadow-[0_0_8px_#5fe995]" />
+                    <span className="text-white font-bold tracking-widest uppercase">AUTEUR 60FPS NLE</span>
+                  </div>
+                  <div className="text-zinc-400 font-mono text-[10px] tracking-widest">
+                    PRORES 422 · 2.39:1 DCI
+                  </div>
                 </div>
 
+                {/* Subnet badge */}
+                <div className="flex items-center justify-center gap-2">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#5fe995]/10 border border-[#5fe995]/25 font-mono text-[10px] text-[#5fe995]">
+                    <Film className="w-3 h-3" />
+                    <span>5-Act Master Composition</span>
+                  </div>
+                </div>
+
+                {/* Quoted Brief & Active Territory */}
                 <div className="space-y-1">
                   {activeTerritory?.title && (
                     <span className="text-[#4ed4b7] font-mono text-[10px] uppercase tracking-widest block font-semibold">
                       {activeTerritory.title}
                     </span>
                   )}
-                  <p className="font-serif italic text-base sm:text-lg text-zinc-100 max-w-md mx-auto line-clamp-2 leading-relaxed">
+                  <p className="font-serif italic text-base sm:text-lg text-zinc-100 max-w-lg mx-auto line-clamp-2 leading-relaxed px-2">
                     &ldquo;{brief || urlInput}&rdquo;
                   </p>
                 </div>
 
-                <div className="flex items-center justify-center gap-3 text-xs font-mono text-zinc-400">
-                  <span className="text-zinc-300">5 Continuous Acts</span>
-                  <span className="text-zinc-600">·</span>
-                  <span className="text-zinc-300">Livepeer Soundstage</span>
-                  <span className="text-zinc-600">·</span>
-                  <span className="text-[#5fe995] font-semibold">60 FPS Compositor</span>
+                {/* Live Progress Stage & Specs */}
+                <div className="space-y-2.5 max-w-md mx-auto pt-1">
+                  <div className="flex items-center justify-center gap-2 text-xs font-mono text-zinc-300">
+                    <span className="font-bold text-[#4ed4b7] tracking-wider">AUTEUR</span>
+                    <span className="text-zinc-600">•</span>
+                    <span className="text-zinc-200 text-xs">
+                      {producingMessage}
+                    </span>
+                  </div>
+
+                  <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden shadow-inner">
+                    <div
+                      className="h-full bg-gradient-to-r from-[#4ed4b7] via-[#5fe995] to-[#7e94ff] transition-all duration-700 rounded-full shadow-[0_0_12px_#4ed4b7]"
+                      style={{ width: `${Math.max(18, (producingStep / 4) * 100)}%` }}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 px-0.5">
+                    <span>STAGE 0{producingStep}/04</span>
+                    <span className="text-zinc-400">5 Continuous Acts · 60 FPS Compositor</span>
+                    <span className="text-[#5fe995] flex items-center gap-1 font-semibold">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995] animate-ping" />
+                      MASTER ASSEMBLY
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              {/* Footer Metadata */}
-              <div className="flex items-center justify-between border-t border-white/10 pt-3.5 text-[10px] font-mono text-zinc-500">
-                <div className="flex items-center gap-2">
-                  <span className="text-zinc-400 uppercase tracking-wider">COMPOSITOR:</span>
-                  <span className="text-zinc-200">60 FPS CANVAS ENGINE</span>
-                </div>
-                <div className="text-[#5fe995] flex items-center gap-1.5 font-semibold">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995] animate-ping" />
-                  <span>ASSEMBLING MASTER</span>
-                </div>
-              </div>
-            </div>
+              {/* 2. Triptych Fanned Cards for 5-Act Production */}
+              <div className="relative pt-6 sm:pt-8 pb-4 flex items-center justify-center w-full max-w-xl">
+                {[
+                  {
+                    actNum: "ACT I",
+                    badge: "OPENING HOOK",
+                    title: shots[0]?.title || "Act 1: Narrative Entrance",
+                    imageUrl:
+                      shots[0]?.previewUrl ||
+                      activeTerritory?.previewUrl ||
+                      resolveCinematicAsset(`${brief || urlInput} act 1 opening`, 1),
+                    transformClass:
+                      "-rotate-[7deg] sm:-rotate-[8deg] -translate-x-3 sm:-translate-x-6 translate-y-3 hover:-rotate-2 hover:translate-y-1 hover:z-30",
+                    zIndex: "z-10",
+                    widthClass: "w-36 sm:w-44 md:w-48 aspect-[9/14]",
+                    borderClass: "border border-white/15",
+                    shadowClass: "shadow-[0_16px_36px_rgba(0,0,0,0.85)]",
+                  },
+                  {
+                    actNum: "ACT III",
+                    badge: "CLIMAX · MASTER",
+                    title: shots[2]?.title || "Act 3: Dramatic Climax",
+                    imageUrl:
+                      shots[2]?.previewUrl ||
+                      shots[1]?.previewUrl ||
+                      activeTerritory?.previewUrl ||
+                      resolveCinematicAsset(`${brief || urlInput} act 3 dramatic climax`, 3),
+                    transformClass:
+                      "rotate-0 scale-105 hover:scale-110 z-20",
+                    zIndex: "z-20",
+                    widthClass: "w-40 sm:w-48 md:w-52 aspect-[9/14]",
+                    borderClass: "border border-[#5fe995]/60 ring-1 ring-[#5fe995]/30",
+                    shadowClass: "shadow-[0_24px_55px_rgba(0,0,0,0.92),0_0_30px_rgba(95,233,149,0.22)]",
+                  },
+                  {
+                    actNum: "ACT V",
+                    badge: "RESOLUTION",
+                    title: shots[4]?.title || "Act 5: Final Resolution",
+                    imageUrl:
+                      shots[4]?.previewUrl ||
+                      shots[3]?.previewUrl ||
+                      activeTerritory?.previewUrl ||
+                      resolveCinematicAsset(`${brief || urlInput} act 5 resolution`, 5),
+                    transformClass:
+                      "rotate-[7deg] sm:rotate-[8deg] translate-x-3 sm:translate-x-6 translate-y-3 hover:rotate-2 hover:translate-y-1 hover:z-30",
+                    zIndex: "z-10",
+                    widthClass: "w-36 sm:w-44 md:w-48 aspect-[9/14]",
+                    borderClass: "border border-white/15",
+                    shadowClass: "shadow-[0_16px_36px_rgba(0,0,0,0.85)]",
+                  },
+                ].map((card, idx) => (
+                  <div
+                    key={card.actNum}
+                    className={`relative rounded-2xl overflow-hidden bg-[#090b12] ${card.widthClass} ${card.borderClass} ${card.shadowClass} ${card.transformClass} ${card.zIndex} transition-all duration-500 ease-out group shrink-0`}
+                    style={{ willChange: "transform" }}
+                  >
+                    {/* Simulated live visual still */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={card.imageUrl}
+                      alt={card.title}
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        target.onerror = null;
+                        target.src = resolveCinematicAsset("cinematic 35mm film still", idx + 1);
+                      }}
+                    />
 
-            {/* Live Progress Stage */}
-            <div className="space-y-3 w-full max-w-md text-center">
-              <div className="flex items-center justify-center gap-2 text-sm font-display font-medium text-white">
-                <span className="font-bold text-[#4ed4b7] tracking-wider">AUTEUR</span>
-                <span className="text-zinc-500">•</span>
-                <span className="text-zinc-200 font-sans text-xs">
-                  {producingMessage}
-                </span>
-              </div>
+                    {/* Top Scrim HUD */}
+                    <div className="absolute inset-x-0 top-0 p-2.5 bg-gradient-to-b from-black/80 via-black/40 to-transparent flex items-center justify-between text-[9px] font-mono text-white/90">
+                      <span className="px-1.5 py-0.5 rounded bg-black/60 border border-white/10 uppercase tracking-wider">
+                        {card.badge}
+                      </span>
+                      <span className="flex items-center gap-1 text-[8px] text-[#5fe995]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#5fe995] animate-pulse" />
+                        PRORES
+                      </span>
+                    </div>
 
-              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-[#4ed4b7] via-[#5fe995] to-[#7e94ff] transition-all duration-700 rounded-full shadow-[0_0_12px_#4ed4b7]"
-                  style={{ width: `${Math.max(15, (producingStep / 4) * 100)}%` }}
-                />
-              </div>
+                    {/* Bottom Scrim HUD */}
+                    <div className="absolute inset-x-0 bottom-0 p-2.5 bg-gradient-to-t from-black/95 via-black/60 to-transparent">
+                      <div className="text-[9px] font-mono text-[#5fe995] uppercase tracking-wider font-semibold">
+                        {card.actNum}
+                      </div>
+                      <div className="text-[11px] font-display font-bold text-white truncate">
+                        {card.title}
+                      </div>
+                    </div>
 
-              <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500">
-                <span>STAGE 0{producingStep}/04</span>
-                <span>MASTER SEQUENCE ASSEMBLY</span>
+                    {/* Film grain / specular sheen */}
+                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.04] to-transparent opacity-60" />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
