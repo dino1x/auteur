@@ -2232,40 +2232,49 @@ export function AuteurWorkstation({
                 </div>
               </div>
 
-              {/* Inspiration Playbooks */}
-              <div className="space-y-3 pt-2">
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-zinc-400 uppercase tracking-wider font-semibold text-[11px]">
-                    Inspiration Playbooks:
+              {/* Sleek Tactile Inspiration Playbooks Dock */}
+              <div className="space-y-2 pt-1">
+                <div className="flex items-center justify-between text-[11px] font-mono px-1">
+                  <div className="flex items-center gap-1.5 text-zinc-400">
+                    <Sparkles className="w-3 h-3 text-[#4ed4b7]" />
+                    <span className="uppercase tracking-wider font-semibold text-[10px]">
+                      Curated Playbooks
+                    </span>
+                  </div>
+                  <span className="text-zinc-500 text-[10px] hidden sm:inline">
+                    Click to load · Double-click to synthesize
                   </span>
-                  <span className="text-zinc-500 text-[10px]">Click to load · Press Enter to synthesize</span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {[
                     {
                       id: "pb-spatial",
-                      category: "SPATIAL HARDWARE",
-                      title: "Spatial Computing Launch",
+                      category: "SPATIAL",
+                      title: "Spatial Launch",
                       brief: "Apple Vision Pro: curved 3D glass optics, spatial visionOS interfaces, precision machined aluminum, and ambient physical room integration.",
+                      thumbnail: resolveCinematicAsset("Apple Vision Pro curved 3D glass optics spatial", 1),
                     },
                     {
                       id: "pb-nike",
-                      category: "ATHLETIC CINEMA",
-                      title: "Nike Marathon Velocity",
+                      category: "ATHLETIC",
+                      title: "Nike Velocity",
                       brief: "Commercial for Nike Alphafly 3 marathon racing shoe sprinting across rain-slicked nocturnal Tokyo streetlights with high-speed camera tracking.",
+                      thumbnail: resolveCinematicAsset("Nike marathon racing shoe nocturnal Tokyo", 2),
                     },
                     {
                       id: "pb-cyber",
                       category: "CYBER-NOIR",
-                      title: "Auteur Cinema Director",
+                      title: "Auteur Director",
                       brief: "A cyber-noir operative infiltrates an orbital cryogenic server vault suspended above a tempest ocean. Panavision anamorphic glass with cold cyan rim lighting.",
+                      thumbnail: resolveCinematicAsset("cyber-noir operative orbital server vault", 3),
                     },
                     {
                       id: "pb-fashion",
-                      category: "LUXURY LOOKBOOK",
-                      title: "Avant-Garde Lookbook",
+                      category: "LUXURY",
+                      title: "Avant-Garde",
                       brief: "Avant-garde architectural streetwear film: sculptural obsidian technical garments cutting through windward Icelandic black sand dunes and geothermal steam vents.",
+                      thumbnail: resolveCinematicAsset("avant-garde architectural streetwear black sand", 4),
                     },
                   ].map((pb) => {
                     const isSelected = urlInput.trim() === pb.brief;
@@ -2284,24 +2293,41 @@ export function AuteurWorkstation({
                           setUrlInput(pb.brief);
                           handleStartGeneration(pb.brief);
                         }}
-                        title="Click to load brief. Double-click to synthesize."
-                        className={`p-4 rounded-2xl border text-left transition-all duration-300 group cursor-pointer relative ${
+                        title={`${pb.title}: ${pb.brief}`}
+                        className={`p-2 rounded-xl border text-left transition-all duration-200 group cursor-pointer relative flex items-center gap-2.5 overflow-hidden ${
                           isSelected
-                            ? "bg-[#4ed4b7]/15 border-[#4ed4b7] shadow-[0_0_20px_rgba(78,212,183,0.25)] ring-1 ring-[#4ed4b7]/40"
-                            : "bg-[#0c0f17]/85 border-white/10 hover:border-[#4ed4b7]/50 hover:bg-[#111520] hover:shadow-[0_10px_25px_rgba(0,0,0,0.5)]"
+                            ? "bg-[#4ed4b7]/15 border-[#4ed4b7] shadow-[0_0_16px_rgba(78,212,183,0.22)] ring-1 ring-[#4ed4b7]/40 scale-[1.02]"
+                            : "bg-[#0a0d14]/85 border-white/10 hover:border-[#4ed4b7]/50 hover:bg-[#0f131e] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.6)]"
                         }`}
                       >
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-[9px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-white/[0.04] border border-white/10 text-[#4ed4b7]">
-                            {pb.category}
-                          </span>
-                          {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-[#4ed4b7] animate-pulse" />}
+                        {/* Miniature Visual Still */}
+                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-white/15 bg-black/60 relative">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={pb.thumbnail}
+                            alt={pb.title}
+                            className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500 ease-out"
+                          />
+                          {isSelected && (
+                            <div className="absolute inset-0 bg-[#4ed4b7]/25 border border-[#4ed4b7]" />
+                          )}
                         </div>
-                        <div className={`font-display font-bold text-xs ${isSelected ? "text-[#4ed4b7]" : "text-white group-hover:text-[#4ed4b7]"} transition-colors`}>
-                          {pb.title}
-                        </div>
-                        <div className="text-[10px] text-zinc-400 line-clamp-2 mt-1.5 font-sans leading-relaxed group-hover:text-zinc-300 transition-colors">
-                          &ldquo;{pb.brief}&rdquo;
+
+                        {/* Text info */}
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="text-[8.5px] font-mono uppercase tracking-wider text-[#4ed4b7] truncate">
+                              {pb.category}
+                            </span>
+                            {isSelected && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#4ed4b7] animate-pulse shrink-0" />
+                            )}
+                          </div>
+                          <div className={`font-display font-medium text-[11px] sm:text-xs truncate transition-colors ${
+                            isSelected ? "text-white font-bold" : "text-zinc-200 group-hover:text-white"
+                          }`}>
+                            {pb.title}
+                          </div>
                         </div>
                       </button>
                     );
