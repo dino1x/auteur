@@ -1,7 +1,6 @@
 # Auteur Studio: Autonomous Multimodal Cinema Director
 
 > **Production Generative Cinema Director on the Livepeer AI Subnet**  
-> **Interactive Launch Demo**: Available at `/demo` (60 FPS HyperFrames Cinema Player with 6-Beat Narration)  
 > **Livepeer Creative MCP**: `https://agent.livepeer.org/api/mcp/creative` (125 tools)  
 
 ---
