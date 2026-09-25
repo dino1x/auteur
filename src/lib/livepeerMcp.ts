@@ -234,7 +234,7 @@ export class LivepeerMcpService {
         profile: "creative",
         toolCount: 120,
         keyClass,
-        creditAllowance: "$100.00 / day (Hackathon Participant Quota)",
+        creditAllowance: "$100.00 / day (Active Participant Quota)",
         principalId: structured.principal_id || "0x4a92...livepeer-subnet",
         message: "Livepeer Agent MCP Creative Pipeline Active",
         recipesCount: LIVEPEER_CINEMA_RECIPES.length,

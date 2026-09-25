@@ -2993,7 +2993,7 @@ export function AuteurWorkstation({
                 <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
                   <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">Daily Quota</div>
                   <div className="text-lg font-display font-bold text-[#5fe995]">$100.00 / d</div>
-                  <div className="text-[10px] text-zinc-400 font-mono">Hackathon Participant</div>
+                  <div className="text-[10px] text-zinc-400 font-mono">Participant Tier</div>
                 </div>
 
                 <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
@@ -3038,7 +3038,7 @@ export function AuteurWorkstation({
                   </button>
                 </div>
                 <p className="text-[11px] text-zinc-400 font-sans">
-                  Connected directly to Livepeer Agent Creative MCP. Operates natively keyless with automatic hackathon participant quota.
+                  Connected directly to Livepeer Agent Creative MCP. Operates natively keyless with automatic participant quota.
                 </p>
               </div>
 

@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
 
     const response = await fetch(url, {
       headers: {
-        "User-Agent": "AuteurStudio/1.0 (Livepeer Agent Hackathon Track 3; dino1x)",
+        "User-Agent": "AuteurStudio/1.0",
         Accept: "image/*, video/*, audio/*, */*",
       },
     });
