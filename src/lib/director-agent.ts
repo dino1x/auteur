@@ -16,10 +16,6 @@ export function computeNarrationDuration(script?: string, minSec: number = 8.5):
 
 export class DirectorAgent {
   /**
-   * Translates any single-sentence creative brief or URL into 3 bespoke Creative Territories
-   * with inferred tone, visual metaphors, color palette, camera language, and score styling.
-   */
-  /**
    * Extract a clean, professional brand or product title from a raw URL or brief.
    * Prevents stripping first letters (e.g. 'Apple' -> 'pple') and eliminates
    * ugly truncated run-on sentences in territory headers.

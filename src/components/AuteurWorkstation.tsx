@@ -2173,7 +2173,7 @@ export function AuteurWorkstation({
                 </p>
               </div>
 
-              {/* Floating Tactile Input Container (Inspired by reference) */}
+              {/* Floating Tactile Input Container */}
               <div className="relative">
                 {/* Ambient Volumetric Backlight Bloom */}
                 <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-96 h-28 bg-gradient-to-r from-[#4ed4b7]/20 via-[#5fe995]/25 to-[#7e94ff]/20 rounded-full blur-3xl pointer-events-none" />
@@ -2232,7 +2232,7 @@ export function AuteurWorkstation({
                 </div>
               </div>
 
-              {/* Sleek Tactile Inspiration Playbooks Dock */}
+              {/* Sleek Tactile Playbooks Dock */}
               <div className="space-y-2 pt-1">
                 <div className="flex items-center justify-between text-[11px] font-mono px-1">
                   <div className="flex items-center gap-1.5 text-zinc-400">
@@ -2550,7 +2550,8 @@ export function AuteurWorkstation({
                     badge: "OPENING HOOK",
                     title: shots[0]?.title || "Act 1: Narrative Entrance",
                     imageUrl:
-                      shots[0]?.previewUrl ||
+                      shots[0]?.posterUrl ||
+                      shots[0]?.videoUrl ||
                       activeTerritory?.previewUrl ||
                       resolveCinematicAsset(`${brief || urlInput} act 1 opening`, 1),
                     transformClass:
@@ -2565,8 +2566,9 @@ export function AuteurWorkstation({
                     badge: "CLIMAX · MASTER",
                     title: shots[2]?.title || "Act 3: Dramatic Climax",
                     imageUrl:
-                      shots[2]?.previewUrl ||
-                      shots[1]?.previewUrl ||
+                      shots[2]?.posterUrl ||
+                      shots[2]?.videoUrl ||
+                      shots[1]?.posterUrl ||
                       activeTerritory?.previewUrl ||
                       resolveCinematicAsset(`${brief || urlInput} act 3 dramatic climax`, 3),
                     transformClass:
@@ -2581,8 +2583,9 @@ export function AuteurWorkstation({
                     badge: "RESOLUTION",
                     title: shots[4]?.title || "Act 5: Final Resolution",
                     imageUrl:
-                      shots[4]?.previewUrl ||
-                      shots[3]?.previewUrl ||
+                      shots[4]?.posterUrl ||
+                      shots[4]?.videoUrl ||
+                      shots[3]?.posterUrl ||
                       activeTerritory?.previewUrl ||
                       resolveCinematicAsset(`${brief || urlInput} act 5 resolution`, 5),
                     transformClass:
