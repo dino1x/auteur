@@ -693,13 +693,17 @@ export class DirectorAgent {
   public generateMasterVoiceover(brief: string, territory: CreativeTerritory): string {
     const p = brief.toLowerCase();
     const cleanBrief = brief
-      .replace(/^(a|an|the|https?:\/\/|www\.)\s*/i, "")
+      .replace(/^https?:\/\/(?:www\.)?/i, "")
+      .replace(/^(?:a|an|the)\b\s*/i, "")
       .replace(/\/.*$/, "")
       .trim();
-    const titleCaseBrief = cleanBrief.length > 40 ? cleanBrief.slice(0, 37) + "..." : cleanBrief;
+    const firstClause = cleanBrief.split(/(?:\s+[—–-]\s+|[.;|:\n])+/)[0].trim();
     const briefWords = cleanBrief.split(/\s+/);
-    const subjectCore = briefWords.slice(0, Math.min(3, briefWords.length)).join(" ");
+    const rawSubject = briefWords.slice(0, Math.min(3, briefWords.length)).join(" ");
+    const subjectCore = rawSubject.replace(/[:;,—–-]+$/, "").trim();
     const subjectCapitalized = subjectCore.charAt(0).toUpperCase() + subjectCore.slice(1);
+    const candidateTitle = firstClause.length >= 2 && firstClause.length <= 40 ? firstClause.replace(/[:;,—–-]+$/, "").trim() : subjectCapitalized;
+    const titleCaseBrief = candidateTitle.charAt(0).toUpperCase() + candidateTitle.slice(1);
 
     // 1. Wildlife / Big Cats (Strict matching only)
     if (p.includes("leopard") || p.includes("tiger") || p.includes("lion") || p.includes("cheetah") || p.includes("panther") || p.includes("jaguar") || p.includes("feline") || (p.includes("predator") && !p.includes("drone"))) {
@@ -757,15 +761,19 @@ export class DirectorAgent {
    */
   public decomposeStoryboard(brief: string, territory: CreativeTerritory, targetActCount: number = 5): Shot[] {
     const cleanBrief = brief
-      .replace(/^(a|an|the|https?:\/\/|www\.)\s*/i, "")
+      .replace(/^https?:\/\/(?:www\.)?/i, "")
+      .replace(/^(?:a|an|the)\b\s*/i, "")
       .replace(/\/.*$/, "")
       .trim();
-    const titleCaseBrief = cleanBrief.length > 40 ? cleanBrief.slice(0, 37) + "..." : cleanBrief;
+    const firstClause = cleanBrief.split(/(?:\s+[—–-]\s+|[.;|:\n])+/)[0].trim();
 
     // Extract semantic subject and context from the brief for narrative framing
     const briefWords = cleanBrief.split(/\s+/);
-    const subjectCore = briefWords.slice(0, Math.min(3, briefWords.length)).join(" ");
+    const rawSubject = briefWords.slice(0, Math.min(3, briefWords.length)).join(" ");
+    const subjectCore = rawSubject.replace(/[:;,—–-]+$/, "").trim();
     const subjectCapitalized = subjectCore.charAt(0).toUpperCase() + subjectCore.slice(1);
+    const candidateTitle = firstClause.length >= 2 && firstClause.length <= 40 ? firstClause.replace(/[:;,—–-]+$/, "").trim() : subjectCapitalized;
+    const titleCaseBrief = candidateTitle.charAt(0).toUpperCase() + candidateTitle.slice(1);
 
     // Derive master voiceover for the entire production sequence
     const masterVoiceover = this.generateMasterVoiceover(brief, territory);
