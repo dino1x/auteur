@@ -116,7 +116,7 @@ export function ShotLedgerModal({
   const handleExportReceipt = () => {
     const receiptData = {
       project: "Auteur - Autonomous Cinema Director",
-      track: "Livepeer Agent Innovation Track",
+      pipeline: "Livepeer Agent Creative Pipeline",
       timestamp: new Date().toISOString(),
       livepeerMode,
       territory: activeTerritory?.title || "Default Spec",
@@ -151,7 +151,7 @@ export function ShotLedgerModal({
                   Livepeer Shot Ledger & Cost Forecaster
                 </h3>
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-[#4ed4b7]/10 border border-[#4ed4b7]/30 text-[#5fe995]">
-                  Innovation Track
+                  Subnet Verified
                 </span>
               </div>
               <p className="text-xs text-zinc-400 font-sans">
