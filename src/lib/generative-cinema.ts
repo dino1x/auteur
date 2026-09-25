@@ -513,6 +513,8 @@ export function renderCinematicShot(
 
     // High-visibility subtitle text with active karaoke progress shimmer
     ctx.fillStyle = normProgress > 0.08 && normProgress < 0.92 ? "#ffffff" : "#cbd5e1";
+    ctx.shadowColor = "rgba(0, 0, 0, 0.9)";
+    ctx.shadowBlur = 4;
     ctx.fillText(scriptText, width / 2, textY, width - (isPortrait ? 36 : 140));
     ctx.restore();
   }
@@ -696,16 +698,17 @@ export async function compileMasterVideo(
   const canvas = document.createElement("canvas");
   canvas.width = 1280;
   canvas.height = 720;
-  // GPU hardware-accelerated 2D context (avoid willReadFrequently which forces software CPU copies)
+  // GPU hardware-accelerated 2D context with bicubic high-fidelity image smoothing
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Canvas context initialization failed");
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
 
-  // Cinematic 24fps standard (Hollywood 24p reduces frame budget by 20% while enhancing filmic motion)
-  const fps = 24;
-  const shotDurations = shots.map((s) => Math.min(Math.max(s.durationSec || 3.6, 2.5), 5.0));
+  const fps = 30;
+  const shotDurations = shots.map((s) => Math.min(Math.max(s.durationSec || 4.0, 3.0), 6.0));
   const totalDurationSec = shotDurations.reduce((acc, d) => acc + d, 0);
   const totalFrames = Math.max(1, Math.round(totalDurationSec * fps));
-  const transitionDurationSec = 0.45;
+  const transitionDurationSec = 0.5;
 
   // 1. High-Speed WebCodecs + MP4 Muxer Pipeline (Hardware GPU, ~10x-20x faster, native .mp4)
   const canUseWebCodecs =
@@ -737,14 +740,15 @@ export async function compileMasterVideo(
         },
       });
 
-      // Negotiate optimal supported H.264 hardware profile
+      // Negotiate highest quality H.264 hardware profile first
       const codecCandidates = [
-        "avc1.4d002a", // H.264 Main Level 4.2
-        "avc1.42001f", // H.264 Baseline Level 3.1
-        "avc1.4d001f", // H.264 Main Level 3.1
-        "avc1.640028", // H.264 High Level 4.0
+        "avc1.640028", // H.264 High Profile Level 4.0 (Highest visual fidelity, CABAC)
+        "avc1.4d002a", // H.264 Main Profile Level 4.2
+        "avc1.4d001f", // H.264 Main Profile Level 3.1
+        "avc1.42001f", // H.264 Baseline Profile Level 3.1
       ];
 
+      const bitrate = 8_000_000; // 8 Mbps high-bitrate broadcast quality
       let selectedCodec = "avc1.4d002a";
       for (const candidate of codecCandidates) {
         try {
@@ -752,7 +756,7 @@ export async function compileMasterVideo(
             codec: candidate,
             width: canvas.width,
             height: canvas.height,
-            bitrate: 6_000_000,
+            bitrate,
             framerate: fps,
           });
           if (support.supported) {
@@ -768,7 +772,7 @@ export async function compileMasterVideo(
         codec: selectedCodec,
         width: canvas.width,
         height: canvas.height,
-        bitrate: 6_000_000,
+        bitrate,
         framerate: fps,
       });
 
@@ -795,7 +799,7 @@ export async function compileMasterVideo(
           duration: Math.round(1_000_000 / fps),
         });
 
-        videoEncoder.encode(videoFrame, { keyFrame: currentFrame % 24 === 0 });
+        videoEncoder.encode(videoFrame, { keyFrame: currentFrame % 30 === 0 });
         videoFrame.close();
 
         // Regulate hardware encoder queue pressure via native ondequeue callback
@@ -810,8 +814,8 @@ export async function compileMasterVideo(
           });
         }
 
-        // Yield execution every 24 frames (~1s of cinematic video) to keep UI responsive and report progress
-        if (currentFrame % 24 === 0 || currentFrame === totalFrames - 1) {
+        // Yield execution every 30 frames (~1s of video) to keep UI responsive and report progress
+        if (currentFrame % 30 === 0 || currentFrame === totalFrames - 1) {
           if (onProgress) {
             onProgress(Math.round((currentFrame / totalFrames) * 100));
           }
