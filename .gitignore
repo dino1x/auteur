@@ -13,3 +13,4 @@ demo-video/
 .turbo/
 .cache/
 *.tsbuildinfo
+/auteur-launch-demo.mp4
