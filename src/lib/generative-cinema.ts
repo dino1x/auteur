@@ -22,8 +22,8 @@ const THEMATIC_PALETTES: Record<string, string[]> = {
   ],
   tech: [
     "https://v3b.fal.media/files/b/0aabd1ce/BDsvgaKgr8d4JHGKFoscl.jpg",
-    "https://v3b.fal.media/files/b/0aab971e/JHK1CAxuntPAwoGCTYMWB.jpg",
-    "https://v3b.fal.media/files/b/0aab9716/z4CLU4Ly2F1hZiyNIIqa2.jpg",
+    "https://v3b.fal.media/files/b/0aab9706/0SNbKuQaZ5cSp0GlIQD7e.jpg",
+    "https://v3b.fal.media/files/b/0aabd1d0/Xf2XPsFPlWxVq4qWCrVwg.jpg",
   ],
   ocean: [
     "https://v3b.fal.media/files/b/0aab970b/X6cbMzd56VxmDJaC7HHDF.jpg",
