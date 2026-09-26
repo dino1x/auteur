@@ -1,11 +1,13 @@
 # Auteur Studio: Autonomous Multimodal Cinema Director
 
+[![Live Application](https://img.shields.io/badge/Live_App-www.auteur.lol-00e5ff?style=for-the-badge&logo=vercel)](https://www.auteur.lol)
 [![Livepeer Agent MCP](https://img.shields.io/badge/Livepeer_MCP-agent.livepeer.org-00a651?style=for-the-badge&logo=livepeer)](#)
 [![Multi-Agent Architecture](https://img.shields.io/badge/Multi--Agent-Director_%7C_Critic_%7C_Memory-6366f1?style=for-the-badge)](#)
 [![Zero-CORS Proxy](https://img.shields.io/badge/Stream_Proxy-Zero--CORS_Canvas-06b6d4?style=for-the-badge)](#)
 [![Browser Compositor Law](https://img.shields.io/badge/Performance-60_FPS_Locked_Canvas-10b981?style=for-the-badge)](#)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
+> **Live Application**: [https://www.auteur.lol](https://www.auteur.lol)  
 > **Autonomous Generative Cinema Director on the Livepeer AI Subnet**  
 > **Official Creative MCP Endpoint**: `https://agent.livepeer.org/api/mcp/creative` (125 tools)  
 > **Participant Compute Model**: Keyless hackathon participant credit allowance + Bearer auth  
@@ -138,9 +140,15 @@ Tracks and retains director critiques across iterations. When you instruct Auteu
 
 ---
 
-## Quickstart & Local Setup
+## Live Application & Quickstart
 
-### 1. Installation
+### Live Production Deployment
+Experience the production studio directly in your browser:  
+**[https://www.auteur.lol](https://www.auteur.lol)**
+
+---
+
+### Local Installation
 ```bash
 git clone https://github.com/dino1x/auteur.git
 cd auteur
