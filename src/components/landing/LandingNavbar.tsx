@@ -1,12 +1,15 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Film } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowRight, Film, Loader2 } from "lucide-react";
 import { cinematicAudio } from "@/lib/cinematic-audio";
 
 export function LandingNavbar() {
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -16,7 +19,15 @@ export function LandingNavbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Proactively pre-warm the studio route in the background
+  useEffect(() => {
+    try {
+      router.prefetch("/studio");
+    } catch {}
+  }, [router]);
+
   const handleStudioClick = () => {
+    setIsNavigating(true);
     try {
       cinematicAudio.playCue("start");
     } catch {}
@@ -75,11 +86,26 @@ export function LandingNavbar() {
         <div className="flex items-center gap-3">
           <Link
             href="/studio"
+            prefetch={true}
             onClick={handleStudioClick}
-            className="relative inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold text-black bg-gradient-to-r from-[#4ed4b7] via-[#5fe995] to-[#7af2d9] shadow-lg shadow-[#4ed4b7]/25 hover:shadow-[#4ed4b7]/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            onMouseEnter={() => {
+              try {
+                router.prefetch("/studio");
+              } catch {}
+            }}
+            className="relative inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold text-black bg-gradient-to-r from-[#4ed4b7] via-[#5fe995] to-[#7af2d9] shadow-lg shadow-[#4ed4b7]/25 hover:shadow-[#4ed4b7]/40 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
           >
-            <span>Launch Studio</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            {isNavigating ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-black" />
+                <span>Opening Studio...</span>
+              </>
+            ) : (
+              <>
+                <span>Launch Studio</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </>
+            )}
           </Link>
         </div>
       </div>

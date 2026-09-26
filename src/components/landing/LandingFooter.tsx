@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React from "react";
 import Link from "next/link";
@@ -30,8 +30,9 @@ export function LandingFooter() {
             <div>
               <Link
                 href="/studio"
+                prefetch={true}
                 onClick={handleStudioLink}
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-semibold text-black bg-gradient-to-r from-[#4ed4b7] via-[#5fe995] to-[#7af2d9] shadow-xl shadow-[#4ed4b7]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-semibold text-black bg-gradient-to-r from-[#4ed4b7] via-[#5fe995] to-[#7af2d9] shadow-xl shadow-[#4ed4b7]/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
               >
                 <span>Launch Director Studio</span>
                 <ArrowUpRight className="w-4 h-4" />
@@ -70,6 +71,7 @@ export function LandingFooter() {
           <div className="flex items-center gap-6">
             <Link
               href="/studio"
+              prefetch={true}
               className="text-zinc-400 hover:text-white transition-colors"
             >
               Direct Studio

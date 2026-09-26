@@ -194,7 +194,13 @@ export function FeatureCardsSection() {
 
           <Link
             href="/studio"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-mono font-semibold text-black bg-gradient-to-r from-[#4ed4b7] to-[#5fe995] hover:brightness-110 active:scale-95 transition-all"
+            prefetch={true}
+            onClick={() => {
+              try {
+                cinematicAudio.playCue("start");
+              } catch {}
+            }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-mono font-semibold text-black bg-gradient-to-r from-[#4ed4b7] to-[#5fe995] hover:brightness-110 active:scale-95 transition-all cursor-pointer"
           >
             <span>Launch Studio</span>
             <ArrowRight className="w-3.5 h-3.5" />

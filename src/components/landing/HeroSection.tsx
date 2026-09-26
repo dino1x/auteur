@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   Volume2,
   VolumeX,
-  Cpu
+  Cpu,
+  Loader2
 } from "lucide-react";
 import { cinematicAudio } from "@/lib/cinematic-audio";
 
@@ -79,6 +81,8 @@ const CINEMA_SEQUENCE_SHOTS: SequenceShot[] = [
 ];
 
 export function HeroSection() {
+  const router = useRouter();
+  const [isNavigating, setIsNavigating] = useState(false);
   const [audioMuted, setAudioMuted] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ambientGlowRef = useRef<HTMLDivElement | null>(null);
@@ -90,6 +94,13 @@ export function HeroSection() {
   const fallbackImgRef = useRef<HTMLImageElement | null>(null);
   const currentIdxRef = useRef<number>(0);
   const shotStartTimeRef = useRef<number>(Date.now());
+
+  // Proactively prefetch the studio route
+  useEffect(() => {
+    try {
+      router.prefetch("/studio");
+    } catch {}
+  }, [router]);
 
   // 60 FPS Hardware-Accelerated Fast-Sequence Cinema Viewport
   useEffect(() => {
@@ -300,6 +311,7 @@ export function HeroSection() {
   }, [audioMuted]);
 
   const handleLaunchClick = () => {
+    setIsNavigating(true);
     try {
       cinematicAudio.playCue("start");
     } catch {}
@@ -347,11 +359,26 @@ export function HeroSection() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
           <Link
             href="/studio"
+            prefetch={true}
             onClick={handleLaunchClick}
+            onMouseEnter={() => {
+              try {
+                router.prefetch("/studio");
+              } catch {}
+            }}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-full text-sm font-semibold text-black bg-gradient-to-r from-[#4ed4b7] via-[#5fe995] to-[#7af2d9] shadow-xl shadow-[#4ed4b7]/20 hover:shadow-[#4ed4b7]/40 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
           >
-            <span>Enter Director Studio</span>
-            <ArrowRight className="w-4 h-4" />
+            {isNavigating ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin text-black" />
+                <span>Entering Studio...</span>
+              </>
+            ) : (
+              <>
+                <span>Enter Director Studio</span>
+                <ArrowRight className="w-4 h-4" />
+              </>
+            )}
           </Link>
 
           <a

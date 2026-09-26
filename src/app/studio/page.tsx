@@ -14,27 +14,51 @@ import { visualCriticAgent } from "@/lib/critic-agent";
 import { livepeerClient } from "@/lib/livepeer";
 import { resolveCinematicAsset, preloadAllShots } from "@/lib/generative-cinema";
 
+import dynamic from "next/dynamic";
+import { StudioSkeleton } from "@/components/StudioSkeleton";
+
 const DEFAULT_BRIEF =
   "A carbon-fiber autonomous drone swarm weaves through Neo-Tokyo mega-spires at twilight during torrential rain. Heavy 35mm anamorphic flares, holographic neon billboards reflecting off wet asphalt, hyper-precise formation flight, and deep cinematic bass droning through the skyline.";
-const INITIAL_PROD = directorAgent.getInitialProduction(DEFAULT_BRIEF);
-const INITIAL_REVIEW = visualCriticAgent.evaluateSequence(
-  INITIAL_PROD.shots,
-  INITIAL_PROD.selectedTerritory
-);
 
-import { AuteurWorkstation } from "@/components/AuteurWorkstation";
+let _cachedProduction: ReturnType<typeof directorAgent.getInitialProduction> | null = null;
+function getCachedProduction() {
+  if (!_cachedProduction) {
+    _cachedProduction = directorAgent.getInitialProduction(DEFAULT_BRIEF);
+  }
+  return _cachedProduction;
+}
+
+let _cachedReview: ReturnType<typeof visualCriticAgent.evaluateSequence> | null = null;
+function getCachedReview() {
+  if (!_cachedReview) {
+    const prod = getCachedProduction();
+    _cachedReview = visualCriticAgent.evaluateSequence(
+      prod.shots,
+      prod.selectedTerritory
+    );
+  }
+  return _cachedReview;
+}
+
+const AuteurWorkstation = dynamic(
+  () => import("@/components/AuteurWorkstation").then((mod) => mod.AuteurWorkstation),
+  {
+    ssr: false,
+    loading: () => <StudioSkeleton />,
+  }
+);
 
 export default function AuteurStudioPage() {
   const [brief, setBrief] = useState("");
   const [territories, setTerritories] = useState<CreativeTerritory[]>(
-    () => INITIAL_PROD.territories
+    () => getCachedProduction().territories
   );
   const [selectedTerritoryId, setSelectedTerritoryId] = useState<string | null>(
-    () => INITIAL_PROD.selectedTerritory.id
+    () => getCachedProduction().selectedTerritory.id
   );
-  const [shots, setShots] = useState<Shot[]>(() => INITIAL_PROD.shots);
+  const [shots, setShots] = useState<Shot[]>(() => getCachedProduction().shots);
   const [criticReview, setCriticReview] = useState<CriticReview | null>(
-    () => INITIAL_REVIEW
+    () => getCachedReview()
   );
   const [aestheticMemory, setAestheticMemory] = useState<AestheticMemoryItem[]>([]);
   const [agentSteps, setAgentSteps] = useState<AgentStep[]>([
